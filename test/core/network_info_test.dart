@@ -21,8 +21,9 @@ void main() {
     test('should forward the call to InternetConnectionChecker.hasConnection',
         () async {
       final tHasConnectionFuture = Future.value(true);
-      when(() => mockInternetConnectionChecker.hasConnection)
-          .thenAnswer((_) => tHasConnectionFuture);
+      when(() => mockInternetConnectionChecker.hasConnection).thenAnswer(
+        (_) => tHasConnectionFuture,
+      );
 
       final result = networkInfoImpl.isConnected;
 
