@@ -6,10 +6,10 @@ class NoticeModel extends Notice {
     required super.title,
   });
 
-  factory NoticeModel.fromJson(Map<String, dynamic> json) {
+  factory NoticeModel.fromJson({required Map<String, dynamic> json}) {
     return NoticeModel(
-      id: json['id'],
-      title: json['title'],
+      id: json['id'] ?? '',
+      title: json['title'] ?? '',
     );
   }
 
