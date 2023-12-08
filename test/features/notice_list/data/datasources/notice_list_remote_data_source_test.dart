@@ -128,7 +128,7 @@ void main() {
 
       final call = noticeListRemoteDataSourceImpl.getAllNotices;
 
-      expect(() => call(), throwsA(const TypeMatcher<FirebaseAuthException>()));
+      expect(() => call(), throwsA(isA<FirebaseAuthException>()));
     });
   });
 
