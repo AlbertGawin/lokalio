@@ -22,16 +22,47 @@ void main() {
     );
   });
 
-  group('getAllNotices', () {
+  group('getAllCachedNotices', () {
     final tNoticeModelList = List<NoticeModel>.from(
-        jsonDecode(fixture(name: 'notice_list_cached.json'))
-            .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)));
+            jsonDecode(fixture(name: 'notice_list_cached.json'))
+                .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
+        .where((element) => element.userId != '1')
+        .toList();
+
+    test('should return List<NoticeModel> from SharedPreferences', () async {
+      when(() => mockSharedPreferences.getString(cachedNoticeList))
+          .thenReturn(fixture(name: 'notice_list_cached.json'));
+      when(() => mockSharedPreferences.getString(cachedUserId)).thenReturn('1');
+
+      final result = await dataSource.getAllCachedNotices();
+
+      verify(() => mockSharedPreferences.getString(cachedNoticeList));
+      expect(result, equals(tNoticeModelList));
+    });
+
+    test('should throw a CacheException when there is no cached value',
+        () async {
+      when(() => mockSharedPreferences.getString(cachedNoticeList))
+          .thenReturn(null);
+
+      final call = dataSource.getAllCachedNotices;
+
+      expect(() => call(), throwsA(isA<CacheException>()));
+    });
+  });
+
+  group('getUserCachedNotices', () {
+    final tNoticeModelList = List<NoticeModel>.from(
+            jsonDecode(fixture(name: 'notice_list_cached.json'))
+                .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
+        .where((element) => element.userId == '3')
+        .toList();
 
     test('should return List<NoticeModel> from SharedPreferences', () async {
       when(() => mockSharedPreferences.getString(any()))
           .thenReturn(fixture(name: 'notice_list_cached.json'));
 
-      final result = await dataSource.getCachedNotices();
+      final result = await dataSource.getUserCachedNotices(userId: '3');
 
       verify(() => mockSharedPreferences.getString(cachedNoticeList));
       expect(result, equals(tNoticeModelList));
@@ -41,9 +72,9 @@ void main() {
         () async {
       when(() => mockSharedPreferences.getString(any())).thenReturn(null);
 
-      final call = dataSource.getCachedNotices;
+      final call = dataSource.getUserCachedNotices;
 
-      expect(() => call(), throwsA(isA<CacheException>()));
+      expect(() => call(userId: '1'), throwsA(isA<CacheException>()));
     });
   });
 }
