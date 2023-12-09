@@ -43,12 +43,17 @@ void main() {
         .where((element) => element.userId != '1')
         .toList();
 
-    test('should check if the device is online', () async {
-      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+    void setUpFunctions() {
       when(() => mockRemoteDataSource.getAllNotices())
           .thenAnswer((_) async => tNoticeModelList);
-      when(() => mockLocalDataSource.cacheNoticeList(notices: tNoticeModelList))
+      when(() =>
+              mockLocalDataSource.cacheNoticeList(noticeList: tNoticeModelList))
           .thenAnswer((_) async => {});
+    }
+
+    test('should check if the device is online', () async {
+      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      setUpFunctions();
 
       await repository.getAllNotices();
 
@@ -63,34 +68,26 @@ void main() {
       test(
           'should return remote data when the call to remote data source is successful',
           () async {
-        when(() => mockRemoteDataSource.getAllNotices())
-            .thenAnswer((_) async => tNoticeModelList);
-        when(() =>
-                mockLocalDataSource.cacheNoticeList(notices: tNoticeModelList))
-            .thenAnswer((_) async => {});
+        setUpFunctions();
 
         final result = await repository.getAllNotices();
 
         verify(() => mockRemoteDataSource.getAllNotices());
         verify(() =>
-            mockLocalDataSource.cacheNoticeList(notices: tNoticeModelList));
+            mockLocalDataSource.cacheNoticeList(noticeList: tNoticeModelList));
         expect(result, equals(Right(tNoticeModelList)));
       });
 
       test(
           'should cache the data locally when the call to remote data source is successful',
           () async {
-        when(() => mockRemoteDataSource.getAllNotices())
-            .thenAnswer((_) async => tNoticeModelList);
-        when(() =>
-                mockLocalDataSource.cacheNoticeList(notices: tNoticeModelList))
-            .thenAnswer((_) async => {});
+        setUpFunctions();
 
         await repository.getAllNotices();
 
         verify(() => mockRemoteDataSource.getAllNotices());
         verify(() =>
-            mockLocalDataSource.cacheNoticeList(notices: tNoticeModelList));
+            mockLocalDataSource.cacheNoticeList(noticeList: tNoticeModelList));
       });
 
       test(
@@ -147,12 +144,17 @@ void main() {
         .where((element) => element.userId == '3')
         .toList();
 
-    test('should check if the device is online', () async {
-      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+    void setUpFunctions() {
       when(() => mockRemoteDataSource.getUserNotices(userId: tUserId))
           .thenAnswer((_) async => tNoticeModelList);
-      when(() => mockLocalDataSource.cacheNoticeList(notices: tNoticeModelList))
+      when(() =>
+              mockLocalDataSource.cacheNoticeList(noticeList: tNoticeModelList))
           .thenAnswer((_) async => {});
+    }
+
+    test('should check if the device is online', () async {
+      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      setUpFunctions();
 
       await repository.getUserNotices(userId: tUserId);
 
@@ -167,34 +169,26 @@ void main() {
       test(
           'should return remote data when the call to remote data source is successful',
           () async {
-        when(() => mockRemoteDataSource.getUserNotices(userId: tUserId))
-            .thenAnswer((_) async => tNoticeModelList);
-        when(() =>
-                mockLocalDataSource.cacheNoticeList(notices: tNoticeModelList))
-            .thenAnswer((_) async => {});
+        setUpFunctions();
 
         final result = await repository.getUserNotices(userId: tUserId);
 
         verify(() => mockRemoteDataSource.getUserNotices(userId: tUserId));
         verify(() =>
-            mockLocalDataSource.cacheNoticeList(notices: tNoticeModelList));
+            mockLocalDataSource.cacheNoticeList(noticeList: tNoticeModelList));
         expect(result, equals(Right(tNoticeModelList)));
       });
 
       test(
           'should cache the data locally when the call to remote data source is successful',
           () async {
-        when(() => mockRemoteDataSource.getUserNotices(userId: tUserId))
-            .thenAnswer((_) async => tNoticeModelList);
-        when(() =>
-                mockLocalDataSource.cacheNoticeList(notices: tNoticeModelList))
-            .thenAnswer((_) async => {});
+        setUpFunctions();
 
         await repository.getUserNotices(userId: tUserId);
 
         verify(() => mockRemoteDataSource.getUserNotices(userId: tUserId));
         verify(() =>
-            mockLocalDataSource.cacheNoticeList(notices: tNoticeModelList));
+            mockLocalDataSource.cacheNoticeList(noticeList: tNoticeModelList));
       });
 
       test(

@@ -52,7 +52,7 @@ class NoticeListRepositoryImpl implements NoticeListRepository {
     if (await networkInfo.isConnected) {
       try {
         final noticeList = await remoteAllOrUser();
-        await localDataSource.cacheNoticeList(notices: noticeList);
+        await localDataSource.cacheNoticeList(noticeList: noticeList);
 
         return Right(noticeList);
       } on Exception {

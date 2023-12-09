@@ -89,7 +89,7 @@ void main() {
       when(() => mockSharedPreferences.setString(any(), any()))
           .thenAnswer((_) async => true);
 
-      dataSource.cacheNoticeList(tNoticeModelList);
+      dataSource.cacheNoticeList(noticeList: tNoticeModelList);
 
       final expectedJsonString = jsonEncode(
         tNoticeModelList.map((e) => e.toJson()).toList(),

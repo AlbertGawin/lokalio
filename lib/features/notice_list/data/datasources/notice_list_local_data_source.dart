@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract class NoticeListLocalDataSource {
   Future<List<NoticeModel>> getAllCachedNotices();
   Future<List<NoticeModel>> getUserCachedNotices({required String userId});
-  Future<void> cacheNoticeList({required List<NoticeModel> notices});
+  Future<void> cacheNoticeList({required List<NoticeModel> noticeList});
 }
 
 const cachedUserId = 'CACHED_USER_ID';
@@ -57,8 +57,8 @@ class NoticeListLocalDataSourceImpl implements NoticeListLocalDataSource {
   }
 
   @override
-  Future<void> cacheNoticeList({required List<NoticeModel> notices}) async {
-    final List<dynamic> jsonList = notices.map((notice) {
+  Future<void> cacheNoticeList({required List<NoticeModel> noticeList}) async {
+    final List<dynamic> jsonList = noticeList.map((notice) {
       return notice.toJson();
     }).toList();
 
