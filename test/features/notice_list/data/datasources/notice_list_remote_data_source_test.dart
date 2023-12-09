@@ -80,9 +80,9 @@ void main() {
   }
 
   group('getAllNotices', () {
-    final tNoticeModelList = List<NoticeModel>.from(
-            jsonDecode(fixture(name: 'notice_list.json'))
-                .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
+    final tNoticeModelList = List<NoticeModel>.from(json
+            .decode(fixture(name: 'notice_list.json'))
+            .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
         .where((element) => element.userId != '1')
         .toList();
 
@@ -142,9 +142,9 @@ void main() {
 
   group('getUserNotices', () {
     const tUserId = '3';
-    final tNoticeModelList = List<NoticeModel>.from(
-            jsonDecode(fixture(name: 'notice_list.json'))
-                .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
+    final tNoticeModelList = List<NoticeModel>.from(json
+            .decode(fixture(name: 'notice_list.json'))
+            .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
         .where((element) => element.userId == tUserId)
         .toList();
 

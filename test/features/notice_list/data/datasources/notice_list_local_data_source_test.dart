@@ -77,4 +77,28 @@ void main() {
       expect(() => call(userId: '1'), throwsA(isA<CacheException>()));
     });
   });
+
+  group('cacheNoticeList', () {
+    final tNoticeModelList = List<NoticeModel>.from(
+            jsonDecode(fixture(name: 'notice_list_cached.json'))
+                .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
+        .where((element) => element.userId != '1')
+        .toList();
+
+    test('should call SharedPreferences to cache the data', () async {
+      when(() => mockSharedPreferences.setString(any(), any()))
+          .thenAnswer((_) async => true);
+
+      dataSource.cacheNoticeList(tNoticeModelList);
+
+      final expectedJsonString = jsonEncode(
+        tNoticeModelList.map((e) => e.toJson()).toList(),
+      );
+
+      verify(() => mockSharedPreferences.setString(
+            cachedNoticeList,
+            expectedJsonString,
+          ));
+    });
+  });
 }
