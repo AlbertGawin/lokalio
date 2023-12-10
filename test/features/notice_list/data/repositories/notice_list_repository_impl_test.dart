@@ -100,7 +100,7 @@ void main() {
 
         verify(() => mockRemoteDataSource.getAllNotices());
         verifyZeroInteractions(mockLocalDataSource);
-        expect(result, equals(Left(ServerFailure())));
+        expect(result, equals(const Left(ServerFailure())));
       });
     });
 
@@ -131,7 +131,7 @@ void main() {
 
         verifyZeroInteractions(mockRemoteDataSource);
         verify(() => mockLocalDataSource.getAllCachedNotices());
-        expect(result, equals(Left(CacheFailure())));
+        expect(result, equals(const Left(CacheFailure())));
       });
     });
   });
@@ -201,7 +201,7 @@ void main() {
 
         verify(() => mockRemoteDataSource.getUserNotices(userId: tUserId));
         verifyZeroInteractions(mockLocalDataSource);
-        expect(result, equals(Left(ServerFailure())));
+        expect(result, equals(const Left(ServerFailure())));
       });
     });
 
@@ -232,7 +232,7 @@ void main() {
 
         verifyZeroInteractions(mockRemoteDataSource);
         verify(() => mockLocalDataSource.getUserCachedNotices(userId: tUserId));
-        expect(result, equals(Left(CacheFailure())));
+        expect(result, equals(const Left(CacheFailure())));
       });
     });
   });

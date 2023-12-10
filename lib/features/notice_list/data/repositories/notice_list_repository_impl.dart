@@ -56,14 +56,14 @@ class NoticeListRepositoryImpl implements NoticeListRepository {
 
         return Right(noticeList);
       } on Exception {
-        return Left(ServerFailure());
+        return const Left(ServerFailure());
       }
     } else {
       try {
         final localNotices = await localAllOrUser();
         return Right(localNotices);
       } on Exception {
-        return Left(CacheFailure());
+        return const Left(CacheFailure());
       }
     }
   }
