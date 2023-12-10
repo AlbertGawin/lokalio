@@ -23,9 +23,9 @@ void main() {
   });
 
   group('getAllCachedNotices', () {
-    final tNoticeModelList = List<NoticeModel>.from(
-            jsonDecode(fixture(name: 'notice_list_cached.json'))
-                .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
+    final tNoticeModelList = List<NoticeModel>.from(json
+            .decode(fixture(name: 'notice_list_cached.json'))
+            .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
         .where((element) => element.userId != '1')
         .toList();
 
@@ -52,9 +52,9 @@ void main() {
   });
 
   group('getUserCachedNotices', () {
-    final tNoticeModelList = List<NoticeModel>.from(
-            jsonDecode(fixture(name: 'notice_list_cached.json'))
-                .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
+    final tNoticeModelList = List<NoticeModel>.from(json
+            .decode(fixture(name: 'notice_list_cached.json'))
+            .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
         .where((element) => element.userId == '3')
         .toList();
 
@@ -79,9 +79,9 @@ void main() {
   });
 
   group('cacheNoticeList', () {
-    final tNoticeModelList = List<NoticeModel>.from(
-            jsonDecode(fixture(name: 'notice_list_cached.json'))
-                .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
+    final tNoticeModelList = List<NoticeModel>.from(json
+            .decode(fixture(name: 'notice_list_cached.json'))
+            .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
         .where((element) => element.userId != '1')
         .toList();
 
@@ -91,7 +91,7 @@ void main() {
 
       dataSource.cacheNoticeList(noticeList: tNoticeModelList);
 
-      final expectedJsonString = jsonEncode(
+      final expectedJsonString = json.encode(
         tNoticeModelList.map((e) => e.toJson()).toList(),
       );
 

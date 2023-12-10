@@ -24,7 +24,7 @@ class NoticeListLocalDataSourceImpl implements NoticeListLocalDataSource {
     final userId = sharedPreferences.getString(cachedUserId);
 
     if (jsonString != null) {
-      final List<dynamic> jsonList = jsonDecode(jsonString);
+      final List<dynamic> jsonList = json.decode(jsonString);
       final List<NoticeModel> notices = jsonList.map((json) {
         return NoticeModel.fromJson(json: json);
       }).where((element) {
@@ -43,7 +43,7 @@ class NoticeListLocalDataSourceImpl implements NoticeListLocalDataSource {
     final jsonString = sharedPreferences.getString(cachedNoticeList);
 
     if (jsonString != null) {
-      final List<dynamic> jsonList = jsonDecode(jsonString);
+      final List<dynamic> jsonList = json.decode(jsonString);
       final List<NoticeModel> notices = jsonList.map((json) {
         return NoticeModel.fromJson(json: json);
       }).where((element) {
@@ -64,7 +64,7 @@ class NoticeListLocalDataSourceImpl implements NoticeListLocalDataSource {
 
     await sharedPreferences.setString(
       cachedNoticeList,
-      jsonEncode(jsonList),
+      json.encode(jsonList),
     );
   }
 }

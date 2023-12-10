@@ -19,7 +19,7 @@ void main() {
     test('should return a valid model when the JSON is valid', () async {
       for (NoticeModel tNoticeModel in tNoticeModelList) {
         final result =
-            NoticeModel.fromJson(json: jsonDecode(jsonEncode(tNoticeModel)));
+            NoticeModel.fromJson(json: json.decode(json.encode(tNoticeModel)));
 
         expect(result, equals(tNoticeModel));
       }
@@ -30,7 +30,7 @@ void main() {
     test('should return a JSON map containing the proper data', () async {
       for (NoticeModel tNoticeModel in tNoticeModelList) {
         final result = tNoticeModel.toJson();
-        final tNoticeJson = jsonDecode(jsonEncode(tNoticeModel));
+        final tNoticeJson = json.decode(json.encode(tNoticeModel));
 
         expect(result, equals(tNoticeJson));
       }
