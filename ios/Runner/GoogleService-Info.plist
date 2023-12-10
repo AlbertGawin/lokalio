@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>484114100454-5f4ade9j03tvd10teac2dj0a5p7bslas.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyC19GEl66q-wI37MZk_yhX3w1_ul8o5ndw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>484114100454</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.lokalio</string>
+	<key>PROJECT_ID</key>
+	<string>lokalio-add0f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>lokalio-add0f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:484114100454:ios:12238ed8ede37e9f90cb27</string>
+</dict>
+</plist>

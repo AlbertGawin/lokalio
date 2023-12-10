@@ -1,0 +1,79 @@
+{
+  "project_info": {
+    "project_number": "484114100454",
+    "project_id": "lokalio-add0f",
+    "storage_bucket": "lokalio-add0f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:484114100454:android:8240b0070dd0c79d90cb27",
+        "android_client_info": {
+          "package_name": "com.example.lokalio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBy2AhiOywciHNIqnoe_bugLBkzc-2tUCE"
+        },
+        {
+          "current_key": "AIzaSyCA43chsF9A0W62iYEBAAH_bsv1RK2nuTk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "484114100454-kop5v03unq4vas6si7jca7dkdtfl534q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.lokalio.app.lokalio"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:484114100454:android:d86b6a43667c8e3a90cb27",
+        "android_client_info": {
+          "package_name": "com.lokalio.app.lokalio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "484114100454-5f4ade9j03tvd10teac2dj0a5p7bslas.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lokalio.app.lokalio",
+            "certificate_hash": "feedb6d5768b736128c61a4e3b11af9bf6f6b80a"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBy2AhiOywciHNIqnoe_bugLBkzc-2tUCE"
+        },
+        {
+          "current_key": "AIzaSyCA43chsF9A0W62iYEBAAH_bsv1RK2nuTk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "484114100454-kop5v03unq4vas6si7jca7dkdtfl534q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.lokalio.app.lokalio"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
