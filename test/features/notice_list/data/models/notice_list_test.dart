@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lokalio/features/notice_list/data/models/notice.dart';
-import 'package:lokalio/features/notice_list/domain/entities/notice.dart';
+import 'package:lokalio/features/home/data/models/notice.dart';
+import 'package:lokalio/features/home/domain/entities/notice.dart';
 
 import '../../../../fixtures/fixture_reader.dart';
 
 void main() {
   final tNoticeModelList = List<NoticeModel>.from(json
-      .decode(fixture(name: 'notice_list.json'))
+      .decode(fixture(name: 'home.json'))
       .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)));
 
   test('should be a subclass of List<Notice> entity', () async {

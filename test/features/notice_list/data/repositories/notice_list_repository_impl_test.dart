@@ -5,10 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
-import 'package:lokalio/features/notice_list/data/datasources/notice_list_local_data_source.dart';
-import 'package:lokalio/features/notice_list/data/datasources/notice_list_remote_data_source.dart';
-import 'package:lokalio/features/notice_list/data/models/notice.dart';
-import 'package:lokalio/features/notice_list/data/repositories/notice_list_repository_impl.dart';
+import 'package:lokalio/features/home/data/datasources/notice_list_local_data_source.dart';
+import 'package:lokalio/features/home/data/datasources/notice_list_remote_data_source.dart';
+import 'package:lokalio/features/home/data/models/notice.dart';
+import 'package:lokalio/features/home/data/repositories/notice_list_repository_impl.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../fixtures/fixture_reader.dart';
@@ -38,7 +38,7 @@ void main() {
 
   group('getAllNotices', () {
     final tNoticeModelList = List<NoticeModel>.from(json
-            .decode(fixture(name: 'notice_list.json'))
+            .decode(fixture(name: 'home.json'))
             .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
         .where((element) => element.userId != '1')
         .toList();
@@ -139,7 +139,7 @@ void main() {
   group('getUserNotices', () {
     const tUserId = '3';
     final tNoticeModelList = List<NoticeModel>.from(json
-            .decode(fixture(name: 'notice_list.json'))
+            .decode(fixture(name: 'home.json'))
             .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
         .where((element) => element.userId == '3')
         .toList();

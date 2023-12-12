@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
-import 'package:lokalio/features/notice_list/data/datasources/notice_list_local_data_source.dart';
-import 'package:lokalio/features/notice_list/data/datasources/notice_list_remote_data_source.dart';
-import 'package:lokalio/features/notice_list/data/models/notice.dart';
-import 'package:lokalio/features/notice_list/domain/entities/notice.dart';
-import 'package:lokalio/features/notice_list/domain/repositories/notice_list_repository.dart';
+import 'package:lokalio/features/home/data/datasources/notice_list_local_data_source.dart';
+import 'package:lokalio/features/home/data/datasources/notice_list_remote_data_source.dart';
+import 'package:lokalio/features/home/data/models/notice.dart';
+import 'package:lokalio/features/home/domain/entities/notice.dart';
+import 'package:lokalio/features/home/domain/repositories/notice_list_repository.dart';
 
 typedef _AllOrUserChooser = Future<List<NoticeModel>> Function();
 

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:lokalio/core/error/exceptions.dart';
-import 'package:lokalio/features/notice_list/data/models/notice.dart';
+import 'package:lokalio/features/home/data/models/notice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class NoticeListLocalDataSource {

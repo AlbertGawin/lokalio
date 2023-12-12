@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lokalio/features/notice_list/domain/entities/notice.dart';
-import 'package:lokalio/features/notice_list/domain/repositories/notice_list_repository.dart';
-import 'package:lokalio/features/notice_list/domain/usecases/get_user_notices.dart';
+import 'package:lokalio/features/home/domain/entities/notice.dart';
+import 'package:lokalio/features/home/domain/repositories/notice_list_repository.dart';
+import 'package:lokalio/features/home/domain/usecases/get_user_notices.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockNoticeListRepository extends Mock implements NoticeListRepository {}
