@@ -8,7 +8,7 @@ import '../../../../fixtures/fixture_reader.dart';
 
 void main() {
   final tNoticeModelList = List<NoticeModel>.from(json
-      .decode(fixture(name: 'home.json'))
+      .decode(fixture(name: 'notice_list.json'))
       .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)));
 
   test('should be a subclass of List<Notice> entity', () async {

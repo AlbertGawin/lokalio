@@ -17,6 +17,8 @@ class MockFirestore extends Mock implements FirebaseFirestore {}
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 
+class MockUserCredential extends Mock implements UserCredential {}
+
 class MockUser extends Mock implements User {}
 
 class MockQueryDocumentSnapshot extends Mock
@@ -35,12 +37,15 @@ void main() {
   setupFirebaseAuthMocks();
 
   late NoticeListRemoteDataSourceImpl noticeListRemoteDataSourceImpl;
+
   late MockFirestore mockFirestoreFirebase;
+  late MockFirebaseAuth mockFirebaseAuth;
+  late MockUserCredential mockUserCredential;
+  late MockUser mockUser;
+
   late MockQuerySnapshot mockQuerySnapshot;
   late MockCollectionReference mockCollectionReference;
   late MockQueryMapSnapshot mockQueryMapSnapshot;
-  late MockFirebaseAuth mockFirebaseAuth;
-  late MockUser mockUser;
 
   setUp(() {
     mockFirestoreFirebase = MockFirestore();
@@ -49,10 +54,12 @@ void main() {
       firebaseFirestore: mockFirestoreFirebase,
       firebaseAuth: mockFirebaseAuth,
     );
+    mockUserCredential = MockUserCredential();
+    mockUser = MockUser();
+
     mockQuerySnapshot = MockQuerySnapshot();
     mockCollectionReference = MockCollectionReference();
     mockQueryMapSnapshot = MockQueryMapSnapshot();
-    mockUser = MockUser();
   });
 
   setUpAll(() async {
@@ -63,14 +70,16 @@ void main() {
     when(() => mockFirestoreFirebase.collection(any()))
         .thenReturn(mockCollectionReference);
     when(() => mockQueryMapSnapshot.get())
-        .thenAnswer((_) async => mockQuerySnapshot);
+        .thenAnswer((_) => Future.value(mockQuerySnapshot));
   }
 
   void setUpAllNotices() {
     when(() => mockCollectionReference.where(any(),
             isNotEqualTo: any(named: 'isNotEqualTo')))
         .thenReturn(mockQueryMapSnapshot);
-    when(() => mockFirebaseAuth.currentUser).thenReturn(mockUser);
+    when(() => mockFirebaseAuth.signInAnonymously())
+        .thenAnswer((_) => Future.value(mockUserCredential));
+    when(() => mockUserCredential.user).thenReturn(mockUser);
     when(() => mockUser.uid).thenReturn('1');
   }
 
@@ -81,7 +90,7 @@ void main() {
 
   group('getAllNotices', () {
     final tNoticeModelList = List<NoticeModel>.from(json
-            .decode(fixture(name: 'home.json'))
+            .decode(fixture(name: 'notice_list.json'))
             .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
         .where((element) => element.userId != '1')
         .toList();
@@ -92,7 +101,7 @@ void main() {
       return mockDocSnapshot;
     }).toList();
 
-    test('should perform and GET request on a Firebase collection', () {
+    test('should perform and GET request on a Firebase collection', () async {
       setUp200();
       setUpAllNotices();
 
@@ -100,7 +109,7 @@ void main() {
           .where((element) => element.data()['userId'] != '1')
           .toList());
 
-      noticeListRemoteDataSourceImpl.getAllNotices();
+      await noticeListRemoteDataSourceImpl.getAllNotices();
 
       verify(() => mockFirestoreFirebase.collection('notices').get());
     });
@@ -132,7 +141,9 @@ void main() {
 
     test('should throw a FirebaseAuthException when the user is not found',
         () async {
-      when(() => mockFirebaseAuth.currentUser).thenReturn(null);
+      when(() => mockFirebaseAuth.signInAnonymously())
+          .thenAnswer((invocation) => Future.value(mockUserCredential));
+      when(() => mockUserCredential.user).thenReturn(null);
 
       final call = noticeListRemoteDataSourceImpl.getAllNotices;
 
@@ -143,7 +154,7 @@ void main() {
   group('getUserNotices', () {
     const tUserId = '3';
     final tNoticeModelList = List<NoticeModel>.from(json
-            .decode(fixture(name: 'home.json'))
+            .decode(fixture(name: 'notice_list.json'))
             .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
         .where((element) => element.userId == tUserId)
         .toList();
