@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lokalio/features/home/presentation/bloc/notice_list_bloc.dart';
+import 'package:lokalio/features/home/presentation/widgets/notice_list_widget.dart';
 import 'package:lokalio/injection_container.dart';
 
 class HomePage extends StatelessWidget {
@@ -32,20 +33,9 @@ class HomePage extends StatelessWidget {
           } else if (state is Loading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is Done) {
-            return ListView.builder(
-              itemCount: state.noticeList.length,
-              itemBuilder: (context, index) {
-                final notice = state.noticeList[index];
-                return ListTile(
-                  title: Text(notice.title),
-                  subtitle: const Text('opis'),
-                );
-              },
-            );
+            return NoticeListWidget(noticeList: state.noticeList);
           } else if (state is Error) {
-            return Center(
-              child: Text(state.message),
-            );
+            return Center(child: Text(state.message));
           } else {
             return const Center(child: Text('Something went wrong'));
           }
