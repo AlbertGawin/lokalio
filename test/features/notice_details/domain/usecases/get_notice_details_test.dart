@@ -18,23 +18,24 @@ void main() {
         GetNoticeDetails(noticeDetailsRepository: mockNoticeDetailsRepository);
   });
 
-  const tId = '1';
+  const tNoticeId = '1';
   const NoticeDetails tNoticeDetails = NoticeDetails(
-    id: tId,
+    id: tNoticeId,
     title: 'title',
     description: 'description',
     userId: '1',
   );
 
   test('should get NoticeDetails from the repository', () async {
-    when(() =>
-            mockNoticeDetailsRepository.getNoticeDetails(id: any(named: 'id')))
+    when(() => mockNoticeDetailsRepository.getNoticeDetails(
+            noticeId: any(named: 'noticeId')))
         .thenAnswer((_) async => const Right(tNoticeDetails));
 
-    final result = await getNoticeDetails(const Params(id: tId));
+    final result = await getNoticeDetails(const Params(noticeId: tNoticeId));
 
     expect(result, const Right(tNoticeDetails));
-    verify(() => mockNoticeDetailsRepository.getNoticeDetails(id: tId));
+    verify(() =>
+        mockNoticeDetailsRepository.getNoticeDetails(noticeId: tNoticeId));
     verifyNoMoreInteractions(mockNoticeDetailsRepository);
   });
 }

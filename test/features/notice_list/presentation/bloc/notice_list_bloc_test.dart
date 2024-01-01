@@ -2,10 +2,10 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/usecases/usecase.dart';
-import 'package:lokalio/features/home/domain/entities/notice.dart';
-import 'package:lokalio/features/home/domain/usecases/get_all_notices.dart';
-import 'package:lokalio/features/home/domain/usecases/get_user_notices.dart';
-import 'package:lokalio/features/home/presentation/bloc/notice_list_bloc.dart';
+import 'package:lokalio/features/notice_list/domain/entities/notice.dart';
+import 'package:lokalio/features/notice_list/domain/usecases/get_all_notices.dart';
+import 'package:lokalio/features/notice_list/domain/usecases/get_user_notices.dart';
+import 'package:lokalio/features/notice_list/presentation/bloc/notice_list_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockGetAllNotices extends Mock implements GetAllNotices {}
@@ -33,7 +33,7 @@ void main() {
   });
 
   test('initialState should be NoticeListInitial', () {
-    expect(bloc.state, equals(Empty()));
+    expect(bloc.state, equals(NoticeListInitial()));
   });
 
   group('GetAllNotices', () {

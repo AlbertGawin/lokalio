@@ -12,15 +12,17 @@ class GetNoticeDetails implements UseCase<NoticeDetails, Params> {
 
   @override
   Future<Either<Failure, NoticeDetails>> call(Params params) async {
-    return await noticeDetailsRepository.getNoticeDetails(id: params.id);
+    return await noticeDetailsRepository.getNoticeDetails(
+      noticeId: params.noticeId,
+    );
   }
 }
 
 class Params extends Equatable {
-  final String id;
+  final String noticeId;
 
-  const Params({required this.id});
+  const Params({required this.noticeId});
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [noticeId];
 }

@@ -39,13 +39,13 @@ void main() {
   });
 
   group('getNoticeDetails', () {
-    const tId = '1';
+    const tNoticeId = '1';
     final tNoticeDetails = NoticeDetailsModel.fromJson(
       json: json.decode(fixture(name: 'notice_details.json')),
     );
 
     void setUpFunctions() {
-      when(() => mockRemoteDataSource.getNoticeDetails(id: tId))
+      when(() => mockRemoteDataSource.getNoticeDetails(noticeId: tNoticeId))
           .thenAnswer((_) async => tNoticeDetails);
       when(() => mockLocalDataSource.cacheNoticeDetails(
           noticeDetails: tNoticeDetails)).thenAnswer((_) async => {});
@@ -55,7 +55,7 @@ void main() {
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       setUpFunctions();
 
-      await repository.getNoticeDetails(id: tId);
+      await repository.getNoticeDetails(noticeId: tNoticeId);
 
       verify(() => mockNetworkInfo.isConnected);
     });
@@ -70,9 +70,10 @@ void main() {
           () async {
         setUpFunctions();
 
-        final result = await repository.getNoticeDetails(id: tId);
+        final result = await repository.getNoticeDetails(noticeId: tNoticeId);
 
-        verify(() => mockRemoteDataSource.getNoticeDetails(id: tId));
+        verify(
+            () => mockRemoteDataSource.getNoticeDetails(noticeId: tNoticeId));
         verify(() => mockLocalDataSource.cacheNoticeDetails(
             noticeDetails: tNoticeDetails));
         expect(result, equals(Right(tNoticeDetails)));
@@ -83,9 +84,10 @@ void main() {
           () async {
         setUpFunctions();
 
-        await repository.getNoticeDetails(id: tId);
+        await repository.getNoticeDetails(noticeId: tNoticeId);
 
-        verify(() => mockRemoteDataSource.getNoticeDetails(id: tId));
+        verify(
+            () => mockRemoteDataSource.getNoticeDetails(noticeId: tNoticeId));
         verify(() => mockLocalDataSource.cacheNoticeDetails(
             noticeDetails: tNoticeDetails));
       });
@@ -93,12 +95,13 @@ void main() {
       test(
           'should return server failure when the call to remote data source is unsuccessful',
           () async {
-        when(() => mockRemoteDataSource.getNoticeDetails(id: tId))
+        when(() => mockRemoteDataSource.getNoticeDetails(noticeId: tNoticeId))
             .thenThrow(ServerException());
 
-        final result = await repository.getNoticeDetails(id: tId);
+        final result = await repository.getNoticeDetails(noticeId: tNoticeId);
 
-        verify(() => mockRemoteDataSource.getNoticeDetails(id: tId));
+        verify(
+            () => mockRemoteDataSource.getNoticeDetails(noticeId: tNoticeId));
         verifyZeroInteractions(mockLocalDataSource);
         expect(result, equals(const Left(ServerFailure())));
       });
@@ -112,25 +115,29 @@ void main() {
       test(
           'should return last locally cached data when the cached data is present',
           () async {
-        when(() => mockLocalDataSource.getCachedNoticeDetails(id: tId))
+        when(() =>
+                mockLocalDataSource.getCachedNoticeDetails(noticeId: tNoticeId))
             .thenAnswer((_) async => tNoticeDetails);
 
-        final result = await repository.getNoticeDetails(id: tId);
+        final result = await repository.getNoticeDetails(noticeId: tNoticeId);
 
         verifyZeroInteractions(mockRemoteDataSource);
-        verify(() => mockLocalDataSource.getCachedNoticeDetails(id: tId));
+        verify(() =>
+            mockLocalDataSource.getCachedNoticeDetails(noticeId: tNoticeId));
         expect(result, equals(Right(tNoticeDetails)));
       });
 
       test('should return CacheFailure when there is no cached data present',
           () async {
-        when(() => mockLocalDataSource.getCachedNoticeDetails(id: tId))
+        when(() =>
+                mockLocalDataSource.getCachedNoticeDetails(noticeId: tNoticeId))
             .thenThrow(CacheException());
 
-        final result = await repository.getNoticeDetails(id: tId);
+        final result = await repository.getNoticeDetails(noticeId: tNoticeId);
 
         verifyZeroInteractions(mockRemoteDataSource);
-        verify(() => mockLocalDataSource.getCachedNoticeDetails(id: tId));
+        verify(() =>
+            mockLocalDataSource.getCachedNoticeDetails(noticeId: tNoticeId));
         expect(result, equals(const Left(CacheFailure())));
       });
     });

@@ -25,7 +25,7 @@ void main() {
   });
 
   group('getNoticeDetails', () {
-    const tId = '1';
+    const tNoticeId = '1';
     final tNoticeDetailsModel = NoticeDetailsModel.fromJson(
       json: json.decode(fixture(name: 'notice_details_cached.json')),
     );
@@ -34,7 +34,8 @@ void main() {
       when(() => mockSharedPreferences.getString(cachedNoticeDetails))
           .thenReturn(fixture(name: 'notice_details_cached.json'));
 
-      final result = await dataSource.getCachedNoticeDetails(id: tId);
+      final result =
+          await dataSource.getCachedNoticeDetails(noticeId: tNoticeId);
 
       verify(() => mockSharedPreferences.getString(cachedNoticeDetails));
       expect(result, equals(tNoticeDetailsModel));
@@ -47,7 +48,7 @@ void main() {
 
       final call = dataSource.getCachedNoticeDetails;
 
-      expect(() => call(id: tId), throwsA(isA<CacheException>()));
+      expect(() => call(noticeId: tNoticeId), throwsA(isA<CacheException>()));
     });
   });
 }

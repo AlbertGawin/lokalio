@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lokalio/core/error/exceptions.dart';
-import 'package:lokalio/features/home/data/datasources/notice_list_local_data_source.dart';
-import 'package:lokalio/features/home/data/models/notice.dart';
+import 'package:lokalio/features/notice_list/data/datasources/notice_list_local_data_source.dart';
+import 'package:lokalio/features/notice_list/data/models/notice.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

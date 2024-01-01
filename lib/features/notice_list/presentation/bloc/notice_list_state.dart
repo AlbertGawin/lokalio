@@ -7,7 +7,7 @@ sealed class NoticeListState extends Equatable {
   List<Object> get props => [];
 }
 
-final class Empty extends NoticeListState {}
+final class NoticeListInitial extends NoticeListState {}
 
 final class Loading extends NoticeListState {}
 

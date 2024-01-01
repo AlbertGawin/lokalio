@@ -2,8 +2,8 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/usecases/usecase.dart';
-import 'package:lokalio/features/home/domain/entities/notice.dart';
-import 'package:lokalio/features/home/domain/repositories/notice_list_repository.dart';
+import 'package:lokalio/features/notice_list/domain/entities/notice.dart';
+import 'package:lokalio/features/notice_list/domain/repositories/notice_list_repository.dart';
 
 class GetUserNotices implements UseCase<List<Notice>, Params> {
   final NoticeListRepository noticeListRepository;

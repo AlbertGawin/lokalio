@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
 import 'package:lokalio/features/notice_details/data/datasources/notice_details_local_data_source.dart';
@@ -22,13 +23,13 @@ class NoticeDetailsRepositoryImpl implements NoticeDetailsRepository {
 
   @override
   Future<Either<Failure, NoticeDetails>> getNoticeDetails(
-      {required String id}) async {
+      {required String noticeId}) async {
     return await _getNoticeDetails(
       remoteMyOrUser: () async {
-        return await remoteDataSource.getNoticeDetails(id: id);
+        return await remoteDataSource.getNoticeDetails(noticeId: noticeId);
       },
       localMyOrUser: () async {
-        return await localDataSource.getCachedNoticeDetails(id: id);
+        return await localDataSource.getCachedNoticeDetails(noticeId: noticeId);
       },
     );
   }
@@ -43,6 +44,8 @@ class NoticeDetailsRepositoryImpl implements NoticeDetailsRepository {
         await localDataSource.cacheNoticeDetails(noticeDetails: noticeDetails);
 
         return Right(noticeDetails);
+      } on NoDataException {
+        return const Left(NoDataFailure());
       } on Exception {
         return const Left(ServerFailure());
       }

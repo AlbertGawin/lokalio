@@ -1,4 +1,4 @@
-import 'package:lokalio/features/home/domain/entities/notice.dart';
+import 'package:lokalio/features/notice_list/domain/entities/notice.dart';
 
 class NoticeDetails extends Notice {
   final String description;

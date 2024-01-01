@@ -6,8 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lokalio/features/home/data/datasources/notice_list_remote_data_source.dart';
-import 'package:lokalio/features/home/data/models/notice.dart';
+import 'package:lokalio/features/notice_list/data/datasources/notice_list_remote_data_source.dart';
+import 'package:lokalio/features/notice_list/data/models/notice.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../fixtures/fixture_reader.dart';

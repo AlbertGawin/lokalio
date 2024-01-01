@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lokalio/features/home/presentation/bloc/notice_list_bloc.dart';
-import 'package:lokalio/features/home/presentation/widgets/notice_list_widget.dart';
+import 'package:lokalio/features/notice_list/presentation/bloc/notice_list_bloc.dart';
+import 'package:lokalio/features/notice_list/presentation/widgets/notice_list_widget.dart';
 import 'package:lokalio/injection_container.dart';
 
 class HomePage extends StatelessWidget {
@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
       },
       child: BlocBuilder<NoticeListBloc, NoticeListState>(
         builder: (context, state) {
-          if (state is Empty) {
+          if (state is NoticeListInitial) {
             return const Center(child: Text('Press the button below to load'));
           } else if (state is Loading) {
             return const Center(child: CircularProgressIndicator());

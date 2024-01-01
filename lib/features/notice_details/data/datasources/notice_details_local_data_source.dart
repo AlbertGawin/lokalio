@@ -5,7 +5,7 @@ import 'package:lokalio/features/notice_details/data/models/notice_details.dart'
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class NoticeDetailsLocalDataSource {
-  Future<NoticeDetailsModel> getCachedNoticeDetails({required String id});
+  Future<NoticeDetailsModel> getCachedNoticeDetails({required String noticeId});
   Future<void> cacheNoticeDetails({required NoticeDetailsModel noticeDetails});
 }
 
@@ -19,7 +19,7 @@ class NoticeDetailsLocalDataSourceImpl implements NoticeDetailsLocalDataSource {
 
   @override
   Future<NoticeDetailsModel> getCachedNoticeDetails(
-      {required String id}) async {
+      {required String noticeId}) async {
     final jsonString = sharedPreferences.getString(cachedNoticeDetails);
 
     if (jsonString != null) {

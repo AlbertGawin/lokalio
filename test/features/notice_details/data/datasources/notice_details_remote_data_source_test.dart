@@ -62,10 +62,11 @@ void main() {
         .thenReturn(mockDocumentReference);
     when(() => mockDocumentReference.get())
         .thenAnswer((_) => Future.value(mockQueryDocumentSnapshot));
+    when(() => mockQueryDocumentSnapshot.exists).thenReturn(true);
   }
 
   group('getNoticeDetails', () {
-    const tId = '1';
+    const tNoticeId = '1';
     final tNoticeDetailsModel = NoticeDetailsModel.fromJson(
       json: json.decode(fixture(name: 'notice_details.json')),
     );
@@ -77,7 +78,7 @@ void main() {
         when(() => mockQueryDocumentSnapshot.data())
             .thenReturn(tNoticeDetailsModel.toJson());
 
-        final result = await dataSource.getNoticeDetails(id: tId);
+        final result = await dataSource.getNoticeDetails(noticeId: tNoticeId);
 
         expect(result, equals(tNoticeDetailsModel));
       },
@@ -90,7 +91,19 @@ void main() {
 
       final call = dataSource.getNoticeDetails;
 
-      expect(() async => await call(id: tId), throwsA(isA<ServerException>()));
+      expect(() async => await call(noticeId: tNoticeId),
+          throwsA(isA<ServerException>()));
+    });
+
+    test('should throw NoDataException when the document does not exist',
+        () async {
+      setUp200();
+      when(() => mockQueryDocumentSnapshot.exists).thenReturn(false);
+
+      final call = dataSource.getNoticeDetails;
+
+      expect(() async => await call(noticeId: tNoticeId),
+          throwsA(isA<NoDataException>()));
     });
   });
 }

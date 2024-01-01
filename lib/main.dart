@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:lokalio/features/home/presentation/pages/home_page.dart';
+import 'package:lokalio/features/notice_list/presentation/pages/home_page.dart';
 import 'firebase_options.dart';
 
 import 'injection_container.dart' as di;
