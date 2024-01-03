@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:lokalio/features/auth/presentation/pages/auth_page.dart';
 import 'package:lokalio/features/notice_list/presentation/pages/home_page.dart';
 import 'firebase_options.dart';
 
@@ -66,27 +67,28 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
         primaryColor: Colors.blueGrey,
       ),
-      home: Scaffold(
-        body: IndexedStack(
-          index: _selectedIndex,
-          children: _widgetOptions,
-        ),
-        bottomNavigationBar: NavigationBar(
-          destinations: const <Widget>[
-            NavigationDestination(
-              icon: Icon(Icons.search_outlined),
-              selectedIcon: Icon(Icons.search),
-              label: 'Ogłoszenia',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.account_circle_outlined),
-              selectedIcon: Icon(Icons.account_circle),
-              label: 'Profil',
-            ),
-          ],
-          selectedIndex: _selectedIndex,
-          onDestinationSelected: _onItemTapped,
-        ),
+      home: const Scaffold(
+        body: AuthPage(),
+        // IndexedStack(
+        //   index: _selectedIndex,
+        //   children: _widgetOptions,
+        // ),
+        // bottomNavigationBar: NavigationBar(
+        //   destinations: const <Widget>[
+        //     NavigationDestination(
+        //       icon: Icon(Icons.search_outlined),
+        //       selectedIcon: Icon(Icons.search),
+        //       label: 'Ogłoszenia',
+        //     ),
+        //     NavigationDestination(
+        //       icon: Icon(Icons.account_circle_outlined),
+        //       selectedIcon: Icon(Icons.account_circle),
+        //       label: 'Profil',
+        //     ),
+        //   ],
+        //   selectedIndex: _selectedIndex,
+        //   onDestinationSelected: _onItemTapped,
+        // ),
       ),
     );
   }

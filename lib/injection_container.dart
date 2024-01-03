@@ -3,6 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:lokalio/core/network/network_info.dart';
+import 'package:lokalio/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:lokalio/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:lokalio/features/auth/domain/repositories/auth_repository.dart';
+import 'package:lokalio/features/auth/domain/usecases/sign_in.dart';
+import 'package:lokalio/features/auth/domain/usecases/sign_out.dart';
+import 'package:lokalio/features/auth/domain/usecases/sign_up.dart';
+import 'package:lokalio/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:lokalio/features/notice_details/data/datasources/notice_details_local_data_source.dart';
 import 'package:lokalio/features/notice_details/data/datasources/notice_details_remote_data_source.dart';
 import 'package:lokalio/features/notice_details/data/repositories/notice_details_repository_impl.dart';
@@ -22,10 +29,49 @@ import 'package:http/http.dart' as http;
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  initNoticeList();
+  initAuth();
   initNoticeDetails();
+  initNoticeList();
   initCore();
   await initExternal();
+}
+
+void initAuth() {
+  //Bloc
+  sl.registerFactory(() => AuthBloc(signIn: sl(), signUp: sl(), signOut: sl()));
+
+  // Use cases
+  sl.registerLazySingleton(() => SignIn(authRepository: sl()));
+  sl.registerLazySingleton(() => SignUp(authRepository: sl()));
+  sl.registerLazySingleton(() => SignOut(authRepository: sl()));
+
+  // Repository
+  sl.registerLazySingleton<AuthRepository>(
+      () => AuthRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()));
+
+  // Data sources
+  sl.registerLazySingleton<AuthRemoteDataSource>(
+      () => AuthRemoteDataSourceImpl(firebaseAuth: sl()));
+}
+
+void initNoticeDetails() {
+  //Bloc
+  sl.registerFactory(() => NoticeDetailsBloc(getNoticeDetails: sl()));
+
+  // Use cases
+  sl.registerLazySingleton(
+      () => GetNoticeDetails(noticeDetailsRepository: sl()));
+
+  // Repository
+  sl.registerLazySingleton<NoticeDetailsRepository>(() =>
+      NoticeDetailsRepositoryImpl(
+          remoteDataSource: sl(), localDataSource: sl(), networkInfo: sl()));
+
+  // Data sources
+  sl.registerLazySingleton<NoticeDetailsRemoteDataSource>(
+      () => NoticeDetailsRemoteDataSourceImpl(firebaseFirestore: sl()));
+  sl.registerLazySingleton<NoticeDetailsLocalDataSource>(
+      () => NoticeDetailsLocalDataSourceImpl(sharedPreferences: sl()));
 }
 
 void initNoticeList() {
@@ -47,26 +93,6 @@ void initNoticeList() {
           firebaseFirestore: sl(), firebaseAuth: sl()));
   sl.registerLazySingleton<NoticeListLocalDataSource>(
       () => NoticeListLocalDataSourceImpl(sharedPreferences: sl()));
-}
-
-void initNoticeDetails() {
-  //Bloc
-  sl.registerFactory(() => NoticeDetailsBloc(getNoticeDetails: sl()));
-
-  // Use cases
-  sl.registerLazySingleton(
-      () => GetNoticeDetails(noticeDetailsRepository: sl()));
-
-  // Repository
-  sl.registerLazySingleton<NoticeDetailsRepository>(() =>
-      NoticeDetailsRepositoryImpl(
-          remoteDataSource: sl(), localDataSource: sl(), networkInfo: sl()));
-
-  // Data sources
-  sl.registerLazySingleton<NoticeDetailsRemoteDataSource>(
-      () => NoticeDetailsRemoteDataSourceImpl(firebaseFirestore: sl()));
-  sl.registerLazySingleton<NoticeDetailsLocalDataSource>(
-      () => NoticeDetailsLocalDataSourceImpl(sharedPreferences: sl()));
 }
 
 void initCore() {
