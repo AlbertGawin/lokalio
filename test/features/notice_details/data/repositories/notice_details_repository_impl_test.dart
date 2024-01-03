@@ -17,7 +17,7 @@ class MockRemoteDataSource extends Mock
     implements NoticeDetailsRemoteDataSource {}
 
 class MockLocalDataSource extends Mock
-    implements NoticeDetailsLocalDataSourceImpl {}
+    implements NoticeDetailsLocalDataSource {}
 
 class MockNetworkInfo extends Mock implements NetworkInfo {}
 

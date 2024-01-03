@@ -9,12 +9,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Lokalio'),
-      ),
-      body: buildBody(context),
-    );
+    return buildBody(context);
   }
 
   BlocProvider<NoticeListBloc> buildBody(BuildContext context) {

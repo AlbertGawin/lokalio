@@ -63,9 +63,8 @@ void initNoticeDetails() {
           remoteDataSource: sl(), localDataSource: sl(), networkInfo: sl()));
 
   // Data sources
-  sl.registerLazySingleton<NoticeDetailsRemoteDataSource>(() =>
-      NoticeDetailsRemoteDataSourceImpl(
-          firebaseFirestore: sl(), firebaseAuth: sl()));
+  sl.registerLazySingleton<NoticeDetailsRemoteDataSource>(
+      () => NoticeDetailsRemoteDataSourceImpl(firebaseFirestore: sl()));
   sl.registerLazySingleton<NoticeDetailsLocalDataSource>(
       () => NoticeDetailsLocalDataSourceImpl(sharedPreferences: sl()));
 }

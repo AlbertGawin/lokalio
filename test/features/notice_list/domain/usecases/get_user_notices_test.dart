@@ -9,12 +9,11 @@ class MockNoticeListRepository extends Mock implements NoticeListRepository {}
 
 void main() {
   late MockNoticeListRepository mockNoticeListRepository;
-  late GetUserNotices getUserNotices;
+  late GetUserNotices usecase;
 
   setUp(() {
     mockNoticeListRepository = MockNoticeListRepository();
-    getUserNotices =
-        GetUserNotices(noticeListRepository: mockNoticeListRepository);
+    usecase = GetUserNotices(noticeListRepository: mockNoticeListRepository);
   });
 
   const List<Notice> tNoticeList = [];
@@ -26,7 +25,7 @@ void main() {
       (_) async => const Right(tNoticeList),
     );
 
-    final result = await getUserNotices(const Params(userId: tUserId));
+    final result = await usecase(const Params(userId: tUserId));
 
     expect(result, const Right(tNoticeList));
     verify(() => mockNoticeListRepository.getUserNotices(userId: tUserId));

@@ -20,15 +20,13 @@ void main() {
   setUp(() {
     mockSharedPreferences = MockSharedPreferences();
     dataSource = NoticeDetailsLocalDataSourceImpl(
-      sharedPreferences: mockSharedPreferences,
-    );
+        sharedPreferences: mockSharedPreferences);
   });
 
   group('getNoticeDetails', () {
     const tNoticeId = '1';
     final tNoticeDetailsModel = NoticeDetailsModel.fromJson(
-      json: json.decode(fixture(name: 'notice_details_cached.json')),
-    );
+        json: json.decode(fixture(name: 'notice_details_cached.json')));
 
     test('should return NoticeDetailsModel from SharedPreferences', () async {
       when(() => mockSharedPreferences.getString(cachedNoticeDetails))

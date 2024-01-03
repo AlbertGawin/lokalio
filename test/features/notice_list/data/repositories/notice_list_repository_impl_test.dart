@@ -21,6 +21,7 @@ class MockNetworkInfo extends Mock implements NetworkInfo {}
 
 void main() {
   late NoticeListRepositoryImpl repository;
+
   late MockRemoteDataSource mockRemoteDataSource;
   late MockLocalDataSource mockLocalDataSource;
   late MockNetworkInfo mockNetworkInfo;

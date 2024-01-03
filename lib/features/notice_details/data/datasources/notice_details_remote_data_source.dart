@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/features/notice_details/data/models/notice_details.dart';
 
@@ -10,12 +9,8 @@ abstract class NoticeDetailsRemoteDataSource {
 class NoticeDetailsRemoteDataSourceImpl
     implements NoticeDetailsRemoteDataSource {
   final FirebaseFirestore firebaseFirestore;
-  final FirebaseAuth firebaseAuth;
 
-  NoticeDetailsRemoteDataSourceImpl({
-    required this.firebaseFirestore,
-    required this.firebaseAuth,
-  });
+  const NoticeDetailsRemoteDataSourceImpl({required this.firebaseFirestore});
 
   @override
   Future<NoticeDetailsModel> getNoticeDetails(

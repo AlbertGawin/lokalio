@@ -7,7 +7,7 @@ sealed class NoticeListEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetUserNoticesEvent extends NoticeListEvent {
+final class GetUserNoticesEvent extends NoticeListEvent {
   final String userId;
 
   const GetUserNoticesEvent({required this.userId});

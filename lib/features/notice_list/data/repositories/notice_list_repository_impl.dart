@@ -14,7 +14,7 @@ class NoticeListRepositoryImpl implements NoticeListRepository {
   final NoticeListLocalDataSource localDataSource;
   final NetworkInfo networkInfo;
 
-  NoticeListRepositoryImpl({
+  const NoticeListRepositoryImpl({
     required this.remoteDataSource,
     required this.localDataSource,
     required this.networkInfo,

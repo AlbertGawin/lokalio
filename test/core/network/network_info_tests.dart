@@ -6,7 +6,7 @@ import 'package:mocktail/mocktail.dart';
 class MockInternetConnectionChecker extends Mock
     implements InternetConnectionChecker {}
 
-void main() {
+void networkInfoTests() {
   late NetworkInfoImpl networkInfoImpl;
   late MockInternetConnectionChecker mockInternetConnectionChecker;
 

@@ -1,11 +1,17 @@
 import 'package:equatable/equatable.dart';
 
-enum FailureType { serverFailure, cacheFailure, noDataFailure }
+enum FailureType {
+  serverFailure,
+  cacheFailure,
+  noDataFailure,
+  noConnectionFailure
+}
 
 const failureMessages = {
   FailureType.serverFailure: 'Server Failure',
   FailureType.cacheFailure: 'Cache Failure',
   FailureType.noDataFailure: 'No data found.',
+  FailureType.noConnectionFailure: 'No connection.',
 };
 
 abstract class Failure extends Equatable {
@@ -30,4 +36,8 @@ class CacheFailure extends Failure {
 
 class NoDataFailure extends Failure {
   const NoDataFailure() : super(type: FailureType.noDataFailure);
+}
+
+class NoConnectionFailure extends Failure {
+  const NoConnectionFailure() : super(type: FailureType.noConnectionFailure);
 }

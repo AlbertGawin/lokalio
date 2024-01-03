@@ -3,7 +3,6 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lokalio/core/error/exceptions.dart';
@@ -15,8 +14,6 @@ import '../../../../fixtures/fixture_reader.dart';
 import '../../../../mock.dart';
 
 class MockFirestore extends Mock implements FirebaseFirestore {}
-
-class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 
 class MockQueryDocumentSnapshot extends Mock
     implements QueryDocumentSnapshot<Map<String, dynamic>> {}
@@ -33,18 +30,14 @@ void main() {
   late NoticeDetailsRemoteDataSourceImpl dataSource;
 
   late MockFirestore mockFirestoreFirebase;
-  late MockFirebaseAuth mockFirebaseAuth;
   late MockQueryDocumentSnapshot mockQueryDocumentSnapshot;
   late MockCollectionReference mockCollectionReference;
   late MockDocumentReference mockDocumentReference;
 
   setUp(() {
     mockFirestoreFirebase = MockFirestore();
-    mockFirebaseAuth = MockFirebaseAuth();
     dataSource = NoticeDetailsRemoteDataSourceImpl(
-      firebaseFirestore: mockFirestoreFirebase,
-      firebaseAuth: mockFirebaseAuth,
-    );
+        firebaseFirestore: mockFirestoreFirebase);
 
     mockQueryDocumentSnapshot = MockQueryDocumentSnapshot();
     mockCollectionReference = MockCollectionReference();
@@ -84,7 +77,8 @@ void main() {
       },
     );
 
-    test('should throw ServerException when there is an error', () async {
+    test('should throw ServerException when the call is unsuccessful',
+        () async {
       setUp200();
       when(() => mockDocumentReference.get())
           .thenAnswer((_) => Future.error(ServerException()));
