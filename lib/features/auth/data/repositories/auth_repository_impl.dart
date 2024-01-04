@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
 import 'package:lokalio/features/auth/data/datasources/auth_remote_data_source.dart';
@@ -21,6 +22,14 @@ class AuthRepositoryImpl implements AuthRepository {
         await remoteDataSource.signIn(email: email, password: password);
 
         return const Right(true);
+      } on FirebaseException catch (e) {
+        if (e.code == 'user-not-found') {
+          return const Left(UserNotFoundFailure());
+        } else if (e.code == 'wrong-password') {
+          return const Left(WrongPasswordFailure());
+        } else {
+          return const Left(ServerFailure());
+        }
       } on Exception {
         return const Left(ServerFailure());
       }
@@ -37,6 +46,12 @@ class AuthRepositoryImpl implements AuthRepository {
         await remoteDataSource.signUp(email: email, password: password);
 
         return const Right(true);
+      } on FirebaseException catch (e) {
+        if (e.code == 'email-already-in-use') {
+          return const Left(EmailAlreadyInUseFailure());
+        } else {
+          return const Left(ServerFailure());
+        }
       } on Exception {
         return const Left(ServerFailure());
       }

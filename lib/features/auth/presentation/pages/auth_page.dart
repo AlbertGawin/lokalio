@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lokalio/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:lokalio/features/auth/presentation/widgets/auth_widget.dart';
-import 'package:lokalio/features/notice_list/presentation/pages/home_page.dart';
 
 import 'package:lokalio/injection_container.dart';
+import 'package:lokalio/main_page.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -22,12 +22,8 @@ class AuthPage extends StatelessWidget {
         builder: (context, state) {
           if (state is AuthInitial) {
             return const Center(child: Text('Auth Initial'));
-          } else if (state is Loading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is Done) {
+          } else if (state is Loading || state is Done || state is Error) {
             return _streamLogic();
-          } else if (state is Error) {
-            return Center(child: Text(state.message));
           } else {
             return const Center(child: Text('Something went wrong'));
           }
@@ -41,7 +37,7 @@ class AuthPage extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return const HomePage();
+          return const MainPage();
         } else {
           return const AuthWidget();
         }

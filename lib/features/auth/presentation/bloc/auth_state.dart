@@ -13,6 +13,8 @@ final class Loading extends AuthState {}
 
 final class Done extends AuthState {}
 
+final class Authenticated extends AuthState {}
+
 final class Error extends AuthState {
   final String message;
 

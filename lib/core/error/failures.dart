@@ -4,7 +4,10 @@ enum FailureType {
   serverFailure,
   cacheFailure,
   noDataFailure,
-  noConnectionFailure
+  noConnectionFailure,
+  userNotFoundFailure,
+  wrongPasswordFailure,
+  emailAlreadyInUseFailure,
 }
 
 const failureMessages = {
@@ -12,6 +15,9 @@ const failureMessages = {
   FailureType.cacheFailure: 'Cache Failure',
   FailureType.noDataFailure: 'No data found.',
   FailureType.noConnectionFailure: 'No connection.',
+  FailureType.userNotFoundFailure: 'User not found.',
+  FailureType.wrongPasswordFailure: 'Wrong password.',
+  FailureType.emailAlreadyInUseFailure: 'Email already in use.',
 };
 
 abstract class Failure extends Equatable {
@@ -40,4 +46,17 @@ class NoDataFailure extends Failure {
 
 class NoConnectionFailure extends Failure {
   const NoConnectionFailure() : super(type: FailureType.noConnectionFailure);
+}
+
+class UserNotFoundFailure extends Failure {
+  const UserNotFoundFailure() : super(type: FailureType.userNotFoundFailure);
+}
+
+class WrongPasswordFailure extends Failure {
+  const WrongPasswordFailure() : super(type: FailureType.wrongPasswordFailure);
+}
+
+class EmailAlreadyInUseFailure extends Failure {
+  const EmailAlreadyInUseFailure()
+      : super(type: FailureType.emailAlreadyInUseFailure);
 }
