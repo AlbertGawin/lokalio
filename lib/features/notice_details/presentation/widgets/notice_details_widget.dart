@@ -11,8 +11,10 @@ class NoticeDetailsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(noticeDetails.title),
+    return Scaffold(
+      body: Center(
+        child: Text(noticeDetails.title),
+      ),
     );
   }
 }

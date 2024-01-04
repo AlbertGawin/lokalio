@@ -29,36 +29,22 @@ void main() {
 
   late MockFirebaseAuth mockFirebaseAuth;
   late MockUserCredential mockUserCredential;
-  late MockQueryDocumentSnapshot mockQueryDocumentSnapshot;
-  late MockCollectionReference mockCollectionReference;
-  late MockDocumentReference mockDocumentReference;
 
   setUp(() {
     mockFirebaseAuth = MockFirebaseAuth();
     dataSource = AuthRemoteDataSourceImpl(firebaseAuth: mockFirebaseAuth);
 
     mockUserCredential = MockUserCredential();
-    mockQueryDocumentSnapshot = MockQueryDocumentSnapshot();
-    mockCollectionReference = MockCollectionReference();
-    mockDocumentReference = MockDocumentReference();
   });
 
   setUpAll(() async {
     await Firebase.initializeApp();
   });
 
-  void setUp200() {
-    when(() => mockCollectionReference.doc(any()))
-        .thenReturn(mockDocumentReference);
-    when(() => mockDocumentReference.get())
-        .thenAnswer((_) => Future.value(mockQueryDocumentSnapshot));
-    when(() => mockQueryDocumentSnapshot.exists).thenReturn(true);
-  }
+  const tEmail = 'test';
+  const tPassword = 'test';
 
   group('signIn', () {
-    const tEmail = 'test';
-    const tPassword = 'test';
-
     test('should sign in with email and password', () async {
       when(() => mockFirebaseAuth.signInWithEmailAndPassword(
               email: any(named: 'email'), password: any(named: 'password')))
@@ -77,6 +63,45 @@ void main() {
 
       expect(() => dataSource.signIn(email: tEmail, password: tPassword),
           throwsA(isA<FirebaseAuthException>()));
+    });
+  });
+
+  group('signUp', () {
+    test('should sign up with email and password', () async {
+      when(() => mockFirebaseAuth.createUserWithEmailAndPassword(
+              email: any(named: 'email'), password: any(named: 'password')))
+          .thenAnswer((_) async => mockUserCredential);
+
+      await dataSource.signUp(email: tEmail, password: tPassword);
+
+      verify(() => mockFirebaseAuth.createUserWithEmailAndPassword(
+          email: tEmail, password: tPassword));
+    });
+
+    test('should throw FirebaseAuthException when sign up fails', () async {
+      when(() => mockFirebaseAuth.createUserWithEmailAndPassword(
+              email: any(named: 'email'), password: any(named: 'password')))
+          .thenThrow(FirebaseAuthException(code: 'code', message: 'message'));
+
+      expect(() => dataSource.signUp(email: tEmail, password: tPassword),
+          throwsA(isA<FirebaseAuthException>()));
+    });
+  });
+
+  group('signOut', () {
+    test('should sign out', () async {
+      when(() => mockFirebaseAuth.signOut()).thenAnswer((_) async {});
+
+      await dataSource.signOut();
+
+      verify(() => mockFirebaseAuth.signOut());
+    });
+
+    test('should throw FirebaseAuthException when sign out fails', () async {
+      when(() => mockFirebaseAuth.signOut())
+          .thenThrow(FirebaseAuthException(code: 'code', message: 'message'));
+
+      expect(() => dataSource.signOut(), throwsA(isA<FirebaseAuthException>()));
     });
   });
 }

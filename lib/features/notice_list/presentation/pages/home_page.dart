@@ -9,7 +9,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return buildBody(context);
+    return Scaffold(
+      body: buildBody(context),
+    );
   }
 
   BlocProvider<NoticeListBloc> buildBody(BuildContext context) {

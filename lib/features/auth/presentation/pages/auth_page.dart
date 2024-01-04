@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lokalio/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:lokalio/features/auth/presentation/widgets/auth_widget.dart';
+import 'package:lokalio/features/notice_list/presentation/pages/home_page.dart';
 
 import 'package:lokalio/injection_container.dart';
 
@@ -10,7 +12,7 @@ class AuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return buildBody(context);
+    return Scaffold(body: buildBody(context));
   }
 
   BlocProvider<AuthBloc> buildBody(BuildContext context) {
@@ -31,7 +33,7 @@ class AuthPage extends StatelessWidget {
           } else if (state is Loading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is Done) {
-            return const AuthWidget();
+            return _streamLogic();
           } else if (state is Error) {
             return Center(child: Text(state.message));
           } else {
@@ -39,6 +41,19 @@ class AuthPage extends StatelessWidget {
           }
         },
       ),
+    );
+  }
+
+  StreamBuilder<User?> _streamLogic() {
+    return StreamBuilder(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return const HomePage();
+        } else {
+          return const AuthWidget();
+        }
+      },
     );
   }
 }
