@@ -43,8 +43,8 @@ void main() {
     registerFallbackValue(NoParams());
   });
 
-  test('initialState should be AuthInitial', () {
-    expect(bloc.state, equals(AuthInitial()));
+  test('initialState should be Done', () {
+    expect(bloc.state, equals(Done()));
   });
 
   group('SignIn', () {

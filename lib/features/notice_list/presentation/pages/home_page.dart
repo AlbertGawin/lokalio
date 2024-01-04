@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
       child: BlocBuilder<NoticeListBloc, NoticeListState>(
         builder: (context, state) {
           if (state is NoticeListInitial) {
-            return const Center(child: Text('Press the button below to load'));
+            return const Center(child: Text('NoticeInitial'));
           } else if (state is Loading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is Done) {

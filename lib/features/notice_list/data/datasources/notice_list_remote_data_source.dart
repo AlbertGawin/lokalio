@@ -18,8 +18,7 @@ class NoticeListRemoteDataSourceImpl implements NoticeListRemoteDataSource {
 
   @override
   Future<List<NoticeModel>> getAllNotices() async {
-    final credentials = await firebaseAuth.signInAnonymously();
-    final user = credentials.user;
+    final user = firebaseAuth.currentUser;
 
     if (user == null) {
       throw FirebaseAuthException(message: 'User not found', code: '');

@@ -15,7 +15,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignOut signOut;
 
   AuthBloc({required this.signIn, required this.signUp, required this.signOut})
-      : super(AuthInitial()) {
+      : super(Done()) {
     on<AuthEvent>((event, emit) async {
       if (event is SignInEvent) {
         emit(Loading());

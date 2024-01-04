@@ -17,19 +17,11 @@ class AuthPage extends StatelessWidget {
 
   BlocProvider<AuthBloc> buildBody(BuildContext context) {
     return BlocProvider(
-      create: (context) {
-        final bloc = sl<AuthBloc>();
-
-        bloc.add(const SignInEvent(email: '', password: ''));
-        bloc.add(const SignUpEvent(email: '', password: ''));
-        bloc.add(const SignOutEvent());
-
-        return bloc;
-      },
+      create: (_) => sl<AuthBloc>(),
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           if (state is AuthInitial) {
-            return const Center(child: Text('Press the button below to load'));
+            return const Center(child: Text('Auth Initial'));
           } else if (state is Loading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is Done) {

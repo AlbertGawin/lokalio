@@ -77,8 +77,7 @@ void main() {
     when(() => mockCollectionReference.where(any(),
             isNotEqualTo: any(named: 'isNotEqualTo')))
         .thenReturn(mockQueryMapSnapshot);
-    when(() => mockFirebaseAuth.signInAnonymously())
-        .thenAnswer((_) => Future.value(mockUserCredential));
+    when(() => mockFirebaseAuth.currentUser).thenReturn(mockUser);
     when(() => mockUserCredential.user).thenReturn(mockUser);
     when(() => mockUser.uid).thenReturn('1');
   }
@@ -141,9 +140,7 @@ void main() {
 
     test('should throw a FirebaseAuthException when the user is not found',
         () async {
-      when(() => mockFirebaseAuth.signInAnonymously())
-          .thenAnswer((invocation) => Future.value(mockUserCredential));
-      when(() => mockUserCredential.user).thenReturn(null);
+      when(() => mockFirebaseAuth.currentUser).thenReturn(null);
 
       final call = noticeListRemoteDataSourceImpl.getAllNotices;
 

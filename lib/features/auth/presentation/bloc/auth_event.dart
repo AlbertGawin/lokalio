@@ -30,3 +30,7 @@ final class SignUpEvent extends AuthEvent {
 final class SignOutEvent extends AuthEvent {
   const SignOutEvent();
 }
+
+final class CheckAuthEvent extends AuthEvent {
+  const CheckAuthEvent();
+}
