@@ -31,9 +31,7 @@ class SignInWidget extends StatelessWidget {
               autofillHints: const [AutofillHints.email],
               maxLines: 1,
               textInputAction: TextInputAction.next,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-              ),
+              decoration: const InputDecoration(labelText: 'Email'),
               keyboardType: TextInputType.emailAddress,
               validator: (value) {
                 if (value == null || value.isEmpty) {

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/core/error/failures.dart';
@@ -111,6 +112,59 @@ void main() {
       when(() => remoteDataSource.signOut()).thenThrow(ServerException());
 
       final result = await repository.signOut();
+
+      expect(result, const Left(ServerFailure()));
+    });
+
+    test('should return UserNotFoundFailure when sign in is unsuccessful',
+        () async {
+      when(() => remoteDataSource.signIn(email: tEmail, password: tPassword))
+          .thenThrow(FirebaseException(plugin: '', code: 'user-not-found'));
+
+      final result = await repository.signIn(
+        email: tEmail,
+        password: tPassword,
+      );
+
+      expect(result, const Left(UserNotFoundFailure()));
+    });
+
+    test('should return WrongPasswordFailure when sign in is unsuccessful',
+        () async {
+      when(() => remoteDataSource.signIn(email: tEmail, password: tPassword))
+          .thenThrow(FirebaseException(plugin: '', code: 'wrong-password'));
+
+      final result = await repository.signIn(
+        email: tEmail,
+        password: tPassword,
+      );
+
+      expect(result, const Left(WrongPasswordFailure()));
+    });
+
+    test('should return EmailAlreadyInUseFailure when sign up is unsuccessful',
+        () async {
+      when(() => remoteDataSource.signUp(email: tEmail, password: tPassword))
+          .thenThrow(
+              FirebaseException(plugin: '', code: 'email-already-in-use'));
+
+      final result = await repository.signUp(
+        email: tEmail,
+        password: tPassword,
+      );
+
+      expect(result, const Left(EmailAlreadyInUseFailure()));
+    });
+
+    test('should return ServerFailure when sign in throws an exception',
+        () async {
+      when(() => remoteDataSource.signIn(email: tEmail, password: tPassword))
+          .thenThrow(Exception());
+
+      final result = await repository.signIn(
+        email: tEmail,
+        password: tPassword,
+      );
 
       expect(result, const Left(ServerFailure()));
     });

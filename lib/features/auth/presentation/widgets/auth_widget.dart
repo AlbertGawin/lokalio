@@ -20,18 +20,20 @@ class _AuthWidgetState extends State<AuthWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(32),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (_isSignIn) SignInWidget(),
-          if (!_isSignIn) SignUpWidget(),
-          TextButton(
-            onPressed: _toggleAuthMode,
-            child: Text(_isSignIn ? 'Switch to Sign Up' : 'Switch to Sign In'),
-          ),
-        ],
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          children: [
+            if (_isSignIn) SignInWidget(),
+            if (!_isSignIn) SignUpWidget(),
+            TextButton(
+              onPressed: _toggleAuthMode,
+              child:
+                  Text(_isSignIn ? 'Switch to Sign Up' : 'Switch to Sign In'),
+            ),
+          ],
+        ),
       ),
     );
   }

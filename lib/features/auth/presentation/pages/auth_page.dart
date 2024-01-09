@@ -12,7 +12,10 @@ class AuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: buildBody(context));
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(body: buildBody(context)),
+    );
   }
 
   BlocProvider<AuthBloc> buildBody(BuildContext context) {
