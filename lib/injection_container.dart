@@ -10,10 +10,10 @@ import 'package:lokalio/features/auth/domain/usecases/sign_in.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_out.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_up.dart';
 import 'package:lokalio/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:lokalio/features/notice_details/data/datasources/notice_details_local_data_source.dart';
-import 'package:lokalio/features/notice_details/data/datasources/notice_details_remote_data_source.dart';
+import 'package:lokalio/features/notice_CRUD/domain/repositories/create_notice_repository.dart';
+import 'package:lokalio/features/notice_crud/data/datasources/notice_crud_local_data_source.dart';
+import 'package:lokalio/features/notice_crud/data/datasources/notice_crud_remote_data_source.dart';
 import 'package:lokalio/features/notice_details/data/repositories/notice_details_repository_impl.dart';
-import 'package:lokalio/features/notice_details/domain/repositories/notice_details_repository.dart';
 import 'package:lokalio/features/notice_details/domain/usecases/get_notice_details.dart';
 import 'package:lokalio/features/notice_details/presentation/bloc/notice_details_bloc.dart';
 import 'package:lokalio/features/notice_list/data/datasources/notice_list_local_data_source.dart';
@@ -63,15 +63,14 @@ void initNoticeDetails() {
       () => GetNoticeDetails(noticeDetailsRepository: sl()));
 
   // Repository
-  sl.registerLazySingleton<NoticeDetailsRepository>(() =>
-      NoticeDetailsRepositoryImpl(
-          remoteDataSource: sl(), localDataSource: sl(), networkInfo: sl()));
+  sl.registerLazySingleton<NoticeCRUDRepository>(() => NoticeCRUDRepositoryImpl(
+      remoteDataSource: sl(), localDataSource: sl(), networkInfo: sl()));
 
   // Data sources
-  sl.registerLazySingleton<NoticeDetailsRemoteDataSource>(
-      () => NoticeDetailsRemoteDataSourceImpl(firebaseFirestore: sl()));
-  sl.registerLazySingleton<NoticeDetailsLocalDataSource>(
-      () => NoticeDetailsLocalDataSourceImpl(sharedPreferences: sl()));
+  sl.registerLazySingleton<NoticeCRUDRemoteDataSource>(
+      () => NoticeCRUDRemoteDataSourceImpl(firebaseFirestore: sl()));
+  sl.registerLazySingleton<NoticeCRUDLocalDataSource>(
+      () => NoticeCRUDLocalDataSourceImpl(sharedPreferences: sl()));
 }
 
 void initNoticeList() {

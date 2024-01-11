@@ -2,34 +2,34 @@ import 'package:dartz/dartz.dart';
 import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
-import 'package:lokalio/features/notice_details/data/datasources/notice_details_local_data_source.dart';
-import 'package:lokalio/features/notice_details/data/datasources/notice_details_remote_data_source.dart';
-import 'package:lokalio/features/notice_details/data/models/notice_details.dart';
-import 'package:lokalio/features/notice_details/domain/entities/notice_details.dart';
-import 'package:lokalio/features/notice_details/domain/repositories/notice_details_repository.dart';
+import 'package:lokalio/features/notice_CRUD/domain/repositories/create_notice_repository.dart';
+import 'package:lokalio/features/notice_crud/data/datasources/notice_crud_local_data_source.dart';
+import 'package:lokalio/features/notice_crud/domain/entities/notice_details.dart';
+import 'package:lokalio/features/notice_crud/data/datasources/notice_crud_remote_data_source.dart';
+import 'package:lokalio/features/notice_crud/data/models/notice_details.dart';
 
 typedef _MyOrUserChooser = Future<NoticeDetailsModel> Function();
 
-class NoticeDetailsRepositoryImpl implements NoticeDetailsRepository {
-  final NoticeDetailsRemoteDataSource remoteDataSource;
-  final NoticeDetailsLocalDataSource localDataSource;
+class NoticeCRUDRepositoryImpl implements NoticeCRUDRepository {
+  final NoticeCRUDRemoteDataSource remoteDataSource;
+  final NoticeCRUDLocalDataSource localDataSource;
   final NetworkInfo networkInfo;
 
-  const NoticeDetailsRepositoryImpl({
+  const NoticeCRUDRepositoryImpl({
     required this.remoteDataSource,
     required this.localDataSource,
     required this.networkInfo,
   });
 
   @override
-  Future<Either<Failure, NoticeDetails>> getNoticeDetails(
+  Future<Either<Failure, NoticeDetails>> readNotice(
       {required String noticeId}) async {
     return await _getNoticeDetails(
       remoteMyOrUser: () async {
-        return await remoteDataSource.getNoticeDetails(noticeId: noticeId);
+        return await remoteDataSource.readNotice(noticeId: noticeId);
       },
       localMyOrUser: () async {
-        return await localDataSource.getCachedNoticeDetails(noticeId: noticeId);
+        return await localDataSource.readCachedNotice(noticeId: noticeId);
       },
     );
   }
@@ -41,7 +41,7 @@ class NoticeDetailsRepositoryImpl implements NoticeDetailsRepository {
     if (await networkInfo.isConnected) {
       try {
         final noticeDetails = await remoteMyOrUser();
-        await localDataSource.cacheNoticeDetails(noticeDetails: noticeDetails);
+        await localDataSource.cacheNotice(noticeDetails: noticeDetails);
 
         return Right(noticeDetails);
       } on NoDataException {
@@ -57,5 +57,32 @@ class NoticeDetailsRepositoryImpl implements NoticeDetailsRepository {
         return const Left(CacheFailure());
       }
     }
+  }
+
+  @override
+  Future<Either<Failure, bool>> createNotice(
+      {required NoticeDetails noticeDetails}) {
+    // TODO: implement createNotice
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteNotice({required String noticeId}) {
+    // TODO: implement deleteNotice
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> saveNotice(
+      {required NoticeDetails noticeDetails}) {
+    // TODO: implement saveNotice
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateNotice(
+      {required NoticeDetails noticeDetails}) {
+    // TODO: implement updateNotice
+    throw UnimplementedError();
   }
 }

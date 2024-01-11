@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lokalio/features/notice_details/data/models/notice_details.dart';
-import 'package:lokalio/features/notice_details/domain/entities/notice_details.dart';
+import 'package:lokalio/features/notice_crud/domain/entities/notice_details.dart';
+import 'package:lokalio/features/notice_crud/data/models/notice_details.dart';
 
 import '../../../../fixtures/fixture_reader.dart';
 

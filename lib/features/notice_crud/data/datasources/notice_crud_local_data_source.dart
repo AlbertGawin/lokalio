@@ -1,24 +1,24 @@
 import 'dart:convert';
 
 import 'package:lokalio/core/error/exceptions.dart';
-import 'package:lokalio/features/notice_details/data/models/notice_details.dart';
+import 'package:lokalio/features/notice_crud/data/models/notice_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-abstract class NoticeDetailsLocalDataSource {
-  Future<NoticeDetailsModel> getCachedNoticeDetails({required String noticeId});
-  Future<void> cacheNoticeDetails({required NoticeDetailsModel noticeDetails});
+abstract class NoticeCRUDLocalDataSource {
+  Future<NoticeDetailsModel> readCachedNotice({required String noticeId});
+  Future<void> cacheNotice({required NoticeDetailsModel noticeDetails});
 }
 
 const cachedUserId = 'CACHED_USER_ID';
 const cachedNoticeDetails = 'CACHED_NOTICE_DETAILS';
 
-class NoticeDetailsLocalDataSourceImpl implements NoticeDetailsLocalDataSource {
+class NoticeCRUDLocalDataSourceImpl implements NoticeCRUDLocalDataSource {
   final SharedPreferences sharedPreferences;
 
-  const NoticeDetailsLocalDataSourceImpl({required this.sharedPreferences});
+  const NoticeCRUDLocalDataSourceImpl({required this.sharedPreferences});
 
   @override
-  Future<NoticeDetailsModel> getCachedNoticeDetails(
+  Future<NoticeDetailsModel> readCachedNotice(
       {required String noticeId}) async {
     final jsonString = sharedPreferences.getString(cachedNoticeDetails);
 
@@ -34,8 +34,7 @@ class NoticeDetailsLocalDataSourceImpl implements NoticeDetailsLocalDataSource {
   }
 
   @override
-  Future<void> cacheNoticeDetails(
-      {required NoticeDetailsModel noticeDetails}) async {
+  Future<void> cacheNotice({required NoticeDetailsModel noticeDetails}) async {
     final jsonString = json.encode(noticeDetails.toJson());
     await sharedPreferences.setString(cachedNoticeDetails, jsonString);
   }

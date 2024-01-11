@@ -6,8 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lokalio/core/error/exceptions.dart';
-import 'package:lokalio/features/notice_details/data/datasources/notice_details_remote_data_source.dart';
-import 'package:lokalio/features/notice_details/data/models/notice_details.dart';
+import 'package:lokalio/features/notice_crud/data/datasources/notice_crud_remote_data_source.dart';
+import 'package:lokalio/features/notice_crud/data/models/notice_details.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../fixtures/fixture_reader.dart';
@@ -27,7 +27,7 @@ class MockDocumentReference extends Mock
 void main() {
   setupFirebaseAuthMocks();
 
-  late NoticeDetailsRemoteDataSourceImpl dataSource;
+  late NoticeCRUDRemoteDataSourceImpl dataSource;
 
   late MockFirestore mockFirestoreFirebase;
   late MockQueryDocumentSnapshot mockQueryDocumentSnapshot;
@@ -36,7 +36,7 @@ void main() {
 
   setUp(() {
     mockFirestoreFirebase = MockFirestore();
-    dataSource = NoticeDetailsRemoteDataSourceImpl(
+    dataSource = NoticeCRUDRemoteDataSourceImpl(
         firebaseFirestore: mockFirestoreFirebase);
 
     mockQueryDocumentSnapshot = MockQueryDocumentSnapshot();
@@ -71,7 +71,7 @@ void main() {
         when(() => mockQueryDocumentSnapshot.data())
             .thenReturn(tNoticeDetailsModel.toJson());
 
-        final result = await dataSource.getNoticeDetails(noticeId: tNoticeId);
+        final result = await dataSource.readNotice(noticeId: tNoticeId);
 
         expect(result, equals(tNoticeDetailsModel));
       },
@@ -83,7 +83,7 @@ void main() {
       when(() => mockDocumentReference.get())
           .thenAnswer((_) => Future.error(ServerException()));
 
-      final call = dataSource.getNoticeDetails;
+      final call = dataSource.readNotice;
 
       expect(() async => await call(noticeId: tNoticeId),
           throwsA(isA<ServerException>()));
@@ -94,7 +94,7 @@ void main() {
       setUp200();
       when(() => mockQueryDocumentSnapshot.exists).thenReturn(false);
 
-      final call = dataSource.getNoticeDetails;
+      final call = dataSource.readNotice;
 
       expect(() async => await call(noticeId: tNoticeId),
           throwsA(isA<NoDataException>()));

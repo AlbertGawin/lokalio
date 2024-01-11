@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lokalio/features/notice_details/domain/entities/notice_details.dart';
+import 'package:lokalio/features/notice_crud/domain/entities/notice_details.dart';
 
 class NoticeDetailsWidget extends StatelessWidget {
   final NoticeDetails noticeDetails;
