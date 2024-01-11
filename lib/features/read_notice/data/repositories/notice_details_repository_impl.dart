@@ -2,11 +2,11 @@ import 'package:dartz/dartz.dart';
 import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
-import 'package:lokalio/features/notice_CRUD/domain/repositories/create_notice_repository.dart';
 import 'package:lokalio/features/notice_crud/data/datasources/notice_crud_local_data_source.dart';
 import 'package:lokalio/features/notice_crud/domain/entities/notice_details.dart';
 import 'package:lokalio/features/notice_crud/data/datasources/notice_crud_remote_data_source.dart';
 import 'package:lokalio/features/notice_crud/data/models/notice_details.dart';
+import 'package:lokalio/features/notice_crud/domain/repositories/notice_crud_repository.dart';
 
 typedef _MyOrUserChooser = Future<NoticeDetailsModel> Function();
 

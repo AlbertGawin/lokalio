@@ -10,11 +10,11 @@ import 'package:lokalio/features/auth/domain/usecases/sign_in.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_out.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_up.dart';
 import 'package:lokalio/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:lokalio/features/notice_CRUD/domain/repositories/create_notice_repository.dart';
 import 'package:lokalio/features/notice_crud/data/datasources/notice_crud_local_data_source.dart';
 import 'package:lokalio/features/notice_crud/data/datasources/notice_crud_remote_data_source.dart';
-import 'package:lokalio/features/notice_details/data/repositories/notice_details_repository_impl.dart';
-import 'package:lokalio/features/notice_details/domain/usecases/get_notice_details.dart';
+import 'package:lokalio/features/notice_crud/data/repositories/notice_crud_repository_impl.dart';
+import 'package:lokalio/features/notice_crud/domain/repositories/notice_crud_repository.dart';
+import 'package:lokalio/features/notice_crud/domain/usecases/read_notice.dart';
 import 'package:lokalio/features/notice_details/presentation/bloc/notice_details_bloc.dart';
 import 'package:lokalio/features/notice_list/data/datasources/notice_list_local_data_source.dart';
 import 'package:lokalio/features/notice_list/data/datasources/notice_list_remote_data_source.dart';
@@ -59,8 +59,7 @@ void initNoticeDetails() {
   sl.registerFactory(() => NoticeDetailsBloc(getNoticeDetails: sl()));
 
   // Use cases
-  sl.registerLazySingleton(
-      () => GetNoticeDetails(noticeDetailsRepository: sl()));
+  sl.registerLazySingleton(() => ReadNotice(repository: sl()));
 
   // Repository
   sl.registerLazySingleton<NoticeCRUDRepository>(() => NoticeCRUDRepositoryImpl(

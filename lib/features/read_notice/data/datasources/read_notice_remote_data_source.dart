@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lokalio/core/error/exceptions.dart';
-import 'package:lokalio/features/notice_crud/data/models/notice_details.dart';
 
 abstract class NoticeCRUDRemoteDataSource {
   Future<NoticeDetailsModel> readNotice({required String noticeId});

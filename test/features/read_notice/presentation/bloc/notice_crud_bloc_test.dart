@@ -4,21 +4,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lokalio/core/enums/notice_category.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/usecases/usecase.dart';
-import 'package:lokalio/features/notice_crud/domain/entities/notice_details.dart';
-import 'package:lokalio/features/notice_details/domain/usecases/get_notice_details.dart';
 import 'package:lokalio/features/notice_details/presentation/bloc/notice_details_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockGetNoticeDetails extends Mock implements GetNoticeDetails {}
+class MockReadNotice extends Mock implements ReadNotice {}
 
 void main() {
-  late NoticeDetailsBloc bloc;
-  late MockGetNoticeDetails mockGetNoticeDetails;
+  late ReadNoticeBloc bloc;
+  late MockReadNotice mockReadNotice;
 
   setUp(() {
-    mockGetNoticeDetails = MockGetNoticeDetails();
-
-    bloc = NoticeDetailsBloc(getNoticeDetails: mockGetNoticeDetails);
+    mockReadNotice = MockReadNotice();
+    bloc = NoticeDetailsBloc(getNoticeDetails: mockReadNotice);
   });
 
   const tId = '1';

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lokalio/features/notice_crud/data/models/notice.dart';
+import 'package:lokalio/features/notice_list/data/models/notice.dart';
 import 'package:lokalio/features/notice_crud/domain/entities/notice.dart';
 
 import '../../../../fixtures/fixture_reader.dart';

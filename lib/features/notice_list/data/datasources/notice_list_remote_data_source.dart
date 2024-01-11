@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:lokalio/features/notice_crud/data/models/notice.dart';
+import 'package:lokalio/features/notice_list/data/models/notice.dart';
 
 abstract class NoticeListRemoteDataSource {
   Future<List<NoticeModel>> getAllNotices();

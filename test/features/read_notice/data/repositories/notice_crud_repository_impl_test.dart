@@ -8,7 +8,7 @@ import 'package:lokalio/core/network/network_info.dart';
 import 'package:lokalio/features/notice_crud/data/datasources/notice_crud_local_data_source.dart';
 import 'package:lokalio/features/notice_crud/data/datasources/notice_crud_remote_data_source.dart';
 import 'package:lokalio/features/notice_crud/data/models/notice_details.dart';
-import 'package:lokalio/features/notice_details/data/repositories/notice_details_repository_impl.dart';
+import 'package:lokalio/features/notice_crud/data/repositories/notice_crud_repository_impl.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../fixtures/fixture_reader.dart';
@@ -36,7 +36,7 @@ void main() {
     );
   });
 
-  group('getNoticeDetails', () {
+  group('readNotice', () {
     const tNoticeId = '1';
     final tNoticeDetails = NoticeDetailsModel.fromJson(
       json: json.decode(fixture(name: 'notice_details.json')),
