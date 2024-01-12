@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:lokalio/features/notice_crud/domain/entities/notice.dart';
+import 'package:lokalio/features/notice_list/domain/entities/notice.dart';
 import 'package:lokalio/features/notice_list/presentation/widgets/notice_item_widget.dart';
 
 class NoticeListWidget extends StatelessWidget {

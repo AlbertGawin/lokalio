@@ -1,17 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lokalio/core/error/exceptions.dart';
+<<<<<<<< HEAD:lib/features/read_notice/data/datasources/read_notice_remote_data_source.dart
+========
+import 'package:lokalio/features/notice_details/data/models/notice_details.dart';
+>>>>>>>> parent of 24fa49f (U poprawki):lib/features/notice_details/data/datasources/notice_details_remote_data_source.dart
 
-abstract class NoticeCRUDRemoteDataSource {
-  Future<NoticeDetailsModel> readNotice({required String noticeId});
+abstract class NoticeDetailsRemoteDataSource {
+  Future<NoticeDetailsModel> getNoticeDetails({required String noticeId});
 }
 
-class NoticeCRUDRemoteDataSourceImpl implements NoticeCRUDRemoteDataSource {
+class NoticeDetailsRemoteDataSourceImpl
+    implements NoticeDetailsRemoteDataSource {
   final FirebaseFirestore firebaseFirestore;
 
-  const NoticeCRUDRemoteDataSourceImpl({required this.firebaseFirestore});
+  const NoticeDetailsRemoteDataSourceImpl({required this.firebaseFirestore});
 
   @override
-  Future<NoticeDetailsModel> readNotice({required String noticeId}) async {
+  Future<NoticeDetailsModel> getNoticeDetails(
+      {required String noticeId}) async {
     final docRef = firebaseFirestore.collection('noticeDetails').doc(noticeId);
     return await docRef.get().then(
       (DocumentSnapshot doc) {
