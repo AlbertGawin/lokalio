@@ -10,7 +10,7 @@ abstract class ReadNoticeLocalDataSource {
 }
 
 const cachedUserId = 'CACHED_USER_ID';
-const cachedNoticeDetails = 'CACHED_NOTICE_DETAILS';
+const cachedLastSeenNotice = 'CACHED_LAST_SEEN_NOTICE';
 
 class ReadNoticeLocalDataSourceImpl implements ReadNoticeLocalDataSource {
   final SharedPreferences sharedPreferences;
@@ -20,7 +20,7 @@ class ReadNoticeLocalDataSourceImpl implements ReadNoticeLocalDataSource {
   @override
   Future<NoticeDetailsModel> readCachedNotice(
       {required String noticeId}) async {
-    final jsonString = sharedPreferences.getString(cachedNoticeDetails);
+    final jsonString = sharedPreferences.getString(cachedLastSeenNotice);
 
     if (jsonString != null) {
       final dynamic jsonData = json.decode(jsonString);
@@ -36,6 +36,10 @@ class ReadNoticeLocalDataSourceImpl implements ReadNoticeLocalDataSource {
   @override
   Future<void> cacheNotice({required NoticeDetailsModel noticeDetails}) async {
     final jsonString = json.encode(noticeDetails.toJson());
-    await sharedPreferences.setString(cachedNoticeDetails, jsonString);
+    try {
+      await sharedPreferences.setString(cachedLastSeenNotice, jsonString);
+    } catch (e) {
+      throw CacheException();
+    }
   }
 }

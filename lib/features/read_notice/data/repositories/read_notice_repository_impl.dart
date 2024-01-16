@@ -24,7 +24,7 @@ class ReadNoticeRepositoryImpl implements ReadNoticeRepository {
   @override
   Future<Either<Failure, NoticeDetails>> readNotice(
       {required String noticeId}) async {
-    return await _getNoticeDetails(
+    return await _readNoticeDetails(
       remoteMyOrUser: () async {
         return await remoteDataSource.readNotice(noticeId: noticeId);
       },
@@ -34,7 +34,7 @@ class ReadNoticeRepositoryImpl implements ReadNoticeRepository {
     );
   }
 
-  Future<Either<Failure, NoticeDetails>> _getNoticeDetails({
+  Future<Either<Failure, NoticeDetails>> _readNoticeDetails({
     required _MyOrUserChooser remoteMyOrUser,
     required _MyOrUserChooser localMyOrUser,
   }) async {

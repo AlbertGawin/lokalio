@@ -60,13 +60,12 @@ void main() {
   group('device is online', () {
     setUp(() {
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      setUpFunctions();
     });
 
     test(
         'should return remote data when the call to remote data source is successful',
         () async {
-      setUpFunctions();
-
       final result = await repository.readNotice(noticeId: tNoticeId);
 
       verify(() => mockRemoteDataSource.readNotice(noticeId: tNoticeId));
@@ -78,8 +77,6 @@ void main() {
     test(
         'should cache the data locally when the call to remote data source is successful',
         () async {
-      setUpFunctions();
-
       await repository.readNotice(noticeId: tNoticeId);
 
       verify(() => mockRemoteDataSource.readNotice(noticeId: tNoticeId));

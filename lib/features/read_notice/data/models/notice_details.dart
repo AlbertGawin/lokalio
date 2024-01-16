@@ -16,6 +16,43 @@ class NoticeDetailsModel extends NoticeDetails {
     super.imagesUrl,
   });
 
+  Map<String, dynamic> toNoticeMap() {
+    return {
+      'id': id,
+      'userId': userId,
+      'title': title,
+      'category': category,
+      'amountInCash': amountInCash,
+      'location': {
+        'latitude': location.latitude,
+        'longitude': location.longitude,
+        'timestamp': location.timestamp.millisecondsSinceEpoch,
+      },
+      'dateTimeRange': {
+        'start': dateTimeRange.start.toIso8601String(),
+        'end': dateTimeRange.end.toIso8601String(),
+      },
+      'thumbnailUrl': imagesUrl?.first,
+    };
+  }
+
+  factory NoticeDetailsModel.fromNoticeDetails({
+    required NoticeDetails noticeDetails,
+  }) {
+    return NoticeDetailsModel(
+      id: noticeDetails.id,
+      userId: noticeDetails.userId,
+      title: noticeDetails.title,
+      category: noticeDetails.category,
+      amountInCash: noticeDetails.amountInCash,
+      location: noticeDetails.location,
+      dateTimeRange: noticeDetails.dateTimeRange,
+      description: noticeDetails.description,
+      amountInKind: noticeDetails.amountInKind,
+      imagesUrl: noticeDetails.imagesUrl,
+    );
+  }
+
   factory NoticeDetailsModel.fromJson({required Map<String, dynamic> json}) {
     return NoticeDetailsModel(
       id: json['id'] as String,

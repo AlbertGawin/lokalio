@@ -8,6 +8,20 @@ class NoticeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('NoticeWidget'));
+    return Column(
+      children: [
+        Text(noticeDetails.id),
+        Text(noticeDetails.userId),
+        Text(noticeDetails.title),
+        Text(noticeDetails.category.toString()),
+        Text(noticeDetails.amountInCash.toString()),
+        Text(noticeDetails.location.longitude.toString()),
+        Text(noticeDetails.location.latitude.toString()),
+        Text(noticeDetails.dateTimeRange.toString()),
+        Text(noticeDetails.description),
+        Text(noticeDetails.amountInKind.toString()),
+        Text(noticeDetails.imagesUrl.toString()),
+      ],
+    );
   }
 }

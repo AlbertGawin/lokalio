@@ -19,7 +19,7 @@ class NoticePage extends StatelessWidget {
       create: (context) {
         final bloc = sl<ReadNoticeBloc>();
 
-        bloc.add(GetNoticeDetailsEvent(noticeId: noticeId));
+        bloc.add(ReadNoticeDetailsEvent(noticeId: noticeId));
 
         return bloc;
       },

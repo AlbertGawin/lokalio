@@ -29,18 +29,18 @@ void main() {
       json: json.decode(fixture(name: 'notice_details_cached.json')));
 
   test('should return NoticeDetailsModel from SharedPreferences', () async {
-    when(() => mockSharedPreferences.getString(cachedNoticeDetails))
+    when(() => mockSharedPreferences.getString(cachedLastSeenNotice))
         .thenReturn(fixture(name: 'notice_details_cached.json'));
 
     final result = await dataSource.readCachedNotice(noticeId: tNoticeId);
 
-    verify(() => mockSharedPreferences.getString(cachedNoticeDetails));
+    verify(() => mockSharedPreferences.getString(cachedLastSeenNotice));
     expect(result, equals(tNoticeDetailsModel));
   });
 
   test('should throw CacheException when there is no cached data present',
       () async {
-    when(() => mockSharedPreferences.getString(cachedNoticeDetails))
+    when(() => mockSharedPreferences.getString(cachedLastSeenNotice))
         .thenReturn(null);
 
     final call = dataSource.readCachedNotice;

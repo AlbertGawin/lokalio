@@ -1,24 +1,26 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/usecases/usecase.dart';
-import 'package:lokalio/features/read_notice/domain/entities/notice_details.dart';
-import 'package:lokalio/features/read_notice/domain/usecases/get_notice_details.dart';
+import 'package:lokalio/features/read_notice/data/models/notice_details.dart';
+import 'package:lokalio/features/read_notice/domain/usecases/read_notice.dart';
 import 'package:lokalio/features/read_notice/presentation/bloc/read_notice_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockGetNoticeDetails extends Mock implements GetNoticeDetails {}
+import '../../../../fixtures/fixture_reader.dart';
+
+class MockReadNotice extends Mock implements ReadNotice {}
 
 void main() {
   late ReadNoticeBloc bloc;
-  late MockGetNoticeDetails mockGetNoticeDetails;
+  late MockReadNotice mockReadNotice;
 
   setUp(() {
-    mockGetNoticeDetails = MockGetNoticeDetails();
+    mockReadNotice = MockReadNotice();
 
-    bloc = ReadNoticeBloc(getNoticeDetails: mockGetNoticeDetails);
+    bloc = ReadNoticeBloc(readNotice: mockReadNotice);
   });
 
   const tId = '1';
@@ -32,43 +34,22 @@ void main() {
   });
 
   group('GetNoticeDetails', () {
-    final NoticeDetails tNoticeDetails = NoticeDetails(
-      id: '1',
-      userId: '1',
-      title: 'Test',
-      category: 1,
-      amountInCash: 0,
-      dateTimeRange: DateTimeRange(
-          start: DateTime.now(),
-          end: DateTime.now().add(const Duration(days: 1))),
-      description: 'Test',
-      location: Position(
-        longitude: 50.5,
-        latitude: 50.5,
-        timestamp: DateTime.now(),
-        accuracy: 1.0,
-        altitude: 1.0,
-        altitudeAccuracy: 1.0,
-        heading: 1.0,
-        headingAccuracy: 1.0,
-        speed: 1.0,
-        speedAccuracy: 1.0,
-      ),
-      amountInKind: 0,
+    final tNoticeDetails = NoticeDetailsModel.fromJson(
+      json: json.decode(fixture(name: 'notice_details.json')),
     );
 
     void setUpMockGetNoticeDetailsSuccess() {
-      when(() => mockGetNoticeDetails(any()))
+      when(() => mockReadNotice(any()))
           .thenAnswer((_) async => Right(tNoticeDetails));
     }
 
     test('should get data from the GetNoticeDetails use case', () async {
       setUpMockGetNoticeDetailsSuccess();
 
-      bloc.add(const GetNoticeDetailsEvent(noticeId: tId));
-      await untilCalled(() => mockGetNoticeDetails(any()));
+      bloc.add(const ReadNoticeDetailsEvent(noticeId: tId));
+      await untilCalled(() => mockReadNotice(any()));
 
-      verify(() => mockGetNoticeDetails(const Params(noticeId: tId)));
+      verify(() => mockReadNotice(const Params(noticeId: tId)));
     });
 
     test(
@@ -79,13 +60,13 @@ void main() {
       final expected = [Loading(), Done(noticeDetails: tNoticeDetails)];
       expectLater(bloc.stream, emitsInOrder(expected));
 
-      bloc.add(const GetNoticeDetailsEvent(noticeId: tId));
+      bloc.add(const ReadNoticeDetailsEvent(noticeId: tId));
     });
 
     test(
         'should emit [Loading, Error] when getting data fails from the use case',
         () async {
-      when(() => mockGetNoticeDetails(any()))
+      when(() => mockReadNotice(any()))
           .thenAnswer((_) async => const Left(ServerFailure()));
 
       final expected = [
@@ -94,7 +75,7 @@ void main() {
       ];
       expectLater(bloc.stream, emitsInOrder(expected));
 
-      bloc.add(const GetNoticeDetailsEvent(noticeId: tId));
+      bloc.add(const ReadNoticeDetailsEvent(noticeId: tId));
     });
   });
 }

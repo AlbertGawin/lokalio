@@ -14,6 +14,19 @@ class NoticeModel extends Notice {
     super.thumbnailUrl,
   });
 
+  factory NoticeModel.fromNotice({required Notice notice}) {
+    return NoticeModel(
+      id: notice.id,
+      userId: notice.userId,
+      title: notice.title,
+      category: notice.category,
+      amountInCash: notice.amountInCash,
+      location: notice.location,
+      dateTimeRange: notice.dateTimeRange,
+      thumbnailUrl: notice.thumbnailUrl,
+    );
+  }
+
   factory NoticeModel.fromJson({required Map<String, dynamic> json}) {
     return NoticeModel(
       id: json['id'] as String,

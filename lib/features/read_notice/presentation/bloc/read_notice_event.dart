@@ -7,10 +7,10 @@ sealed class ReadNoticeEvent extends Equatable {
   List<Object> get props => [];
 }
 
-final class GetNoticeDetailsEvent extends ReadNoticeEvent {
+final class ReadNoticeDetailsEvent extends ReadNoticeEvent {
   final String noticeId;
 
-  const GetNoticeDetailsEvent({required this.noticeId});
+  const ReadNoticeDetailsEvent({required this.noticeId});
 
   @override
   List<Object> get props => [noticeId];

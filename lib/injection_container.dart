@@ -10,11 +10,17 @@ import 'package:lokalio/features/auth/domain/usecases/sign_in.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_out.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_up.dart';
 import 'package:lokalio/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:lokalio/features/create_notice/data/datasources/create_notice_local_data_source.dart';
+import 'package:lokalio/features/create_notice/data/datasources/create_notice_remote_data_source.dart';
+import 'package:lokalio/features/create_notice/data/repositories/create_notice_repository_impl.dart';
+import 'package:lokalio/features/create_notice/domain/repositories/create_notice_repository.dart';
+import 'package:lokalio/features/create_notice/domain/usecases/create_notice.dart';
+import 'package:lokalio/features/create_notice/presentation/bloc/create_notice_bloc.dart';
 import 'package:lokalio/features/read_notice/data/datasources/read_notice_local_data_source.dart';
 import 'package:lokalio/features/read_notice/data/datasources/read_notice_remote_data_source.dart';
 import 'package:lokalio/features/read_notice/data/repositories/read_notice_repository_impl.dart';
 import 'package:lokalio/features/read_notice/domain/repositories/read_notice_repository.dart';
-import 'package:lokalio/features/read_notice/domain/usecases/get_notice_details.dart';
+import 'package:lokalio/features/read_notice/domain/usecases/read_notice.dart';
 import 'package:lokalio/features/notice_list/data/datasources/notice_list_local_data_source.dart';
 import 'package:lokalio/features/notice_list/data/datasources/notice_list_remote_data_source.dart';
 import 'package:lokalio/features/notice_list/data/repositories/notice_list_repository_impl.dart';
@@ -30,8 +36,9 @@ final sl = GetIt.instance;
 
 Future<void> init() async {
   initAuth();
-  initNoticeDetails();
+  initCreateNotice();
   initNoticeList();
+  initReadNotice();
   initCore();
   await initExternal();
 }
@@ -54,12 +61,31 @@ void initAuth() {
       () => AuthRemoteDataSourceImpl(firebaseAuth: sl()));
 }
 
-void initNoticeDetails() {
+void initCreateNotice() {
   //Bloc
-  sl.registerFactory(() => ReadNoticeBloc(getNoticeDetails: sl()));
+  sl.registerFactory(() => CreateNoticeBloc(createNotice: sl()));
 
   // Use cases
-  sl.registerLazySingleton(() => GetNoticeDetails(repository: sl()));
+  sl.registerLazySingleton(() => CreateNotice(repository: sl()));
+
+  // Repository
+  sl.registerLazySingleton<CreateNoticeRepository>(() =>
+      CreateNoticeRepositoryImpl(
+          remoteDataSource: sl(), localDataSource: sl(), networkInfo: sl()));
+
+  // Data sources
+  sl.registerLazySingleton<CreateNoticeRemoteDataSource>(
+      () => CreateNoticeRemoteDataSourceImpl(firebaseFirestore: sl()));
+  sl.registerLazySingleton<CreateNoticeLocalDataSource>(
+      () => CreateNoticeLocalDataSourceImpl(sharedPreferences: sl()));
+}
+
+void initReadNotice() {
+  //Bloc
+  sl.registerFactory(() => ReadNoticeBloc(readNotice: sl()));
+
+  // Use cases
+  sl.registerLazySingleton(() => ReadNotice(repository: sl()));
 
   // Repository
   sl.registerLazySingleton<ReadNoticeRepository>(() => ReadNoticeRepositoryImpl(

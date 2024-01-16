@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lokalio/features/auth/presentation/bloc/auth_bloc.dart';
 
 class SignUpWidget extends StatelessWidget {
-  SignUpWidget({super.key});
-
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  const SignUpWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     final TextEditingController confirmPasswordController =
@@ -23,7 +23,7 @@ class SignUpWidget extends StatelessWidget {
         }
       },
       child: Form(
-        key: _formKey,
+        key: formKey,
         child: Column(
           children: [
             TextFormField(
@@ -100,8 +100,7 @@ class SignUpWidget extends StatelessWidget {
               builder: (context, state) {
                 return ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate() &&
-                        state is! Loading) {
+                    if (formKey.currentState!.validate() && state is! Loading) {
                       context.read<AuthBloc>().add(SignUpEvent(
                             email: emailController.text,
                             password: passwordController.text,

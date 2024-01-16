@@ -5,10 +5,10 @@ import 'package:lokalio/core/usecases/usecase.dart';
 import 'package:lokalio/features/read_notice/domain/entities/notice_details.dart';
 import 'package:lokalio/features/read_notice/domain/repositories/read_notice_repository.dart';
 
-class GetNoticeDetails implements UseCase<NoticeDetails, Params> {
+class ReadNotice implements UseCase<NoticeDetails, Params> {
   final ReadNoticeRepository repository;
 
-  const GetNoticeDetails({required this.repository});
+  const ReadNotice({required this.repository});
 
   @override
   Future<Either<Failure, NoticeDetails>> call(Params params) async {

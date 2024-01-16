@@ -25,8 +25,8 @@ class _AuthWidgetState extends State<AuthWidget> {
         padding: const EdgeInsets.all(32),
         child: Column(
           children: [
-            if (_isSignIn) SignInWidget(),
-            if (!_isSignIn) SignUpWidget(),
+            if (_isSignIn) const SignInWidget(),
+            if (!_isSignIn) const SignUpWidget(),
             TextButton(
               onPressed: _toggleAuthMode,
               child:

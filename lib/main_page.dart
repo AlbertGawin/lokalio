@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lokalio/core/util/create_route.dart';
+import 'package:lokalio/features/create_notice/presentation/pages/create_notice_page.dart';
 import 'package:lokalio/features/notice_list/presentation/pages/home_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -13,6 +15,7 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
     const HomePage(),
+    const CreateNoticePage(),
     Center(
       child: ElevatedButton(
         onPressed: () {
@@ -24,9 +27,15 @@ class _MainPageState extends State<MainPage> {
   ];
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index == 1) {
+      Navigator.of(context).push(
+        createRoute(const CreateNoticePage()),
+      );
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
@@ -42,6 +51,11 @@ class _MainPageState extends State<MainPage> {
             icon: Icon(Icons.search_outlined),
             selectedIcon: Icon(Icons.search),
             label: 'Ogłoszenia',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.add),
+            selectedIcon: Icon(Icons.add),
+            label: 'Dodaj',
           ),
           NavigationDestination(
             icon: Icon(Icons.account_circle_outlined),
