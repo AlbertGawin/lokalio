@@ -4,12 +4,16 @@
     "title": "title1",
     "category": 1,
     "amountInCash": 1000,
-    "dateRange": {
+    "location": {
+        "latitude": 50.5,
+        "longitude": 50.5,
+        "timestamp": 1641031200000
+    },
+    "dateTimeRange": {
         "start": "2020-01-01T00:00:00.000Z",
         "end": "2020-01-01T00:00:00.000Z"
     },
     "description": "description1",
-    "location": "location1",
     "amountInKind": 10,
     "imagesUrl": [
         "url1",

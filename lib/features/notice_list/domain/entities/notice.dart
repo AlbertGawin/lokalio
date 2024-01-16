@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Notice extends Equatable {
   final String id;
@@ -7,16 +8,18 @@ class Notice extends Equatable {
   final String title;
   final int category;
   final int amountInCash;
-  final DateTimeRange dateRange;
+  final Position location;
+  final DateTimeRange dateTimeRange;
   final String? thumbnailUrl;
 
   const Notice({
     required this.id,
     required this.userId,
     required this.title,
+    required this.location,
     required this.category,
     required this.amountInCash,
-    required this.dateRange,
+    required this.dateTimeRange,
     this.thumbnailUrl,
   });
 
@@ -25,9 +28,10 @@ class Notice extends Equatable {
         id,
         userId,
         title,
+        location,
         category,
         amountInCash,
-        dateRange,
+        dateTimeRange,
         thumbnailUrl,
       ];
 }

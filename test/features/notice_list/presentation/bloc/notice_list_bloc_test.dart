@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/usecases/usecase.dart';
 import 'package:lokalio/features/notice_list/domain/entities/notice.dart';
@@ -44,7 +45,19 @@ void main() {
       userId: '1',
       category: 1,
       amountInCash: 10,
-      dateRange: DateTimeRange(
+      location: Position(
+        longitude: 50.5,
+        latitude: 50.5,
+        timestamp: DateTime.now(),
+        accuracy: 1.0,
+        altitude: 1.0,
+        altitudeAccuracy: 1.0,
+        heading: 1.0,
+        headingAccuracy: 1.0,
+        speed: 1.0,
+        speedAccuracy: 1.0,
+      ),
+      dateTimeRange: DateTimeRange(
         start: DateTime(2021, 1, 1),
         end: DateTime(2021, 1, 2),
       ),

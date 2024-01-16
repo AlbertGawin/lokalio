@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:lokalio/features/notice_list/domain/entities/notice.dart';
 
 class NoticeModel extends Notice {
@@ -8,7 +9,8 @@ class NoticeModel extends Notice {
     required super.title,
     required super.category,
     required super.amountInCash,
-    required super.dateRange,
+    required super.location,
+    required super.dateTimeRange,
     super.thumbnailUrl,
   });
 
@@ -19,9 +21,10 @@ class NoticeModel extends Notice {
       title: json['title'] as String,
       category: json['category'] as int,
       amountInCash: json['amountInCash'] as int,
-      dateRange: DateTimeRange(
-        start: DateTime.parse(json['dateRange']['start'] as String),
-        end: DateTime.parse(json['dateRange']['end'] as String),
+      location: Position.fromMap(json['location'] as Map<String, dynamic>),
+      dateTimeRange: DateTimeRange(
+        start: DateTime.parse(json['dateTimeRange']['start'] as String),
+        end: DateTime.parse(json['dateTimeRange']['end'] as String),
       ),
       thumbnailUrl: json['thumbnailUrl'] as String?,
     );
@@ -34,9 +37,14 @@ class NoticeModel extends Notice {
       'title': title,
       'category': category,
       'amountInCash': amountInCash,
-      'dateRange': {
-        'start': dateRange.start.toIso8601String(),
-        'end': dateRange.end.toIso8601String(),
+      'location': {
+        'latitude': location.latitude,
+        'longitude': location.longitude,
+        'timestamp': location.timestamp.millisecondsSinceEpoch,
+      },
+      'dateTimeRange': {
+        'start': dateTimeRange.start.toIso8601String(),
+        'end': dateTimeRange.end.toIso8601String(),
       },
       'thumbnailUrl': thumbnailUrl ?? '',
     };
@@ -48,16 +56,18 @@ class NoticeModel extends Notice {
     String? title,
     int? category,
     int? amountInCash,
-    DateTimeRange? dateRange,
+    Position? location,
+    DateTimeRange? dateTimeRange,
     String? thumbnailUrl,
   }) {
     return NoticeModel(
       id: id ?? this.id,
       userId: userId ?? this.userId,
       title: title ?? this.title,
+      location: location ?? this.location,
       category: category ?? this.category,
       amountInCash: amountInCash ?? this.amountInCash,
-      dateRange: dateRange ?? this.dateRange,
+      dateTimeRange: dateTimeRange ?? this.dateTimeRange,
       thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
     );
   }

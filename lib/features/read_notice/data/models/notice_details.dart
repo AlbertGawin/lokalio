@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:lokalio/features/read_notice/domain/entities/notice_details.dart';
 
 class NoticeDetailsModel extends NoticeDetails {
@@ -8,32 +9,29 @@ class NoticeDetailsModel extends NoticeDetails {
     required super.title,
     required super.category,
     required super.amountInCash,
-    required super.dateRange,
-    required super.description,
     required super.location,
+    required super.dateTimeRange,
+    required super.description,
     required super.amountInKind,
     super.imagesUrl,
   });
 
-  factory NoticeDetailsModel.fromJson({
-    required Map<String, dynamic> json,
-  }) {
+  factory NoticeDetailsModel.fromJson({required Map<String, dynamic> json}) {
     return NoticeDetailsModel(
-      id: json['id'],
-      userId: json['userId'],
-      title: json['title'],
-      category: json['category'],
-      amountInCash: json['amountInCash'],
-      dateRange: DateTimeRange(
-        start: DateTime.parse(json['dateRange']['start']),
-        end: DateTime.parse(json['dateRange']['end']),
+      id: json['id'] as String,
+      userId: json['userId'] as String,
+      title: json['title'] as String,
+      category: json['category'] as int,
+      amountInCash: json['amountInCash'] as int,
+      location: Position.fromMap(json['location'] as Map<String, dynamic>),
+      dateTimeRange: DateTimeRange(
+        start: DateTime.parse(json['dateTimeRange']['start'] as String),
+        end: DateTime.parse(json['dateTimeRange']['end'] as String),
       ),
-      description: json['description'],
-      location: json['location'],
-      amountInKind: json['amountInKind'],
-      imagesUrl: json['imagesUrl'] != null
-          ? List<String>.from(json['imagesUrl'])
-          : null,
+      description: json['description'] as String,
+      amountInKind: json['amountInKind'] as int,
+      imagesUrl:
+          json['imagesUrl'] != null ? List<String>.from(json['imagesUrl']) : [],
     );
   }
 
@@ -44,12 +42,16 @@ class NoticeDetailsModel extends NoticeDetails {
       'title': title,
       'category': category,
       'amountInCash': amountInCash,
-      'dateRange': {
-        'start': dateRange.start.toIso8601String(),
-        'end': dateRange.end.toIso8601String(),
+      'location': {
+        'latitude': location.latitude,
+        'longitude': location.longitude,
+        'timestamp': location.timestamp.millisecondsSinceEpoch,
+      },
+      'dateTimeRange': {
+        'start': dateTimeRange.start.toIso8601String(),
+        'end': dateTimeRange.end.toIso8601String(),
       },
       'description': description,
-      'location': location,
       'amountInKind': amountInKind,
       'imagesUrl': imagesUrl,
     };
@@ -61,9 +63,9 @@ class NoticeDetailsModel extends NoticeDetails {
     String? title,
     int? category,
     int? amountInCash,
-    DateTimeRange? dateRange,
+    Position? location,
+    DateTimeRange? dateTimeRange,
     String? description,
-    String? location,
     int? amountInKind,
     List<String>? imagesUrl,
   }) {
@@ -73,9 +75,9 @@ class NoticeDetailsModel extends NoticeDetails {
       title: title ?? this.title,
       category: category ?? this.category,
       amountInCash: amountInCash ?? this.amountInCash,
-      dateRange: dateRange ?? this.dateRange,
-      description: description ?? this.description,
       location: location ?? this.location,
+      dateTimeRange: dateTimeRange ?? this.dateTimeRange,
+      description: description ?? this.description,
       amountInKind: amountInKind ?? this.amountInKind,
       imagesUrl: imagesUrl ?? this.imagesUrl,
     );

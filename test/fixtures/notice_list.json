@@ -5,7 +5,12 @@
         "title": "title1",
         "category": 1,
         "amountInCash": 100,
-        "dateRange": {
+        "location": {
+            "latitude": 50.5,
+            "longitude": 50.5,
+            "timestamp": 1641031200000
+        },
+        "dateTimeRange": {
             "start": "2020-01-01T00:00:00.000Z",
             "end": "2020-01-01T00:00:00.000Z"
         },
@@ -17,7 +22,12 @@
         "title": "title2",
         "category": 2,
         "amountInCash": 200,
-        "dateRange": {
+        "location": {
+            "latitude": 50.5,
+            "longitude": 50.5,
+            "timestamp": 1641031200000
+        },
+        "dateTimeRange": {
             "start": "2020-01-01T00:00:00.000Z",
             "end": "2020-01-01T00:00:00.000Z"
         },
@@ -29,7 +39,12 @@
         "title": "title3",
         "category": 3,
         "amountInCash": 300,
-        "dateRange": {
+        "location": {
+            "latitude": 50.5,
+            "longitude": 50.5,
+            "timestamp": 1641031200000
+        },
+        "dateTimeRange": {
             "start": "2020-01-01T00:00:00.000Z",
             "end": "2020-01-01T00:00:00.000Z"
         },
@@ -41,7 +56,12 @@
         "title": "title4",
         "category": 1,
         "amountInCash": 400,
-        "dateRange": {
+        "location": {
+            "latitude": 50.5,
+            "longitude": 50.5,
+            "timestamp": 1641031200000
+        },
+        "dateTimeRange": {
             "start": "2020-01-01T00:00:00.000Z",
             "end": "2020-01-01T00:00:00.000Z"
         },
@@ -53,7 +73,12 @@
         "title": "title5",
         "category": 2,
         "amountInCash": 500,
-        "dateRange": {
+        "location": {
+            "latitude": 50.5,
+            "longitude": 50.5,
+            "timestamp": 1641031200000
+        },
+        "dateTimeRange": {
             "start": "2020-01-01T00:00:00.000Z",
             "end": "2020-01-01T00:00:00.000Z"
         },

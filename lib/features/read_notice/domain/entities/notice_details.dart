@@ -2,7 +2,6 @@ import 'package:lokalio/features/notice_list/domain/entities/notice.dart';
 
 class NoticeDetails extends Notice {
   final String description;
-  final String location;
   final int amountInKind;
   final List<String>? imagesUrl;
 
@@ -12,9 +11,9 @@ class NoticeDetails extends Notice {
     required super.title,
     required super.category,
     required super.amountInCash,
-    required super.dateRange,
+    required super.location,
+    required super.dateTimeRange,
     required this.description,
-    required this.location,
     required this.amountInKind,
     this.imagesUrl,
   });
@@ -26,7 +25,8 @@ class NoticeDetails extends Notice {
         title,
         category,
         amountInCash,
-        dateRange,
+        location,
+        dateTimeRange,
         description,
         location,
         amountInKind,
