@@ -10,12 +10,11 @@ import 'package:lokalio/features/auth/domain/usecases/sign_in.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_out.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_up.dart';
 import 'package:lokalio/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:lokalio/features/notice_CRUD/domain/repositories/create_notice_repository.dart';
-import 'package:lokalio/features/notice_crud/data/datasources/notice_crud_local_data_source.dart';
-import 'package:lokalio/features/notice_crud/data/datasources/notice_crud_remote_data_source.dart';
-import 'package:lokalio/features/notice_details/data/repositories/notice_details_repository_impl.dart';
-import 'package:lokalio/features/notice_details/domain/usecases/get_notice_details.dart';
-import 'package:lokalio/features/notice_details/presentation/bloc/notice_details_bloc.dart';
+import 'package:lokalio/features/read_notice/data/datasources/read_notice_local_data_source.dart';
+import 'package:lokalio/features/read_notice/data/datasources/read_notice_remote_data_source.dart';
+import 'package:lokalio/features/read_notice/data/repositories/read_notice_repository_impl.dart';
+import 'package:lokalio/features/read_notice/domain/repositories/read_notice_repository.dart';
+import 'package:lokalio/features/read_notice/domain/usecases/get_notice_details.dart';
 import 'package:lokalio/features/notice_list/data/datasources/notice_list_local_data_source.dart';
 import 'package:lokalio/features/notice_list/data/datasources/notice_list_remote_data_source.dart';
 import 'package:lokalio/features/notice_list/data/repositories/notice_list_repository_impl.dart';
@@ -23,6 +22,7 @@ import 'package:lokalio/features/notice_list/domain/repositories/notice_list_rep
 import 'package:lokalio/features/notice_list/domain/usecases/get_all_notices.dart';
 import 'package:lokalio/features/notice_list/domain/usecases/get_user_notices.dart';
 import 'package:lokalio/features/notice_list/presentation/bloc/notice_list_bloc.dart';
+import 'package:lokalio/features/read_notice/presentation/bloc/read_notice_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -56,21 +56,20 @@ void initAuth() {
 
 void initNoticeDetails() {
   //Bloc
-  sl.registerFactory(() => NoticeDetailsBloc(getNoticeDetails: sl()));
+  sl.registerFactory(() => ReadNoticeBloc(getNoticeDetails: sl()));
 
   // Use cases
-  sl.registerLazySingleton(
-      () => GetNoticeDetails(noticeDetailsRepository: sl()));
+  sl.registerLazySingleton(() => GetNoticeDetails(repository: sl()));
 
   // Repository
-  sl.registerLazySingleton<NoticeCRUDRepository>(() => NoticeCRUDRepositoryImpl(
+  sl.registerLazySingleton<ReadNoticeRepository>(() => ReadNoticeRepositoryImpl(
       remoteDataSource: sl(), localDataSource: sl(), networkInfo: sl()));
 
   // Data sources
-  sl.registerLazySingleton<NoticeCRUDRemoteDataSource>(
-      () => NoticeCRUDRemoteDataSourceImpl(firebaseFirestore: sl()));
-  sl.registerLazySingleton<NoticeCRUDLocalDataSource>(
-      () => NoticeCRUDLocalDataSourceImpl(sharedPreferences: sl()));
+  sl.registerLazySingleton<ReadNoticeRemoteDataSource>(
+      () => ReadNoticeRemoteDataSourceImpl(firebaseFirestore: sl()));
+  sl.registerLazySingleton<ReadNoticeLocalDataSource>(
+      () => ReadNoticeLocalDataSourceImpl(sharedPreferences: sl()));
 }
 
 void initNoticeList() {

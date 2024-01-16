@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lokalio/core/enums/notice_category.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/usecases/usecase.dart';
-import 'package:lokalio/features/notice_crud/domain/entities/notice.dart';
+import 'package:lokalio/features/notice_list/domain/entities/notice.dart';
 import 'package:lokalio/features/notice_list/domain/usecases/get_all_notices.dart';
 import 'package:lokalio/features/notice_list/domain/usecases/get_user_notices.dart';
 import 'package:lokalio/features/notice_list/presentation/bloc/notice_list_bloc.dart';

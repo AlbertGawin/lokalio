@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lokalio/core/util/create_route.dart';
-import 'package:lokalio/features/notice_details/presentation/pages/notice_details_page.dart';
-import 'package:lokalio/features/notice_crud/domain/entities/notice.dart';
+import 'package:lokalio/features/read_notice/presentation/pages/notice_page.dart';
+import 'package:lokalio/features/notice_list/domain/entities/notice.dart';
 
 class NoticeItemWidget extends StatelessWidget {
   final Notice notice;
@@ -16,7 +16,7 @@ class NoticeItemWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
-          createRoute(NoticeDetailsPage(noticeId: notice.id)),
+          createRoute(NoticePage(noticeId: notice.id)),
         );
       },
       child: Card(
