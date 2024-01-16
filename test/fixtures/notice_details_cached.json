@@ -1,6 +1,18 @@
 {
     "id": "1",
-    "title": "title",
-    "description": "description",
-    "user_id": "1"
+    "userId": "1",
+    "title": "title1",
+    "category": 1,
+    "amountInCash": 1000,
+    "dateRange": {
+        "start": "2020-01-01T00:00:00.000Z",
+        "end": "2020-01-01T00:00:00.000Z"
+    },
+    "description": "description1",
+    "location": "location1",
+    "amountInKind": 10,
+    "imagesUrl": [
+        "url1",
+        "url2"
+    ]
 }

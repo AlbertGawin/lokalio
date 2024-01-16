@@ -1,17 +1,62 @@
 [
     {
         "id": "1",
-        "title": "title",
-        "userId": "1"
+        "userId": "1",
+        "title": "title1",
+        "category": 1,
+        "amountInCash": 100,
+        "dateRange": {
+            "start": "2020-01-01T00:00:00.000Z",
+            "end": "2020-01-01T00:00:00.000Z"
+        },
+        "thumbnailUrl": "url1"
     },
     {
         "id": "2",
-        "title": "title",
-        "userId": "2"
+        "userId": "2",
+        "title": "title2",
+        "category": 2,
+        "amountInCash": 200,
+        "dateRange": {
+            "start": "2020-01-01T00:00:00.000Z",
+            "end": "2020-01-01T00:00:00.000Z"
+        },
+        "thumbnailUrl": ""
     },
     {
         "id": "3",
-        "title": "title",
-        "userId": "3"
+        "userId": "3",
+        "title": "title3",
+        "category": 3,
+        "amountInCash": 300,
+        "dateRange": {
+            "start": "2020-01-01T00:00:00.000Z",
+            "end": "2020-01-01T00:00:00.000Z"
+        },
+        "thumbnailUrl": "url3"
+    },
+    {
+        "id": "4",
+        "userId": "1",
+        "title": "title4",
+        "category": 1,
+        "amountInCash": 400,
+        "dateRange": {
+            "start": "2020-01-01T00:00:00.000Z",
+            "end": "2020-01-01T00:00:00.000Z"
+        },
+        "thumbnailUrl": ""
+    },
+    {
+        "id": "5",
+        "userId": "2",
+        "title": "title5",
+        "category": 2,
+        "amountInCash": 500,
+        "dateRange": {
+            "start": "2020-01-01T00:00:00.000Z",
+            "end": "2020-01-01T00:00:00.000Z"
+        },
+        "thumbnailUrl": "url5"
     }
 ]
