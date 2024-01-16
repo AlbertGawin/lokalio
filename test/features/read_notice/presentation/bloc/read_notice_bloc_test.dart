@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lokalio/core/enums/notice_category.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/usecases/usecase.dart';
 import 'package:lokalio/features/read_notice/domain/entities/notice_details.dart';
@@ -36,7 +35,7 @@ void main() {
       id: '1',
       userId: '1',
       title: 'Test',
-      category: NoticeCategory.HELP.index,
+      category: 1,
       amountInCash: 0,
       dateRange: DateTimeRange(
           start: DateTime.now(),

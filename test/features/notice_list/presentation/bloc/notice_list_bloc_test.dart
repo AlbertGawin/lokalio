@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lokalio/core/enums/notice_category.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/usecases/usecase.dart';
 import 'package:lokalio/features/notice_list/domain/entities/notice.dart';
@@ -41,14 +40,15 @@ void main() {
   final tNoticesList = [
     Notice(
       id: '1',
-      userId: '1',
       title: 'title',
-      category: NoticeCategory.HELP.index,
-      amountInCash: 0,
+      userId: '1',
+      category: 1,
+      amountInCash: 10,
       dateRange: DateTimeRange(
-        start: DateTime.now(),
-        end: DateTime.now().add(const Duration(days: 1)),
+        start: DateTime(2021, 1, 1),
+        end: DateTime(2021, 1, 2),
       ),
+      thumbnailUrl: '',
     )
   ];
 
