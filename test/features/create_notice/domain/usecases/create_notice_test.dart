@@ -37,7 +37,7 @@ void main() {
   test('should get bool from the repository', () async {
     when(() => mockCreateNoticeRepository.createNotice(
             noticeDetails: any(named: 'noticeDetails')))
-        .thenAnswer((_) async => const Right(true));
+        .thenAnswer((_) async => const Right(null));
 
     final result = await createNotice(Params(noticeDetails: tNoticeDetails));
 

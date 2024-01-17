@@ -23,7 +23,6 @@ void main() {
     bloc = CreateNoticeBloc(createNotice: mockCreateNotice);
   });
 
-  const tIsCreated = true;
   final tNoticeDetails = NoticeDetailsModel.fromJson(
     json: json.decode(fixture(name: 'notice_details.json')),
   );
@@ -40,7 +39,7 @@ void main() {
   group('CreateNotice', () {
     void setUpMockCreateNoticeSuccess() {
       when(() => mockCreateNotice(any()))
-          .thenAnswer((_) async => const Right(true));
+          .thenAnswer((_) async => const Right(null));
     }
 
     test('should get data from the CreateNotice use case', () async {
@@ -57,7 +56,7 @@ void main() {
         () async {
       setUpMockCreateNoticeSuccess();
 
-      final expected = [Loading(), const Done(isCreated: tIsCreated)];
+      final expected = [Loading(), Done()];
 
       expectLater(bloc.stream, emitsInOrder(expected));
 

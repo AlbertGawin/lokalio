@@ -9,7 +9,15 @@ class CreateNoticePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(), body: _buildBody(context));
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Dodaj ogłoszenie"),
+        ),
+        body: _buildBody(context),
+      ),
+    );
   }
 
   BlocProvider<CreateNoticeBloc> _buildBody(BuildContext context) {
@@ -18,11 +26,11 @@ class CreateNoticePage extends StatelessWidget {
       child: BlocBuilder<CreateNoticeBloc, CreateNoticeState>(
         builder: (context, state) {
           if (state is CreateNoticeInitial) {
-            return const Center(child: Text('CreateNoticePage'));
+            return const CreateNoticeWidget();
           } else if (state is Loading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is Done) {
-            return const CreateNoticeWidget();
+            return const Center(child: Text('Done'));
           } else if (state is Error) {
             return Center(child: Text(state.message));
           } else {

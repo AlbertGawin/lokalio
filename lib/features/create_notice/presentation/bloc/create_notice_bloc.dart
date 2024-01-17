@@ -10,7 +10,8 @@ part 'create_notice_state.dart';
 class CreateNoticeBloc extends Bloc<CreateNoticeEvent, CreateNoticeState> {
   final CreateNotice createNotice;
 
-  CreateNoticeBloc({required this.createNotice}) : super(Done()) {
+  CreateNoticeBloc({required this.createNotice})
+      : super(CreateNoticeInitial()) {
     on<CreateNoticeEvent>((event, emit) async {
       if (event is CreateNoticeDetailsEvent) {
         emit(Loading());

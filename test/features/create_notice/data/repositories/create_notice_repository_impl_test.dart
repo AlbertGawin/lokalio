@@ -70,7 +70,7 @@ void main() {
 
       verify(() =>
           mockRemoteDataSource.createNotice(noticeDetails: tNoticeDetails));
-      expect(result, equals(const Right(true)));
+      expect(result, equals(const Right(null)));
     });
 
     test(
@@ -105,7 +105,7 @@ void main() {
           mockRemoteDataSource.createNotice(noticeDetails: tNoticeDetails));
       verify(() =>
           mockLocalDataSource.cacheCreateNotice(noticeDetails: tNoticeDetails));
-      expect(result, equals(const Right(true)));
+      expect(result, equals(const Right(null)));
     });
 
     test(
@@ -136,7 +136,7 @@ void main() {
 
       verify(() =>
           mockLocalDataSource.cacheCreateNotice(noticeDetails: tNoticeDetails));
-      expect(result, equals(const Right(true)));
+      expect(result, equals(const Right(null)));
     });
   });
 }
