@@ -26,14 +26,8 @@ class CreateNoticeRemoteDataSourceImpl implements CreateNoticeRemoteDataSource {
           (_) {
             return true;
           },
-          onError: (e) {
-            throw ServerException();
-          },
-        );
+        ).onError((error, stackTrace) => throw ServerException());
       },
-      onError: (e) {
-        throw ServerException();
-      },
-    );
+    ).onError((error, stackTrace) => throw ServerException());
   }
 }

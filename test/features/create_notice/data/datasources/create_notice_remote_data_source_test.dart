@@ -74,4 +74,14 @@ void main() {
     expect(() async => await call(noticeDetails: tNoticeDetailsModel),
         throwsA(isA<ServerException>()));
   });
+
+  test('should call notice and noticeDetails collection', () async {
+    setUp200();
+
+    await dataSource.createNotice(noticeDetails: tNoticeDetailsModel);
+
+    verify(() => mockFirestoreFirebase.collection('notice'));
+    verify(() => mockFirestoreFirebase.collection('noticeDetails'));
+    verifyNoMoreInteractions(mockFirestoreFirebase);
+  });
 }
