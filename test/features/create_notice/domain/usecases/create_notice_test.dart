@@ -34,14 +34,14 @@ void main() {
     json: json.decode(fixture(name: 'notice_details.json')),
   );
 
-  test('should get bool from the repository', () async {
+  test('should get null from the repository', () async {
     when(() => mockCreateNoticeRepository.createNotice(
             noticeDetails: any(named: 'noticeDetails')))
         .thenAnswer((_) async => const Right(null));
 
     final result = await createNotice(Params(noticeDetails: tNoticeDetails));
 
-    expect(result, const Right(true));
+    expect(result, const Right(null));
     verify(() =>
         mockCreateNoticeRepository.createNotice(noticeDetails: tNoticeDetails));
     verifyNoMoreInteractions(mockCreateNoticeRepository);

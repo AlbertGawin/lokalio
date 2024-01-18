@@ -7,7 +7,7 @@ class Notice extends Equatable {
   final String userId;
   final String title;
   final int category;
-  final int amountInCash;
+  final int cashAmount;
   final Position location;
   final DateTimeRange dateTimeRange;
   final String? thumbnailUrl;
@@ -18,7 +18,7 @@ class Notice extends Equatable {
     required this.title,
     required this.location,
     required this.category,
-    required this.amountInCash,
+    required this.cashAmount,
     required this.dateTimeRange,
     this.thumbnailUrl,
   });
@@ -30,7 +30,7 @@ class Notice extends Equatable {
         title,
         location,
         category,
-        amountInCash,
+        cashAmount,
         dateTimeRange,
         thumbnailUrl,
       ];

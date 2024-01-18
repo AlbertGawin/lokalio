@@ -8,11 +8,11 @@ class NoticeDetailsModel extends NoticeDetails {
     required super.userId,
     required super.title,
     required super.category,
-    required super.amountInCash,
+    required super.cashAmount,
     required super.location,
     required super.dateTimeRange,
     required super.description,
-    required super.amountInKind,
+    required super.peopleAmount,
     super.imagesUrl,
   });
 
@@ -22,7 +22,7 @@ class NoticeDetailsModel extends NoticeDetails {
       'userId': userId,
       'title': title,
       'category': category,
-      'amountInCash': amountInCash,
+      'cashAmount': cashAmount,
       'location': {
         'latitude': location.latitude,
         'longitude': location.longitude,
@@ -44,11 +44,11 @@ class NoticeDetailsModel extends NoticeDetails {
       userId: noticeDetails.userId,
       title: noticeDetails.title,
       category: noticeDetails.category,
-      amountInCash: noticeDetails.amountInCash,
+      cashAmount: noticeDetails.cashAmount,
       location: noticeDetails.location,
       dateTimeRange: noticeDetails.dateTimeRange,
       description: noticeDetails.description,
-      amountInKind: noticeDetails.amountInKind,
+      peopleAmount: noticeDetails.peopleAmount,
       imagesUrl: noticeDetails.imagesUrl,
     );
   }
@@ -59,14 +59,14 @@ class NoticeDetailsModel extends NoticeDetails {
       userId: json['userId'] as String,
       title: json['title'] as String,
       category: json['category'] as int,
-      amountInCash: json['amountInCash'] as int,
+      cashAmount: json['cashAmount'] as int,
       location: Position.fromMap(json['location'] as Map<String, dynamic>),
       dateTimeRange: DateTimeRange(
         start: DateTime.parse(json['dateTimeRange']['start'] as String),
         end: DateTime.parse(json['dateTimeRange']['end'] as String),
       ),
       description: json['description'] as String,
-      amountInKind: json['amountInKind'] as int,
+      peopleAmount: json['peopleAmount'] as int,
       imagesUrl:
           json['imagesUrl'] != null ? List<String>.from(json['imagesUrl']) : [],
     );
@@ -78,7 +78,7 @@ class NoticeDetailsModel extends NoticeDetails {
       'userId': userId,
       'title': title,
       'category': category,
-      'amountInCash': amountInCash,
+      'cashAmount': cashAmount,
       'location': {
         'latitude': location.latitude,
         'longitude': location.longitude,
@@ -89,7 +89,7 @@ class NoticeDetailsModel extends NoticeDetails {
         'end': dateTimeRange.end.toIso8601String(),
       },
       'description': description,
-      'amountInKind': amountInKind,
+      'peopleAmount': peopleAmount,
       'imagesUrl': imagesUrl,
     };
   }
@@ -99,11 +99,11 @@ class NoticeDetailsModel extends NoticeDetails {
     String? userId,
     String? title,
     int? category,
-    int? amountInCash,
+    int? cashAmount,
     Position? location,
     DateTimeRange? dateTimeRange,
     String? description,
-    int? amountInKind,
+    int? peopleAmount,
     List<String>? imagesUrl,
   }) {
     return NoticeDetailsModel(
@@ -111,11 +111,11 @@ class NoticeDetailsModel extends NoticeDetails {
       userId: userId ?? this.userId,
       title: title ?? this.title,
       category: category ?? this.category,
-      amountInCash: amountInCash ?? this.amountInCash,
+      cashAmount: cashAmount ?? this.cashAmount,
       location: location ?? this.location,
       dateTimeRange: dateTimeRange ?? this.dateTimeRange,
       description: description ?? this.description,
-      amountInKind: amountInKind ?? this.amountInKind,
+      peopleAmount: peopleAmount ?? this.peopleAmount,
       imagesUrl: imagesUrl ?? this.imagesUrl,
     );
   }

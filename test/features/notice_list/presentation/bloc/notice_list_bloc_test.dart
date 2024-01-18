@@ -44,7 +44,7 @@ void main() {
       title: 'title',
       userId: '1',
       category: 1,
-      amountInCash: 10,
+      cashAmount: 10,
       location: Position(
         longitude: 50.5,
         latitude: 50.5,

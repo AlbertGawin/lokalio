@@ -19,7 +19,7 @@ class CategoryInputWidget extends StatefulWidget {
 class _CategoryInputWidgetState extends State<CategoryInputWidget> {
   int? _selectedCategoryIndex;
 
-  void _chooseCategory() async {
+  void _chooseCategory(FormFieldState state) async {
     var pickedCategoryIndex = await Navigator.of(context).push(
       createRoute(
         const ChooseCategoryPage(),
@@ -32,6 +32,7 @@ class _CategoryInputWidgetState extends State<CategoryInputWidget> {
     setState(() {
       _selectedCategoryIndex = pickedCategoryIndex;
     });
+    state.didChange(pickedCategoryIndex);
 
     widget.getCategory(_selectedCategoryIndex!);
   }
@@ -41,82 +42,94 @@ class _CategoryInputWidgetState extends State<CategoryInputWidget> {
     return CardWidget(
       title: 'Kategoria*',
       content: [
-        InkWell(
-          onTap: _chooseCategory,
-          borderRadius: BorderRadius.circular(4),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            width: double.infinity,
-            height: 68,
-            decoration: BoxDecoration(
-              color: _selectedCategoryIndex == null
-                  ? Theme.of(context).colorScheme.onPrimary.withOpacity(0.5)
-                  : NoticeCategory.values[_selectedCategoryIndex!].color
-                      .withOpacity(0.2),
+        FormField(
+          validator: (value) {
+            if (value == null) {
+              print('null category');
+              return 'Please choose a category';
+            }
+            return null;
+          },
+          builder: (FormFieldState state) {
+            return InkWell(
+              onTap: () => _chooseCategory(state),
               borderRadius: BorderRadius.circular(4),
-              border: Border.all(
-                color: _selectedCategoryIndex == null
-                    ? Theme.of(context).colorScheme.primary
-                    : NoticeCategory.values[_selectedCategoryIndex!].color,
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: _selectedCategoryIndex == null
-                  ? MainAxisAlignment.center
-                  : MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (_selectedCategoryIndex != null)
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(90),
-                      color: NoticeCategory
-                          .values[_selectedCategoryIndex!].color
-                          .withOpacity(0.5),
-                    ),
-                    child: Icon(
-                      NoticeCategory.values[_selectedCategoryIndex!].icon,
-                    ),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                width: double.infinity,
+                height: 68,
+                decoration: BoxDecoration(
+                  color: _selectedCategoryIndex == null
+                      ? Theme.of(context).colorScheme.onPrimary.withOpacity(0.5)
+                      : NoticeCategory.values[_selectedCategoryIndex!].color
+                          .withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(
+                    color: _selectedCategoryIndex == null
+                        ? Theme.of(context).colorScheme.primary
+                        : NoticeCategory.values[_selectedCategoryIndex!].color,
                   ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                ),
+                child: Row(
+                  mainAxisAlignment: _selectedCategoryIndex == null
+                      ? MainAxisAlignment.center
+                      : MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (_selectedCategoryIndex == null)
-                      Icon(
-                        Icons.library_add_outlined,
-                        color: Theme.of(context).colorScheme.primary,
+                    if (_selectedCategoryIndex != null)
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(90),
+                          color: NoticeCategory
+                              .values[_selectedCategoryIndex!].color
+                              .withOpacity(0.5),
+                        ),
+                        child: Icon(
+                          NoticeCategory.values[_selectedCategoryIndex!].icon,
+                        ),
                       ),
-                    const SizedBox(width: 10),
-                    Text(
-                      _selectedCategoryIndex == null
-                          ? 'WYBIERZ KATEGORIĘ'
-                          : NoticeCategory.values[_selectedCategoryIndex!].name
-                              .toUpperCase(),
-                      style: TextStyle(
-                        color: _selectedCategoryIndex == null
-                            ? Theme.of(context).colorScheme.primary
-                            : Colors.black,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        if (_selectedCategoryIndex == null)
+                          Icon(
+                            Icons.library_add_outlined,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        const SizedBox(width: 10),
+                        Text(
+                          _selectedCategoryIndex == null
+                              ? 'WYBIERZ KATEGORIĘ'
+                              : NoticeCategory
+                                  .values[_selectedCategoryIndex!].name
+                                  .toUpperCase(),
+                          style: TextStyle(
+                            color: _selectedCategoryIndex == null
+                                ? Theme.of(context).colorScheme.primary
+                                : Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
+                    if (_selectedCategoryIndex != null) ...[
+                      const Spacer(),
+                      Text(
+                        'ZMIEŃ',
+                        style: TextStyle(
+                          color: NoticeCategory
+                              .values[_selectedCategoryIndex!].color,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ],
                 ),
-                if (_selectedCategoryIndex != null) ...[
-                  const Spacer(),
-                  Text(
-                    'ZMIEŃ',
-                    style: TextStyle(
-                      color:
-                          NoticeCategory.values[_selectedCategoryIndex!].color,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                ]
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         )
       ],
     );

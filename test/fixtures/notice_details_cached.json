@@ -3,7 +3,7 @@
     "userId": "1",
     "title": "title1",
     "category": 1,
-    "amountInCash": 1000,
+    "cashAmount": 1000,
     "location": {
         "latitude": 50.5,
         "longitude": 50.5,
@@ -14,7 +14,7 @@
         "end": "2020-01-01T00:00:00.000Z"
     },
     "description": "description1",
-    "amountInKind": 10,
+    "peopleAmount": 10,
     "imagesUrl": [
         "url1",
         "url2"

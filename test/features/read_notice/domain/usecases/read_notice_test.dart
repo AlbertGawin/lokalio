@@ -24,7 +24,7 @@ void main() {
     userId: '1',
     title: 'Test',
     category: 1,
-    amountInCash: 0,
+    cashAmount: 0,
     dateTimeRange: DateTimeRange(
         start: DateTime.now(),
         end: DateTime.now().add(const Duration(days: 1))),
@@ -41,7 +41,7 @@ void main() {
       speed: 1.0,
       speedAccuracy: 1.0,
     ),
-    amountInKind: 0,
+    peopleAmount: 0,
   );
 
   test('should get NoticeDetails from the repository', () async {

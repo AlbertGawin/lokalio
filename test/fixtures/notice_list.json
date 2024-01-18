@@ -4,7 +4,7 @@
         "userId": "1",
         "title": "title1",
         "category": 1,
-        "amountInCash": 100,
+        "cashAmount": 100,
         "location": {
             "latitude": 50.5,
             "longitude": 50.5,
@@ -21,7 +21,7 @@
         "userId": "2",
         "title": "title2",
         "category": 2,
-        "amountInCash": 200,
+        "cashAmount": 200,
         "location": {
             "latitude": 50.5,
             "longitude": 50.5,
@@ -38,7 +38,7 @@
         "userId": "3",
         "title": "title3",
         "category": 3,
-        "amountInCash": 300,
+        "cashAmount": 300,
         "location": {
             "latitude": 50.5,
             "longitude": 50.5,
@@ -55,7 +55,7 @@
         "userId": "1",
         "title": "title4",
         "category": 1,
-        "amountInCash": 400,
+        "cashAmount": 400,
         "location": {
             "latitude": 50.5,
             "longitude": 50.5,
@@ -72,7 +72,7 @@
         "userId": "2",
         "title": "title5",
         "category": 2,
-        "amountInCash": 500,
+        "cashAmount": 500,
         "location": {
             "latitude": 50.5,
             "longitude": 50.5,
