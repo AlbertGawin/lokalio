@@ -16,26 +16,13 @@ class CategoryInputWidget extends StatefulWidget {
 class _CategoryInputWidgetState extends State<CategoryInputWidget> {
   int? _selectedCategoryIndex;
 
-  void _chooseCategory(FormFieldState state) async {
-    var pickedCategoryIndex = await Navigator.of(context).push(
-      createRoute(
-        const ChooseCategoryPage(),
-      ),
-    );
-    if (pickedCategoryIndex == null) {
-      return;
-    }
-
-    setState(() {
-      _selectedCategoryIndex = pickedCategoryIndex;
-    });
-    state.didChange(pickedCategoryIndex);
-
-    widget.getCategory(_selectedCategoryIndex!);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isSelected = _selectedCategoryIndex != null;
+    final selectedCategory =
+        isSelected ? NoticeCategory.values[_selectedCategoryIndex!] : null;
+
     return CardWidget(
       title: 'Kategoria*',
       content: [
@@ -55,68 +42,61 @@ class _CategoryInputWidgetState extends State<CategoryInputWidget> {
                 width: double.infinity,
                 height: 68,
                 decoration: BoxDecoration(
-                  color: _selectedCategoryIndex == null
-                      ? Theme.of(context).colorScheme.onPrimary.withOpacity(0.5)
-                      : NoticeCategory.values[_selectedCategoryIndex!].color
-                          .withOpacity(0.2),
+                  color: isSelected
+                      ? selectedCategory!.color.withOpacity(0.2)
+                      : colorScheme.onPrimary.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(4),
                   border: Border.all(
-                    color: _selectedCategoryIndex == null
-                        ? Theme.of(context).colorScheme.primary
-                        : NoticeCategory.values[_selectedCategoryIndex!].color,
+                    color: isSelected
+                        ? selectedCategory!.color
+                        : colorScheme.primary,
                   ),
                 ),
                 child: Row(
-                  mainAxisAlignment: _selectedCategoryIndex == null
-                      ? MainAxisAlignment.center
-                      : MainAxisAlignment.start,
+                  mainAxisAlignment: isSelected
+                      ? MainAxisAlignment.start
+                      : MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (_selectedCategoryIndex != null)
+                    if (isSelected)
                       Container(
                         width: 50,
                         height: 50,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(90),
-                          color: NoticeCategory
-                              .values[_selectedCategoryIndex!].color
-                              .withOpacity(0.5),
+                          color: selectedCategory!.color.withOpacity(0.5),
                         ),
                         child: Icon(
-                          NoticeCategory.values[_selectedCategoryIndex!].icon,
+                          selectedCategory.icon,
                         ),
                       ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        if (_selectedCategoryIndex == null)
+                        if (!isSelected)
                           Icon(
                             Icons.library_add_outlined,
-                            color: Theme.of(context).colorScheme.primary,
+                            color: colorScheme.primary,
                           ),
                         const SizedBox(width: 10),
                         Text(
-                          _selectedCategoryIndex == null
-                              ? 'WYBIERZ KATEGORIĘ'
-                              : NoticeCategory
-                                  .values[_selectedCategoryIndex!].name
-                                  .toUpperCase(),
+                          isSelected
+                              ? selectedCategory!.name.toUpperCase()
+                              : 'WYBIERZ KATEGORIĘ',
                           style: TextStyle(
-                            color: _selectedCategoryIndex == null
-                                ? Theme.of(context).colorScheme.primary
-                                : Colors.black,
+                            color:
+                                isSelected ? Colors.black : colorScheme.primary,
                           ),
                         ),
                       ],
                     ),
-                    if (_selectedCategoryIndex != null) ...[
+                    if (isSelected) ...[
                       const Spacer(),
                       Text(
                         'ZMIEŃ',
                         style: TextStyle(
-                          color: NoticeCategory
-                              .values[_selectedCategoryIndex!].color,
+                          color: selectedCategory!.color,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -129,5 +109,21 @@ class _CategoryInputWidgetState extends State<CategoryInputWidget> {
         )
       ],
     );
+  }
+
+  Future<void> _chooseCategory(FormFieldState state) async {
+    var pickedCategoryIndex = await Navigator.of(context).push(
+      createRoute(const ChooseCategoryPage()),
+    );
+    if (pickedCategoryIndex == null) {
+      return;
+    }
+
+    setState(() {
+      _selectedCategoryIndex = pickedCategoryIndex;
+    });
+    state.didChange(pickedCategoryIndex);
+
+    widget.getCategory(_selectedCategoryIndex!);
   }
 }
