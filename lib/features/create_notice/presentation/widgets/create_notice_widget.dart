@@ -47,10 +47,10 @@ class CreateNoticeWidget extends StatelessWidget {
             const SizedBox(height: 16),
             TitleDescInput(
               getTitle: (titleData) {
-                title = titleData;
+                title = titleData ?? '';
               },
               getDescription: (descriptionData) {
-                description = descriptionData;
+                description = descriptionData ?? '';
               },
             ),
             const SizedBox(height: 16),

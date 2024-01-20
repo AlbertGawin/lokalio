@@ -8,8 +8,8 @@ class TitleDescInput extends StatefulWidget {
     required this.getDescription,
   });
 
-  final void Function(String title) getTitle;
-  final void Function(String description) getDescription;
+  final void Function(String? title) getTitle;
+  final void Function(String? description) getDescription;
 
   @override
   State<TitleDescInput> createState() => _TitleDescInputState();
@@ -32,55 +32,61 @@ class _TitleDescInputState extends State<TitleDescInput> {
     return CardWidget(
       title: 'Tytuł i opis*',
       content: [
-        TextFormField(
+        buildTextFormField(
           controller: _titleController,
-          textCapitalization: TextCapitalization.sentences,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          autocorrect: false,
+          label: 'Tytuł*',
+          errorMessage: 'Tytuł musi posiadać minimum 5 znaków.',
+          onSaved: widget.getTitle,
+          minLength: 5,
           maxLength: 50,
-          maxLines: 1,
-          keyboardType: TextInputType.text,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: 'Tytuł*',
-          ),
-          validator: (value) {
-            if (value == null || value.trim().length < 5) {
-              return 'Tytuł musi posiadać minimum 5 znaków.';
-            }
-            return null;
-          },
-          onSaved: (newValue) {
-            if (newValue != null) {
-              widget.getTitle(newValue);
-            }
-          },
+          autocorrect: false,
         ),
         const SizedBox(height: 16),
-        TextFormField(
+        buildTextFormField(
           controller: _descController,
-          textCapitalization: TextCapitalization.sentences,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+          label: 'Opis*',
+          errorMessage: 'Opis musi posiadać minimum 10 znaków.',
+          onSaved: widget.getDescription,
+          minLength: 10,
           maxLength: 200,
           maxLines: 3,
           keyboardType: TextInputType.multiline,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: 'Opis*',
-          ),
-          validator: (value) {
-            if (value == null || value.trim().length < 10) {
-              return 'Opis musi posiadać minimum 10 znaków.';
-            }
-            return null;
-          },
-          onSaved: (newValue) {
-            if (newValue != null) {
-              widget.getDescription(newValue);
-            }
-          },
         ),
       ],
+    );
+  }
+
+  TextFormField buildTextFormField({
+    required TextEditingController controller,
+    required String label,
+    required String errorMessage,
+    required void Function(String? value) onSaved,
+    int minLength = 0,
+    int maxLength = 200,
+    int maxLines = 1,
+    TextInputType keyboardType = TextInputType.text,
+    bool autocorrect = false,
+    TextCapitalization textCapitalization = TextCapitalization.sentences,
+  }) {
+    return TextFormField(
+      controller: controller,
+      textCapitalization: textCapitalization,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      autocorrect: autocorrect,
+      maxLength: maxLength,
+      maxLines: maxLines,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(),
+        labelText: label,
+      ),
+      validator: (value) {
+        if (value == null || value.trim().length < minLength) {
+          return errorMessage;
+        }
+        return null;
+      },
+      onSaved: onSaved,
     );
   }
 }
