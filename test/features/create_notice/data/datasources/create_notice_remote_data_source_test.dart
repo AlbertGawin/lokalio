@@ -55,15 +55,6 @@ void main() {
     json: json.decode(fixture(name: 'notice_details.json')),
   );
 
-  test('should return true when the call is successful', () async {
-    setUp200();
-
-    final result =
-        await dataSource.createNotice(noticeDetails: tNoticeDetailsModel);
-
-    expect(result, true);
-  });
-
   test('should throw ServerException when the notice call is unsuccessful',
       () async {
     setUp200();

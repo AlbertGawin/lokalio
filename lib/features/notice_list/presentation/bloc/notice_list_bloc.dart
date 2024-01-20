@@ -13,10 +13,8 @@ class NoticeListBloc extends Bloc<NoticeListEvent, NoticeListState> {
   final GetAllNotices getAllNotices;
   final GetUserNotices getUserNotices;
 
-  NoticeListBloc({
-    required this.getAllNotices,
-    required this.getUserNotices,
-  }) : super(NoticeListInitial()) {
+  NoticeListBloc({required this.getAllNotices, required this.getUserNotices})
+      : super(NoticeListInitial()) {
     on<NoticeListEvent>((event, emit) async {
       if (event is GetAllNoticesEvent) {
         emit(Loading());

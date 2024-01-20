@@ -30,7 +30,7 @@ class _TitleDescInputState extends State<TitleDescInput> {
   @override
   Widget build(BuildContext context) {
     return CardWidget(
-      title: 'Tytuł i opis',
+      title: 'Tytuł i opis*',
       content: [
         TextFormField(
           controller: _titleController,
@@ -45,8 +45,8 @@ class _TitleDescInputState extends State<TitleDescInput> {
             labelText: 'Tytuł*',
           ),
           validator: (value) {
-            if (value == null || value.trim().isEmpty) {
-              return 'Tytuł nie może być pusty.';
+            if (value == null || value.trim().length < 5) {
+              return 'Tytuł musi posiadać minimum 5 znaków.';
             }
             return null;
           },
@@ -66,7 +66,7 @@ class _TitleDescInputState extends State<TitleDescInput> {
           keyboardType: TextInputType.multiline,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
-            labelText: 'Opis',
+            labelText: 'Opis*',
           ),
           validator: (value) {
             if (value == null || value.trim().length < 10) {

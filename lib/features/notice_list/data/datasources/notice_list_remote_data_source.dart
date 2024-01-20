@@ -25,7 +25,7 @@ class NoticeListRemoteDataSourceImpl implements NoticeListRemoteDataSource {
     }
 
     final query = await firebaseFirestore
-        .collection('notices')
+        .collection('notice')
         .where('userId', isNotEqualTo: user.uid)
         .get();
 
@@ -39,7 +39,7 @@ class NoticeListRemoteDataSourceImpl implements NoticeListRemoteDataSource {
   @override
   Future<List<NoticeModel>> getUserNotices({required String userId}) async {
     final query = await firebaseFirestore
-        .collection('notices')
+        .collection('notice')
         .where('userId', isEqualTo: userId)
         .get();
 

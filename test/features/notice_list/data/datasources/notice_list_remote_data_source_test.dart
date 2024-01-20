@@ -110,7 +110,7 @@ void main() {
 
       await noticeListRemoteDataSourceImpl.getAllNotices();
 
-      verify(() => mockFirestoreFirebase.collection('notices').get());
+      verify(() => mockFirestoreFirebase.collection('notice').get());
     });
 
     test('should return a list of NoticeModel when the response code is 200',
@@ -172,7 +172,7 @@ void main() {
 
       noticeListRemoteDataSourceImpl.getUserNotices(userId: tUserId);
 
-      verify(() => mockFirestoreFirebase.collection('notices').get());
+      verify(() => mockFirestoreFirebase.collection('notice').get());
     });
 
     test('should return a list of NoticeModel when the response code is 200',

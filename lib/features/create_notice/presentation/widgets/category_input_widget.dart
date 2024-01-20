@@ -5,10 +5,7 @@ import 'package:lokalio/features/create_notice/presentation/pages/choose_categor
 import 'package:lokalio/features/create_notice/presentation/widgets/card_widget.dart';
 
 class CategoryInputWidget extends StatefulWidget {
-  const CategoryInputWidget({
-    super.key,
-    required this.getCategory,
-  });
+  const CategoryInputWidget({super.key, required this.getCategory});
 
   final void Function(int categoryIndex) getCategory;
 
@@ -45,7 +42,6 @@ class _CategoryInputWidgetState extends State<CategoryInputWidget> {
         FormField(
           validator: (value) {
             if (value == null) {
-              print('null category');
               return 'Please choose a category';
             }
             return null;

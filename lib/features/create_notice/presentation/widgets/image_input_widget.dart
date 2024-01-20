@@ -8,10 +8,7 @@ import 'package:image_picker_platform_interface/image_picker_platform_interface.
 import 'package:lokalio/features/create_notice/presentation/widgets/card_widget.dart';
 
 class ImageInputWidget extends StatefulWidget {
-  const ImageInputWidget({
-    super.key,
-    required this.getImages,
-  });
+  const ImageInputWidget({super.key, required this.getImages});
 
   final void Function(List<String> images) getImages;
 
@@ -23,8 +20,6 @@ class _ImageInputWidgetState extends State<ImageInputWidget> {
   final List<String> _imagesPaths = [];
 
   Future<void> _uploadImage() async {
-    Navigator.of(context).pop();
-
     final pickedImage = await ImagePicker().pickImage(
       source: ImageSource.camera,
       maxWidth: 1280,
@@ -42,19 +37,15 @@ class _ImageInputWidgetState extends State<ImageInputWidget> {
   }
 
   Future<void> _chooseFromGallery() async {
-    Navigator.of(context).pop();
-
-    final ImagePickerPlatform imagePickerImplementation =
-        ImagePickerPlatform.instance;
-
-    if (imagePickerImplementation is ImagePickerAndroid) {
-      imagePickerImplementation.useAndroidPhotoPicker = true;
+    final ImagePickerPlatform imagePicker = ImagePickerPlatform.instance;
+    if (imagePicker is ImagePickerAndroid) {
+      imagePicker.useAndroidPhotoPicker = true;
     }
 
     final pickedImages = await ImagePicker().pickMultiImage(
       maxHeight: 1280,
       maxWidth: 1280,
-      imageQuality: 100,
+      imageQuality: 80,
     );
 
     if (pickedImages.isNotEmpty) {
@@ -76,10 +67,7 @@ class _ImageInputWidgetState extends State<ImageInputWidget> {
     Navigator.of(context).pop();
 
     await ImageCropper()
-        .cropImage(
-      sourcePath: path,
-      compressQuality: 100,
-    )
+        .cropImage(sourcePath: path, compressQuality: 100)
         .then((editedImage) async {
       if (editedImage != null) {
         _imagesPaths[index] = editedImage.path;
@@ -251,8 +239,8 @@ class _ImageInputWidgetState extends State<ImageInputWidget> {
 void lokShowModalBottomSheet({
   required BuildContext context,
   required List<String> titleList,
-  required List<IconData?> leadingList,
-  required List<Function()?> onTapList,
+  required List<IconData> leadingList,
+  required List<Function()> onTapList,
 }) {
   showModalBottomSheet(
     context: context,
@@ -263,7 +251,10 @@ void lokShowModalBottomSheet({
         children: [
           for (var index = 0; index < titleList.length; index++)
             ListTile(
-              onTap: onTapList[index],
+              onTap: () {
+                Navigator.of(context).pop();
+                onTapList[index]();
+              },
               title: Text(titleList[index]),
               leading: Icon(leadingList[index]),
             ),

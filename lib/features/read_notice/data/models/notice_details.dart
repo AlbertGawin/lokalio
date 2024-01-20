@@ -16,7 +16,7 @@ class NoticeDetailsModel extends NoticeDetails {
     super.imagesUrl,
   });
 
-  Map<String, dynamic> toNoticeMap() {
+  Map<String, dynamic> toNoticeMap({String id = ''}) {
     return {
       'id': id,
       'userId': userId,
@@ -72,7 +72,7 @@ class NoticeDetailsModel extends NoticeDetails {
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson({String id = ''}) {
     return {
       'id': id,
       'userId': userId,

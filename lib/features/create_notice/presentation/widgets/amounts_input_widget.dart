@@ -38,7 +38,7 @@ class _AmountsInputWidgetState extends State<AmountsInputWidget> {
   @override
   Widget build(BuildContext context) {
     return CardWidget(
-      title: 'Kwota i liczba osób',
+      title: 'Kwota i liczba osób*',
       content: [
         TextFormField(
           controller: _cashController,
@@ -48,9 +48,7 @@ class _AmountsInputWidgetState extends State<AmountsInputWidget> {
             signed: false,
           ),
           inputFormatters: [
-            FilteringTextInputFormatter.allow(
-              RegExp(r'^\d{0,3}(\,\d{0,2})?'),
-            ),
+            FilteringTextInputFormatter.allow(RegExp(r'^[1-9]\d{0,2}')),
           ],
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -77,13 +75,11 @@ class _AmountsInputWidgetState extends State<AmountsInputWidget> {
           maxLines: 1,
           keyboardType: TextInputType.number,
           inputFormatters: [
-            FilteringTextInputFormatter.allow(
-              RegExp(r'^[1-9][0-9]*'),
-            ),
+            FilteringTextInputFormatter.allow(RegExp(r'^[1-9][0-9]*')),
           ],
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
-            label: Text('Liczba osób'),
+            label: Text('Liczba osób*'),
             counterText: '',
           ),
           autovalidateMode: AutovalidateMode.onUserInteraction,

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -5,7 +6,6 @@ import 'package:lokalio/features/create_notice/presentation/bloc/create_notice_b
 import 'package:lokalio/features/create_notice/presentation/widgets/amounts_input_widget.dart';
 import 'package:lokalio/features/create_notice/presentation/widgets/category_input_widget.dart';
 import 'package:lokalio/features/create_notice/presentation/widgets/date_time_range_input_widget.dart';
-import 'package:lokalio/features/create_notice/presentation/widgets/location_input_widget.dart';
 import 'package:lokalio/features/create_notice/presentation/widgets/title_desc_widget.dart';
 import 'package:lokalio/features/create_notice/presentation/widgets/image_input_widget.dart';
 import 'package:lokalio/features/read_notice/domain/entities/notice_details.dart';
@@ -31,7 +31,7 @@ class CreateNoticeWidget extends StatelessWidget {
       start: DateTime.now(),
       end: DateTime.now(),
     );
-    List<String> images = [];
+    List<String>? images;
 
     return Form(
       key: formKey,
@@ -40,30 +40,45 @@ class CreateNoticeWidget extends StatelessWidget {
         child: Column(
           children: [
             ImageInputWidget(
-              getImages: (images) {},
+              getImages: (imagesData) {
+                images = imagesData;
+              },
             ),
             const SizedBox(height: 16),
             TitleDescInput(
-              getTitle: (title) {},
-              getDescription: (description) {},
+              getTitle: (titleData) {
+                title = titleData;
+              },
+              getDescription: (descriptionData) {
+                description = descriptionData;
+              },
             ),
             const SizedBox(height: 16),
             CategoryInputWidget(
-              getCategory: (categoryIndex) {},
+              getCategory: (categoryIndexData) {
+                category = categoryIndexData;
+              },
             ),
             const SizedBox(height: 16),
             AmountsInputWidget(
-              getCashAmount: (cashAmount) {},
-              getPeopleAmount: (peopleAmount) {},
+              getCashAmount: (cashAmountData) {
+                cashAmount = cashAmountData;
+              },
+              getPeopleAmount: (peopleAmountData) {
+                peopleAmount = peopleAmountData;
+              },
             ),
-            const SizedBox(height: 16),
-            LocationInputWidget(
-              getLocation: (location) {},
-            ),
+            // const SizedBox(height: 16),
+            // LocationInputWidget(
+            //   getLocation: (locationData) {
+            //     location = locationData;
+            //   },
+            // ),
             const SizedBox(height: 16),
             DateTimeRangeInputWidget(
-              getStartDate: (dateTime) {},
-              getEndDate: (dateTime) {},
+              getDateTimeRange: (dateTimeRangeData) {
+                dateTimeRange = dateTimeRangeData;
+              },
             ),
             const SizedBox(height: 16),
             Container(
@@ -73,9 +88,15 @@ class CreateNoticeWidget extends StatelessWidget {
                 onPressed: () {
                   if (formKey.currentState != null &&
                       formKey.currentState!.validate()) {
+                    final User? user = FirebaseAuth.instance.currentUser;
+
+                    if (user == null) {
+                      return;
+                    }
+
                     NoticeDetails noticeDetails = NoticeDetails(
-                      id: 'id',
-                      userId: 'userId',
+                      id: '',
+                      userId: user.uid,
                       title: title,
                       description: description,
                       category: category,
@@ -91,8 +112,6 @@ class CreateNoticeWidget extends StatelessWidget {
                             noticeDetails: noticeDetails,
                           ),
                         );
-
-                    print('dodano');
                   }
                 },
                 label: const Text('DODAJ OGŁOSZENIE'),

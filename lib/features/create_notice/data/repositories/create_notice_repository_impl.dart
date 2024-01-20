@@ -40,6 +40,7 @@ class CreateNoticeRepositoryImpl implements CreateNoticeRepository {
       try {
         await localDataSource.cacheCreateNotice(
             noticeDetails: noticeDetailsModel);
+
         return const Right(null);
       } on Exception {
         return const Left(CacheFailure());
