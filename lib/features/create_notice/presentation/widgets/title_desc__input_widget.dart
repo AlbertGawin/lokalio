@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lokalio/features/create_notice/presentation/widgets/card_widget.dart';
 
-class TitleDescInput extends StatefulWidget {
-  const TitleDescInput({
+class TitleDescInputWidget extends StatefulWidget {
+  const TitleDescInputWidget({
     super.key,
     required this.getTitle,
     required this.getDescription,
@@ -12,10 +12,10 @@ class TitleDescInput extends StatefulWidget {
   final void Function(String? description) getDescription;
 
   @override
-  State<TitleDescInput> createState() => _TitleDescInputState();
+  State<TitleDescInputWidget> createState() => _TitleDescInputWidgetState();
 }
 
-class _TitleDescInputState extends State<TitleDescInput> {
+class _TitleDescInputWidgetState extends State<TitleDescInputWidget> {
   final _titleController = TextEditingController();
   final _descController = TextEditingController();
 
