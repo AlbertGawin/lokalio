@@ -40,62 +40,65 @@ class _AmountsInputWidgetState extends State<AmountsInputWidget> {
     return CardWidget(
       title: 'Kwota i liczba osób*',
       content: [
-        TextFormField(
+        buildTextFormField(
           controller: _cashController,
-          maxLines: 1,
-          keyboardType: const TextInputType.numberWithOptions(
-            decimal: true,
-            signed: false,
-          ),
+          label: 'Kwota*',
+          errorMessage: 'Podaj kwotę.',
+          onSaved: widget.getCashAmount,
           inputFormatters: [
             FilteringTextInputFormatter.allow(RegExp(r'^[1-9]\d{0,2}')),
           ],
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            label: Text('Kwota*'),
-            suffix: Text('zł'),
-            counterText: '',
-          ),
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: (value) {
-            if (value == null || value.trim().isEmpty) {
-              return 'Podaj kwotę.';
-            }
-            return null;
-          },
-          onSaved: (newValue) {
-            if (newValue != null) {
-              widget.getCashAmount(int.tryParse(newValue)!);
-            }
-          },
+          suffix: 'zł',
         ),
-        TextFormField(
+        buildTextFormField(
           controller: _peopleController,
-          maxLength: 2,
-          maxLines: 1,
-          keyboardType: TextInputType.number,
+          label: 'Liczba osób*',
+          errorMessage: 'Podaj liczbę potrzebnych osób.',
+          onSaved: widget.getPeopleAmount,
           inputFormatters: [
             FilteringTextInputFormatter.allow(RegExp(r'^[1-9][0-9]*')),
           ],
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            label: Text('Liczba osób*'),
-            counterText: '',
-          ),
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: (value) {
-            if (value == null || value.trim().isEmpty) {
-              return 'Podaj liczbę potrzebnych osób.';
-            }
-            return null;
-          },
-          onSaved: (newValue) {
-            if (newValue != null) {
-              widget.getPeopleAmount(int.tryParse(newValue)!);
-            }
-          },
+          maxLength: 2,
         ),
       ],
+    );
+  }
+
+  TextFormField buildTextFormField({
+    required TextEditingController controller,
+    required String label,
+    required String errorMessage,
+    required void Function(int value) onSaved,
+    TextInputType keyboardType =
+        const TextInputType.numberWithOptions(decimal: true, signed: false),
+    List<TextInputFormatter>? inputFormatters,
+    String? suffix,
+    int? maxLength,
+  }) {
+    return TextFormField(
+      controller: controller,
+      maxLines: 1,
+      keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
+      maxLength: maxLength,
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(),
+        label: Text(label),
+        suffix: suffix != null ? Text(suffix) : null,
+        counterText: '',
+      ),
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: (value) {
+        if (value == null || value.trim().isEmpty) {
+          return errorMessage;
+        }
+        return null;
+      },
+      onSaved: (newValue) {
+        if (newValue != null) {
+          onSaved(int.parse(newValue));
+        }
+      },
     );
   }
 }
