@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lokalio/core/util/api_keys.dart';
 import 'package:lokalio/core/util/create_route.dart';
@@ -13,14 +14,14 @@ class LocationInputWidget extends StatefulWidget {
     required this.getLocation,
   });
 
-  final void Function(String location) getLocation;
+  final void Function(Position location) getLocation;
 
   @override
   State<LocationInputWidget> createState() => _LocationInputWidgetState();
 }
 
 class _LocationInputWidgetState extends State<LocationInputWidget> {
-  LatLng? _pickedLocation;
+  Position? _pickedLocation;
 
   String gMapCircle({
     required var lat,
@@ -102,21 +103,19 @@ class _LocationInputWidgetState extends State<LocationInputWidget> {
   }
 
   void _selectOnMap() async {
-    final pickedLocation = await Navigator.of(context).push(
-      createRoute(
-        const MapPage(),
-      ),
-    );
-
-    if (pickedLocation == null) {
-      return;
-    }
-    setState(() {
-      _pickedLocation = pickedLocation;
+    LatLng location = LatLng(
+        _pickedLocation?.latitude ?? 52, _pickedLocation?.longitude ?? 19.1);
+    await Navigator.of(context)
+        .push(createRoute(
+            MapPage(location: location, isSelected: _pickedLocation != null)))
+        .then((position) {
+      if (position != null) {
+        setState(() {
+          _pickedLocation = position;
+        });
+        widget.getLocation(_pickedLocation!);
+      }
     });
-
-    widget
-        .getLocation('${pickedLocation.latitude}, ${pickedLocation.longitude}');
   }
 
   @override

@@ -1,42 +1,45 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:lokalio/core/util/messages.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MapPage extends StatefulWidget {
+  final LatLng location;
+  final bool isSelected;
+
   const MapPage({
     super.key,
-    this.location = const LatLng(52, 19.1),
-    this.isSelecting = true,
+    required this.location,
+    required this.isSelected,
   });
-
-  final LatLng location;
-  final bool isSelecting;
 
   @override
   State<MapPage> createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
-  LatLng? _pickedLocation;
+  Position? _pickedLocation;
+  late LatLng _pickedLatLng;
+  late bool _isSelected;
 
   @override
   void initState() {
     super.initState();
 
+    _pickedLatLng = widget.location;
+    _isSelected = widget.isSelected;
     _checkLocationPermission();
   }
 
-  void _getCurrentLocation() async {
-    Location location = Location();
-
-    bool serviceEnabled;
-    LocationData locationData;
-
+  Future<void> _getCurrentLocation() async {
     try {
-      serviceEnabled = await location.serviceEnabled();
+      final location = Location();
+
+      bool serviceEnabled = await location.serviceEnabled();
       if (!serviceEnabled) {
         serviceEnabled = await location.requestService();
         if (!serviceEnabled) {
@@ -44,31 +47,32 @@ class _MapPageState extends State<MapPage> {
         }
       }
 
-      locationData = await location.getLocation();
+      if (!_isSelected) {
+        await location.getLocation().then((locationData) {
+          final lat = locationData.latitude;
+          final lng = locationData.longitude;
 
-      final lat = locationData.latitude;
-      final lng = locationData.longitude;
+          if (lat == null || lng == null) {
+            return;
+          }
 
-      if (lat == null || lng == null) {
-        return;
-      }
-
-      if (mounted) {
-        setState(() {
-          _pickedLocation = LatLng(lat, lng);
+          if (mounted) {
+            setState(() {
+              _pickedLatLng = LatLng(lat, lng);
+            });
+          }
         });
       }
     } on TimeoutException {
-      if (mounted) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Problem z pobraniem twojej lokalizacji.'),
-          ),
-        );
+      if (!mounted) {
+        return;
       }
 
-      return;
+      ScaffoldMessenger.of(context)
+        ..clearSnackBars()
+        ..showSnackBar(
+          const SnackBar(content: Text(locationErrorMessage)),
+        );
     }
   }
 
@@ -76,8 +80,7 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text(widget.isSelecting ? 'Wybierz lokalizację' : 'Your location'),
+        title: Text(_isSelected ? 'Twoja lokalizacja' : 'Wybierz lokalizację'),
       ),
       body: Column(
         children: [
@@ -85,18 +88,17 @@ class _MapPageState extends State<MapPage> {
             child: Stack(
               children: [
                 GoogleMap(
-                  onLongPress: !widget.isSelecting
-                      ? null
-                      : (position) {
-                          setState(() {
-                            _pickedLocation = position;
-                          });
-                        },
+                  onLongPress: (position) {
+                    setState(() {
+                      _isSelected = true;
+                      _pickedLatLng = position;
+                    });
+                  },
                   circles: {
-                    if (_pickedLocation != null)
+                    if (_isSelected)
                       Circle(
                         circleId: const CircleId('Okolica'),
-                        center: _pickedLocation!,
+                        center: _pickedLatLng,
                         radius: 500,
                         strokeWidth: 2,
                         fillColor: Theme.of(context)
@@ -109,24 +111,15 @@ class _MapPageState extends State<MapPage> {
                   zoomControlsEnabled: true,
                   myLocationEnabled: true,
                   initialCameraPosition: CameraPosition(
-                    target: _pickedLocation != null
-                        ? _pickedLocation!
-                        : LatLng(
-                            widget.location.latitude,
-                            widget.location.longitude,
-                          ),
-                    zoom: 5.8,
+                    target: _pickedLatLng,
+                    zoom: _isSelected ? 12 : 6,
                   ),
-                  markers: (_pickedLocation == null && widget.isSelecting)
+                  markers: (!_isSelected)
                       ? {}
                       : {
                           Marker(
                             markerId: const MarkerId('m1'),
-                            position: _pickedLocation ??
-                                LatLng(
-                                  widget.location.latitude,
-                                  widget.location.longitude,
-                                ),
+                            position: _pickedLatLng,
                           ),
                         },
                 ),
@@ -147,11 +140,17 @@ class _MapPageState extends State<MapPage> {
                 SizedBox(
                   width: double.infinity,
                   child: FilledButton(
-                    onPressed: _pickedLocation == null
-                        ? null
-                        : () {
+                    onPressed: _isSelected
+                        ? () {
+                            _pickedLocation = Position.fromMap({
+                              'latitude': _pickedLatLng.latitude,
+                              'longitude': _pickedLatLng.longitude,
+                              'timestamp':
+                                  DateTime.now().millisecondsSinceEpoch,
+                            });
                             Navigator.of(context).pop(_pickedLocation);
-                          },
+                          }
+                        : null,
                     child: const Text('Wybierz'),
                   ),
                 ),
@@ -163,26 +162,16 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  void _checkLocationPermission() async {
-    await Permission.location.status.then((status) async {
-      if (!status.isGranted) {
-        try {
-          // Request permission
-          status = await Permission.location.request();
-        } catch (e) {
-          // Handle exception
-          print('Permission request failed: $e');
-        }
-        if (!status.isGranted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Location permission is denied'),
-            ),
-          );
-        } else {
-          _getCurrentLocation();
-        }
-      }
-    });
+  Future<void> _checkLocationPermission() async {
+    final status = await Permission.location.status;
+
+    if (status.isGranted) {
+      _getCurrentLocation();
+      return;
+    }
+
+    if (status.isDenied) {
+      await Permission.location.request();
+    }
   }
 }

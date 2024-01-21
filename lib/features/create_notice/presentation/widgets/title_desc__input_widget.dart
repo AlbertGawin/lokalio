@@ -8,8 +8,8 @@ class TitleDescInputWidget extends StatefulWidget {
     required this.getDescription,
   });
 
-  final void Function(String? title) getTitle;
-  final void Function(String? description) getDescription;
+  final void Function(String title) getTitle;
+  final void Function(String description) getDescription;
 
   @override
   State<TitleDescInputWidget> createState() => _TitleDescInputWidgetState();
@@ -41,7 +41,6 @@ class _TitleDescInputWidgetState extends State<TitleDescInputWidget> {
           maxLength: 50,
           autocorrect: false,
         ),
-        const SizedBox(height: 16),
         buildTextFormField(
           controller: _descController,
           label: 'Opis*',
@@ -60,7 +59,7 @@ class _TitleDescInputWidgetState extends State<TitleDescInputWidget> {
     required TextEditingController controller,
     required String label,
     required String errorMessage,
-    required void Function(String? value) onSaved,
+    required void Function(String value) onSaved,
     int minLength = 0,
     int maxLength = 200,
     int maxLines = 1,
@@ -86,7 +85,11 @@ class _TitleDescInputWidgetState extends State<TitleDescInputWidget> {
         }
         return null;
       },
-      onSaved: onSaved,
+      onSaved: (value) {
+        if (value != null) {
+          onSaved(value.trim());
+        }
+      },
     );
   }
 }

@@ -8,16 +8,16 @@ import 'package:image_picker_platform_interface/image_picker_platform_interface.
 import 'package:lokalio/core/util/lok_show_modal_bottom_sheet.dart';
 import 'package:lokalio/features/create_notice/presentation/widgets/card_widget.dart';
 
-class ImageInputWidget extends StatefulWidget {
-  const ImageInputWidget({super.key, required this.getImages});
+class ImagesInputWidget extends StatefulWidget {
+  const ImagesInputWidget({super.key, required this.getImages});
 
   final void Function(List<String> images) getImages;
 
   @override
-  State<ImageInputWidget> createState() => _ImageInputWidgetState();
+  State<ImagesInputWidget> createState() => _ImagesInputWidgetState();
 }
 
-class _ImageInputWidgetState extends State<ImageInputWidget> {
+class _ImagesInputWidgetState extends State<ImagesInputWidget> {
   final List<String> _imagesOriginal = [];
   final List<String> _imagesToSend = [];
 
