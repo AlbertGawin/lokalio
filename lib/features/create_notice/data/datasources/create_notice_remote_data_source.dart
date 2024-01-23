@@ -11,16 +11,21 @@ abstract class CreateNoticeRemoteDataSource {
 
 class CreateNoticeRemoteDataSourceImpl implements CreateNoticeRemoteDataSource {
   final FirebaseFirestore firebaseFirestore;
+  final FirebaseStorage firebaseStorage;
 
-  const CreateNoticeRemoteDataSourceImpl({required this.firebaseFirestore});
+  const CreateNoticeRemoteDataSourceImpl({
+    required this.firebaseFirestore,
+    required this.firebaseStorage,
+  });
 
   @override
   Future<void> createNotice({required NoticeDetailsModel noticeDetails}) async {
     final noticeRef = firebaseFirestore.collection('notice').doc();
+    noticeDetails = noticeDetails.copyWith(id: noticeRef.id);
 
     if (noticeDetails.imagesUrl != null) {
       final List<String> imagesUrl = [];
-      final storageRef = FirebaseStorage.instance.ref();
+      final storageRef = firebaseStorage.ref();
 
       int index = 0;
       for (final image in noticeDetails.imagesUrl!) {
@@ -36,13 +41,11 @@ class CreateNoticeRemoteDataSourceImpl implements CreateNoticeRemoteDataSource {
       noticeDetails = noticeDetails.copyWith(imagesUrl: imagesUrl);
     }
 
-    await noticeRef.set(noticeDetails.toNoticeMap(id: noticeRef.id)).then(
+    await noticeRef.set(noticeDetails.toNoticeJson()).then(
       (_) async {
         final noticeDetailsRef =
             firebaseFirestore.collection('noticeDetails').doc(noticeRef.id);
-        await noticeDetailsRef
-            .set(noticeDetails.toJson(id: noticeDetailsRef.id))
-            .then(
+        await noticeDetailsRef.set(noticeDetails.toJson()).then(
           (_) {
             return;
           },

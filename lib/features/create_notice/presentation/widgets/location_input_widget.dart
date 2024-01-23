@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lokalio/core/util/api_keys.dart';
 import 'package:lokalio/core/util/create_route.dart';
@@ -14,14 +13,14 @@ class LocationInputWidget extends StatefulWidget {
     required this.getLocation,
   });
 
-  final void Function(Position location) getLocation;
+  final void Function(LatLng location) getLocation;
 
   @override
   State<LocationInputWidget> createState() => _LocationInputWidgetState();
 }
 
 class _LocationInputWidgetState extends State<LocationInputWidget> {
-  Position? _pickedLocation;
+  LatLng? _pickedLocation;
 
   String gMapCircle({
     required var lat,

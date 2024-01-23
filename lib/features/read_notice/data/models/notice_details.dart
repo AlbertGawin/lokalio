@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lokalio/features/read_notice/domain/entities/notice_details.dart';
 
 class NoticeDetailsModel extends NoticeDetails {
@@ -16,18 +16,14 @@ class NoticeDetailsModel extends NoticeDetails {
     super.imagesUrl,
   });
 
-  Map<String, dynamic> toNoticeMap({String id = ''}) {
+  Map<String, dynamic> toNoticeJson() {
     return {
       'id': id,
       'userId': userId,
       'title': title,
       'category': category,
       'cashAmount': cashAmount,
-      'location': {
-        'latitude': location.latitude,
-        'longitude': location.longitude,
-        'timestamp': location.timestamp.millisecondsSinceEpoch,
-      },
+      'location': location.toJson(),
       'dateTimeRange': {
         'start': dateTimeRange.start.toIso8601String(),
         'end': dateTimeRange.end.toIso8601String(),
@@ -60,7 +56,7 @@ class NoticeDetailsModel extends NoticeDetails {
       title: json['title'] as String,
       category: json['category'] as int,
       cashAmount: json['cashAmount'] as int,
-      location: Position.fromMap(json['location'] as Map<String, dynamic>),
+      location: LatLng.fromJson(json['location']) as LatLng,
       dateTimeRange: DateTimeRange(
         start: DateTime.parse(json['dateTimeRange']['start'] as String),
         end: DateTime.parse(json['dateTimeRange']['end'] as String),
@@ -72,18 +68,14 @@ class NoticeDetailsModel extends NoticeDetails {
     );
   }
 
-  Map<String, dynamic> toJson({String id = ''}) {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'userId': userId,
       'title': title,
       'category': category,
       'cashAmount': cashAmount,
-      'location': {
-        'latitude': location.latitude,
-        'longitude': location.longitude,
-        'timestamp': location.timestamp.millisecondsSinceEpoch,
-      },
+      'location': location.toJson(),
       'dateTimeRange': {
         'start': dateTimeRange.start.toIso8601String(),
         'end': dateTimeRange.end.toIso8601String(),
@@ -100,7 +92,7 @@ class NoticeDetailsModel extends NoticeDetails {
     String? title,
     int? category,
     int? cashAmount,
-    Position? location,
+    LatLng? location,
     DateTimeRange? dateTimeRange,
     String? description,
     int? peopleAmount,

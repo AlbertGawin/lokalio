@@ -198,7 +198,7 @@ class _ImagesInputWidgetState extends State<ImagesInputWidget> {
       source: ImageSource.camera,
       maxWidth: 1280,
       maxHeight: 1280,
-      imageQuality: 100,
+      imageQuality: 80,
     );
 
     if (pickedImage == null) return;

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Notice extends Equatable {
   final String id;
@@ -8,7 +8,7 @@ class Notice extends Equatable {
   final String title;
   final int category;
   final int cashAmount;
-  final Position location;
+  final LatLng location;
   final DateTimeRange dateTimeRange;
   final String? thumbnailUrl;
 

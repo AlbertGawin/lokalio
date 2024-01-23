@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lokalio/features/notice_list/domain/entities/notice.dart';
 
 class NoticeModel extends Notice {
@@ -34,7 +34,7 @@ class NoticeModel extends Notice {
       title: json['title'] as String,
       category: json['category'] as int,
       cashAmount: json['cashAmount'] as int,
-      location: Position.fromMap(json['location'] as Map<String, dynamic>),
+      location: LatLng.fromJson(json['location']) as LatLng,
       dateTimeRange: DateTimeRange(
         start: DateTime.parse(json['dateTimeRange']['start'] as String),
         end: DateTime.parse(json['dateTimeRange']['end'] as String),
@@ -50,11 +50,7 @@ class NoticeModel extends Notice {
       'title': title,
       'category': category,
       'cashAmount': cashAmount,
-      'location': {
-        'latitude': location.latitude,
-        'longitude': location.longitude,
-        'timestamp': location.timestamp.millisecondsSinceEpoch,
-      },
+      'location': location.toJson(),
       'dateTimeRange': {
         'start': dateTimeRange.start.toIso8601String(),
         'end': dateTimeRange.end.toIso8601String(),
@@ -69,7 +65,7 @@ class NoticeModel extends Notice {
     String? title,
     int? category,
     int? cashAmount,
-    Position? location,
+    LatLng? location,
     DateTimeRange? dateTimeRange,
     String? thumbnailUrl,
   }) {

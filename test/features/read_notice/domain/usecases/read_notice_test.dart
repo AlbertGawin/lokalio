@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lokalio/features/read_notice/domain/entities/notice_details.dart';
 import 'package:lokalio/features/read_notice/domain/repositories/read_notice_repository.dart';
 import 'package:lokalio/features/read_notice/domain/usecases/read_notice.dart';
@@ -29,18 +29,7 @@ void main() {
         start: DateTime.now(),
         end: DateTime.now().add(const Duration(days: 1))),
     description: 'Test',
-    location: Position(
-      longitude: 50.5,
-      latitude: 50.5,
-      timestamp: DateTime.now(),
-      accuracy: 1.0,
-      altitude: 1.0,
-      altitudeAccuracy: 1.0,
-      heading: 1.0,
-      headingAccuracy: 1.0,
-      speed: 1.0,
-      speedAccuracy: 1.0,
-    ),
+    location: const LatLng(0, 0),
     peopleAmount: 0,
   );
 

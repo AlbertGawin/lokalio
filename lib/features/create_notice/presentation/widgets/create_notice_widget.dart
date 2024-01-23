@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lokalio/features/create_notice/presentation/bloc/create_notice_bloc.dart';
 import 'package:lokalio/features/create_notice/presentation/widgets/amounts_input_widget.dart';
 import 'package:lokalio/features/create_notice/presentation/widgets/category_input_widget.dart';
@@ -23,11 +23,7 @@ class CreateNoticeWidget extends StatelessWidget {
     int category = 0;
     int cashAmount = 0;
     int peopleAmount = 1;
-    Position location = Position.fromMap(const {
-      'latitude': 0.0,
-      'longitude': 0.0,
-      'timestamp': 0.0,
-    });
+    LatLng location = const LatLng(0, 0);
     DateTimeRange dateTimeRange = DateTimeRange(
       start: DateTime.now(),
       end: DateTime.now(),

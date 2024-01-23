@@ -1,10 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
-import 'package:lokalio/core/util/messages.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MapPage extends StatefulWidget {
@@ -22,58 +19,18 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  Position? _pickedLocation;
-  late LatLng _pickedLatLng;
+  late LatLng _pickedLocation;
   late bool _isSelected;
+
+  GoogleMapController? _controller;
 
   @override
   void initState() {
     super.initState();
 
-    _pickedLatLng = widget.location;
+    _pickedLocation = widget.location;
     _isSelected = widget.isSelected;
     _checkLocationPermission();
-  }
-
-  Future<void> _getCurrentLocation() async {
-    try {
-      final location = Location();
-
-      bool serviceEnabled = await location.serviceEnabled();
-      if (!serviceEnabled) {
-        serviceEnabled = await location.requestService();
-        if (!serviceEnabled) {
-          return;
-        }
-      }
-
-      if (!_isSelected) {
-        await location.getLocation().then((locationData) {
-          final lat = locationData.latitude;
-          final lng = locationData.longitude;
-
-          if (lat == null || lng == null) {
-            return;
-          }
-
-          if (mounted) {
-            setState(() {
-              _pickedLatLng = LatLng(lat, lng);
-            });
-          }
-        });
-      }
-    } on TimeoutException {
-      if (!mounted) {
-        return;
-      }
-
-      ScaffoldMessenger.of(context)
-        ..clearSnackBars()
-        ..showSnackBar(
-          const SnackBar(content: Text(locationErrorMessage)),
-        );
-    }
   }
 
   @override
@@ -88,17 +45,34 @@ class _MapPageState extends State<MapPage> {
             child: Stack(
               children: [
                 GoogleMap(
-                  onLongPress: (position) {
+                  onMapCreated: (controller) {
+                    _controller = controller;
+                  },
+                  onLongPress: (location) async {
                     setState(() {
                       _isSelected = true;
-                      _pickedLatLng = position;
+                      _pickedLocation = location;
                     });
+
+                    if (_controller == null) {
+                      return;
+                    }
+
+                    double currentZoom = await _controller!.getZoomLevel();
+                    _controller!.animateCamera(
+                      CameraUpdate.newCameraPosition(
+                        CameraPosition(
+                          target: location,
+                          zoom: 12 > currentZoom ? 12 : currentZoom,
+                        ),
+                      ),
+                    );
                   },
                   circles: {
                     if (_isSelected)
                       Circle(
                         circleId: const CircleId('Okolica'),
-                        center: _pickedLatLng,
+                        center: _pickedLocation,
                         radius: 500,
                         strokeWidth: 2,
                         fillColor: Theme.of(context)
@@ -111,7 +85,7 @@ class _MapPageState extends State<MapPage> {
                   zoomControlsEnabled: true,
                   myLocationEnabled: true,
                   initialCameraPosition: CameraPosition(
-                    target: _pickedLatLng,
+                    target: _pickedLocation,
                     zoom: _isSelected ? 12 : 6,
                   ),
                   markers: (!_isSelected)
@@ -119,7 +93,7 @@ class _MapPageState extends State<MapPage> {
                       : {
                           Marker(
                             markerId: const MarkerId('m1'),
-                            position: _pickedLatLng,
+                            position: _pickedLocation,
                           ),
                         },
                 ),
@@ -142,12 +116,6 @@ class _MapPageState extends State<MapPage> {
                   child: FilledButton(
                     onPressed: _isSelected
                         ? () {
-                            _pickedLocation = Position.fromMap({
-                              'latitude': _pickedLatLng.latitude,
-                              'longitude': _pickedLatLng.longitude,
-                              'timestamp':
-                                  DateTime.now().millisecondsSinceEpoch,
-                            });
                             Navigator.of(context).pop(_pickedLocation);
                           }
                         : null,
@@ -166,7 +134,6 @@ class _MapPageState extends State<MapPage> {
     final status = await Permission.location.status;
 
     if (status.isGranted) {
-      _getCurrentLocation();
       return;
     }
 

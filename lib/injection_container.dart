@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:lokalio/core/network/network_info.dart';
@@ -74,8 +75,9 @@ void initCreateNotice() {
           remoteDataSource: sl(), localDataSource: sl(), networkInfo: sl()));
 
   // Data sources
-  sl.registerLazySingleton<CreateNoticeRemoteDataSource>(
-      () => CreateNoticeRemoteDataSourceImpl(firebaseFirestore: sl()));
+  sl.registerLazySingleton<CreateNoticeRemoteDataSource>(() =>
+      CreateNoticeRemoteDataSourceImpl(
+          firebaseFirestore: sl(), firebaseStorage: sl()));
   sl.registerLazySingleton<CreateNoticeLocalDataSource>(
       () => CreateNoticeLocalDataSourceImpl(sharedPreferences: sl()));
 }
@@ -129,9 +131,11 @@ Future<void> initExternal() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   final firebaseFirestore = FirebaseFirestore.instance;
   final firebaseAuth = FirebaseAuth.instance;
+  final firebaseStorage = FirebaseStorage.instance;
 
   sl.registerLazySingleton(() => firebaseFirestore);
   sl.registerLazySingleton(() => firebaseAuth);
+  sl.registerLazySingleton(() => firebaseStorage);
   sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => http.Client());
   sl.registerLazySingleton(() => InternetConnectionChecker());
