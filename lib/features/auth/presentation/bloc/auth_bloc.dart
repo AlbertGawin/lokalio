@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/usecases/usecase.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_in.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_up.dart';
@@ -22,7 +21,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await signIn(SignInParams(email: event.email, password: event.password))
             .then((failure) {
           failure.fold(
-            (failure) => emit(Error(message: failureMessages[failure.type]!)),
+            (failure) => emit(Error(message: failure.message)),
             (_) => emit(Done()),
           );
         });
@@ -31,7 +30,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await signUp(SignUpParams(email: event.email, password: event.password))
             .then((failure) {
           failure.fold(
-            (failure) => emit(Error(message: failureMessages[failure.type]!)),
+            (failure) => emit(Error(message: failure.message)),
             (_) => emit(Done()),
           );
         });
@@ -39,7 +38,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(Loading());
         await signOut(NoParams()).then((failure) {
           failure.fold(
-            (failure) => emit(Error(message: failureMessages[failure.type]!)),
+            (failure) => emit(Error(message: failure.message)),
             (_) => emit(Done()),
           );
         });

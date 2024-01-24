@@ -23,13 +23,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
         return const Right(true);
       } on FirebaseException catch (e) {
-        if (e.code == 'user-not-found') {
-          return const Left(UserNotFoundFailure());
-        } else if (e.code == 'wrong-password') {
-          return const Left(WrongPasswordFailure());
-        } else {
-          return const Left(ServerFailure());
-        }
+        return Left(FirebaseFailure(message: e.message ?? ''));
       } on Exception {
         return const Left(ServerFailure());
       }

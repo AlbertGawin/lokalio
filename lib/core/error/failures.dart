@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 enum FailureType {
   serverFailure,
   cacheFailure,
+  firebaseFailure,
   noDataFailure,
   noConnectionFailure,
   userNotFoundFailure,
@@ -13,6 +14,7 @@ enum FailureType {
 const failureMessages = {
   FailureType.serverFailure: 'Server Failure',
   FailureType.cacheFailure: 'Cache Failure',
+  FailureType.firebaseFailure: 'Firebase Failure',
   FailureType.noDataFailure: 'No data found.',
   FailureType.noConnectionFailure: 'No connection.',
   FailureType.userNotFoundFailure: 'User not found.',
@@ -38,6 +40,14 @@ class ServerFailure extends Failure {
 
 class CacheFailure extends Failure {
   const CacheFailure() : super(type: FailureType.cacheFailure);
+}
+
+class FirebaseFailure extends Failure {
+  @override
+  final String message;
+
+  const FirebaseFailure({required this.message})
+      : super(type: FailureType.firebaseFailure);
 }
 
 class NoDataFailure extends Failure {
