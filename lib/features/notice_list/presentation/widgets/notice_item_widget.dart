@@ -27,8 +27,8 @@ class NoticeItemWidget extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
+        margin: const EdgeInsets.all(0),
         elevation: 4,
-        margin: const EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

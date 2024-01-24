@@ -41,34 +41,32 @@ class NoticeListWidget extends StatelessWidget {
               ],
             ),
           )
-        : SizedBox(
-            height: double.infinity,
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                    child: Text(
-                      'ZNALEŹLIŚMY ${noticeList.length} ${_lastWord()}',
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ),
-                  MasonryGridView.count(
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    shrinkWrap: true,
-                    itemCount: noticeList.length,
-                    itemBuilder: (context, index) {
-                      return NoticeItemWidget(notice: noticeList[index]);
-                    },
-                  ),
-                ],
-              ),
+        : SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${noticeList.length} ${_lastWord()}',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                MasonryGridView.count(
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  shrinkWrap: true,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  itemCount: noticeList.length,
+                  itemBuilder: (context, index) {
+                    return NoticeItemWidget(notice: noticeList[index]);
+                  },
+                ),
+              ],
             ),
           );
   }

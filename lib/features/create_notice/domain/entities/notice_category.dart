@@ -12,7 +12,7 @@ extension NoticeCategoryExtension on NoticeCategory {
   String get name {
     switch (this) {
       case NoticeCategory.general:
-        return 'Ogłoszenie';
+        return 'Ogólne';
       case NoticeCategory.event:
         return 'Wydarzenie';
       case NoticeCategory.announcement:
