@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lokalio/features/notice_list/presentation/bloc/notice_list_bloc.dart';
-import 'package:lokalio/features/notice_list/presentation/widgets/notice_list_widget.dart';
+import 'package:lokalio/features/notice_list/presentation/widgets/home_page_widget.dart';
 import 'package:lokalio/injection_container.dart';
 
 class HomePage extends StatelessWidget {
@@ -18,7 +18,6 @@ class HomePage extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final bloc = sl<NoticeListBloc>();
-
         bloc.add(GetAllNoticesEvent());
 
         return bloc;
@@ -30,7 +29,7 @@ class HomePage extends StatelessWidget {
           } else if (state is Loading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is Done) {
-            return NoticeListWidget(noticeList: state.noticeList);
+            return HomePageWidget(noticeList: state.noticeList);
           } else if (state is Error) {
             return Center(child: Text(state.message));
           } else {
