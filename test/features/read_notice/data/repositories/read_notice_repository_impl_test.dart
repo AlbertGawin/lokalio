@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
-import 'package:lokalio/features/read_notice/data/datasources/read_notice_local_data_source.dart';
 import 'package:lokalio/features/read_notice/data/datasources/read_notice_remote_data_source.dart';
 import 'package:lokalio/features/read_notice/data/models/notice_details.dart';
 import 'package:lokalio/features/read_notice/data/repositories/read_notice_repository_impl.dart';
@@ -15,23 +14,20 @@ import '../../../../fixtures/fixture_reader.dart';
 
 class MockRemoteDataSource extends Mock implements ReadNoticeRemoteDataSource {}
 
-class MockLocalDataSource extends Mock implements ReadNoticeLocalDataSource {}
-
 class MockNetworkInfo extends Mock implements NetworkInfo {}
 
 void main() {
   late ReadNoticeRepositoryImpl repository;
   late MockRemoteDataSource mockRemoteDataSource;
-  late MockLocalDataSource mockLocalDataSource;
+
   late MockNetworkInfo mockNetworkInfo;
 
   setUp(() {
     mockNetworkInfo = MockNetworkInfo();
     mockRemoteDataSource = MockRemoteDataSource();
-    mockLocalDataSource = MockLocalDataSource();
+
     repository = ReadNoticeRepositoryImpl(
       remoteDataSource: mockRemoteDataSource,
-      localDataSource: mockLocalDataSource,
       networkInfo: mockNetworkInfo,
     );
   });
@@ -44,8 +40,6 @@ void main() {
   void setUpFunctions() {
     when(() => mockRemoteDataSource.readNotice(noticeId: tNoticeId))
         .thenAnswer((_) async => tNoticeDetails);
-    when(() => mockLocalDataSource.cacheNotice(noticeDetails: tNoticeDetails))
-        .thenAnswer((_) async => {});
   }
 
   test('should check if the device is online', () async {
@@ -69,23 +63,12 @@ void main() {
       final result = await repository.readNotice(noticeId: tNoticeId);
 
       verify(() => mockRemoteDataSource.readNotice(noticeId: tNoticeId));
-      verify(
-          () => mockLocalDataSource.cacheNotice(noticeDetails: tNoticeDetails));
+
       expect(result, equals(Right(tNoticeDetails)));
     });
 
     test(
-        'should cache the data locally when the call to remote data source is successful',
-        () async {
-      await repository.readNotice(noticeId: tNoticeId);
-
-      verify(() => mockRemoteDataSource.readNotice(noticeId: tNoticeId));
-      verify(
-          () => mockLocalDataSource.cacheNotice(noticeDetails: tNoticeDetails));
-    });
-
-    test(
-        'should return server failure when the call to remote data source is unsuccessful',
+        'should return ServerFailure when the call to remote data source is unsuccessful',
         () async {
       when(() => mockRemoteDataSource.readNotice(noticeId: tNoticeId))
           .thenThrow(ServerException());
@@ -93,8 +76,19 @@ void main() {
       final result = await repository.readNotice(noticeId: tNoticeId);
 
       verify(() => mockRemoteDataSource.readNotice(noticeId: tNoticeId));
-      verifyZeroInteractions(mockLocalDataSource);
       expect(result, equals(const Left(ServerFailure())));
+    });
+
+    test(
+        'should return NoDataFailure when there is no data present in the remote data source',
+        () async {
+      when(() => mockRemoteDataSource.readNotice(noticeId: tNoticeId))
+          .thenThrow(NoDataException());
+
+      final result = await repository.readNotice(noticeId: tNoticeId);
+
+      verify(() => mockRemoteDataSource.readNotice(noticeId: tNoticeId));
+      expect(result, equals(const Left(NoDataFailure())));
     });
   });
 
@@ -104,28 +98,15 @@ void main() {
     });
 
     test(
-        'should return last locally cached data when the cached data is present',
+        'should return ServerFailure when the call to remote data source is unsuccessful',
         () async {
-      when(() => mockLocalDataSource.readCachedNotice(noticeId: tNoticeId))
-          .thenAnswer((_) async => tNoticeDetails);
+      when(() => mockRemoteDataSource.readNotice(noticeId: tNoticeId))
+          .thenThrow(ServerException());
 
       final result = await repository.readNotice(noticeId: tNoticeId);
 
       verifyZeroInteractions(mockRemoteDataSource);
-      verify(() => mockLocalDataSource.readCachedNotice(noticeId: tNoticeId));
-      expect(result, equals(Right(tNoticeDetails)));
-    });
-
-    test('should return CacheFailure when there is no cached data present',
-        () async {
-      when(() => mockLocalDataSource.readCachedNotice(noticeId: tNoticeId))
-          .thenThrow(CacheException());
-
-      final result = await repository.readNotice(noticeId: tNoticeId);
-
-      verifyZeroInteractions(mockRemoteDataSource);
-      verify(() => mockLocalDataSource.readCachedNotice(noticeId: tNoticeId));
-      expect(result, equals(const Left(CacheFailure())));
+      expect(result, equals(const Left(ServerFailure())));
     });
   });
 }

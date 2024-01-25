@@ -7,6 +7,10 @@ sealed class NoticeListEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class GetAllNoticesEvent extends NoticeListEvent {}
+
+class GetMyNoticesEvent extends NoticeListEvent {}
+
 final class GetUserNoticesEvent extends NoticeListEvent {
   final String userId;
 
@@ -15,5 +19,3 @@ final class GetUserNoticesEvent extends NoticeListEvent {
   @override
   List<Object> get props => [userId];
 }
-
-class GetAllNoticesEvent extends NoticeListEvent {}

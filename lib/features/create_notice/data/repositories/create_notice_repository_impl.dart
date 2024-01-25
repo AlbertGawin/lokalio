@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
-import 'package:lokalio/features/create_notice/data/datasources/create_notice_local_data_source.dart';
 import 'package:lokalio/features/create_notice/data/datasources/create_notice_remote_data_source.dart';
 import 'package:lokalio/features/create_notice/domain/repositories/create_notice_repository.dart';
 import 'package:lokalio/features/read_notice/data/models/notice_details.dart';
@@ -10,12 +9,10 @@ import 'package:lokalio/features/read_notice/domain/entities/notice_details.dart
 
 class CreateNoticeRepositoryImpl implements CreateNoticeRepository {
   final CreateNoticeRemoteDataSource remoteDataSource;
-  final CreateNoticeLocalDataSource localDataSource;
   final NetworkInfo networkInfo;
 
   const CreateNoticeRepositoryImpl({
     required this.remoteDataSource,
-    required this.localDataSource,
     required this.networkInfo,
   });
 
@@ -37,14 +34,7 @@ class CreateNoticeRepositoryImpl implements CreateNoticeRepository {
         return const Left(ServerFailure());
       }
     } else {
-      try {
-        await localDataSource.cacheCreateNotice(
-            noticeDetails: noticeDetailsModel);
-
-        return const Right(null);
-      } on Exception {
-        return const Left(CacheFailure());
-      }
+      return const Left(ServerFailure());
     }
   }
 }

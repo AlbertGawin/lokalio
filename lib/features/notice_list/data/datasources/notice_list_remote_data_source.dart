@@ -4,6 +4,7 @@ import 'package:lokalio/features/notice_list/data/models/notice.dart';
 
 abstract class NoticeListRemoteDataSource {
   Future<List<NoticeModel>> getAllNotices();
+  Future<List<NoticeModel>> getMyNotices();
   Future<List<NoticeModel>> getUserNotices({required String userId});
 }
 
@@ -41,6 +42,26 @@ class NoticeListRemoteDataSourceImpl implements NoticeListRemoteDataSource {
     final query = await firebaseFirestore
         .collection('notice')
         .where('userId', isEqualTo: userId)
+        .get();
+
+    final notices = query.docs.map((snapshot) {
+      return NoticeModel.fromJson(json: snapshot.data());
+    }).toList();
+
+    return notices;
+  }
+
+  @override
+  Future<List<NoticeModel>> getMyNotices() async {
+    final user = firebaseAuth.currentUser;
+
+    if (user == null) {
+      throw FirebaseAuthException(message: 'User not found', code: '');
+    }
+
+    final query = await firebaseFirestore
+        .collection('notice')
+        .where('userId', isEqualTo: user.uid)
         .get();
 
     final notices = query.docs.map((snapshot) {

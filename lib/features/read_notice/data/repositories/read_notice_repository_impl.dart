@@ -2,22 +2,21 @@ import 'package:dartz/dartz.dart';
 import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
-import 'package:lokalio/features/read_notice/data/datasources/read_notice_local_data_source.dart';
+
 import 'package:lokalio/features/read_notice/data/datasources/read_notice_remote_data_source.dart';
 import 'package:lokalio/features/read_notice/data/models/notice_details.dart';
 import 'package:lokalio/features/read_notice/domain/entities/notice_details.dart';
 import 'package:lokalio/features/read_notice/domain/repositories/read_notice_repository.dart';
 
-typedef _MyOrUserChooser = Future<NoticeDetailsModel> Function();
+typedef _Chooser = Future<NoticeDetailsModel> Function();
 
 class ReadNoticeRepositoryImpl implements ReadNoticeRepository {
   final ReadNoticeRemoteDataSource remoteDataSource;
-  final ReadNoticeLocalDataSource localDataSource;
+
   final NetworkInfo networkInfo;
 
   const ReadNoticeRepositoryImpl({
     required this.remoteDataSource,
-    required this.localDataSource,
     required this.networkInfo,
   });
 
@@ -25,23 +24,18 @@ class ReadNoticeRepositoryImpl implements ReadNoticeRepository {
   Future<Either<Failure, NoticeDetails>> readNotice(
       {required String noticeId}) async {
     return await _readNoticeDetails(
-      remoteMyOrUser: () async {
+      chooserFunction: () async {
         return await remoteDataSource.readNotice(noticeId: noticeId);
-      },
-      localMyOrUser: () async {
-        return await localDataSource.readCachedNotice(noticeId: noticeId);
       },
     );
   }
 
   Future<Either<Failure, NoticeDetails>> _readNoticeDetails({
-    required _MyOrUserChooser remoteMyOrUser,
-    required _MyOrUserChooser localMyOrUser,
+    required _Chooser chooserFunction,
   }) async {
     if (await networkInfo.isConnected) {
       try {
-        final noticeDetails = await remoteMyOrUser();
-        await localDataSource.cacheNotice(noticeDetails: noticeDetails);
+        final noticeDetails = await chooserFunction();
 
         return Right(noticeDetails);
       } on NoDataException {
@@ -50,12 +44,7 @@ class ReadNoticeRepositoryImpl implements ReadNoticeRepository {
         return const Left(ServerFailure());
       }
     } else {
-      try {
-        final localNoticeDetails = await localMyOrUser();
-        return Right(localNoticeDetails);
-      } on Exception {
-        return const Left(CacheFailure());
-      }
+      return const Left(ServerFailure());
     }
   }
 }

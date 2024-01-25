@@ -28,7 +28,8 @@ class NoticeDetailsModel extends NoticeDetails {
         'start': dateTimeRange.start.toIso8601String(),
         'end': dateTimeRange.end.toIso8601String(),
       },
-      'thumbnailUrl': imagesUrl?.first,
+      'thumbnailUrl':
+          imagesUrl != null && imagesUrl!.isNotEmpty ? imagesUrl!.first : null,
     };
   }
 

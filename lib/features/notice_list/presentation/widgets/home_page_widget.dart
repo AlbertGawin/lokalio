@@ -13,21 +13,27 @@ class HomePageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 16),
-        const SearchBarWidget(),
-        const SizedBox(height: 16),
-        const CategoryListWidget(),
-        const SizedBox(height: 16),
-        RefreshIndicator(
-          onRefresh: () {
-            context.read<NoticeListBloc>().add(GetAllNoticesEvent());
-            return Future.delayed(const Duration(seconds: 1));
-          },
-          child: NoticeListWidget(noticeList: noticeList),
+    return SizedBox(
+      height: double.infinity,
+      child: RefreshIndicator(
+        onRefresh: () {
+          context.read<NoticeListBloc>().add(GetAllNoticesEvent());
+          return Future.delayed(const Duration(seconds: 1));
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Column(
+            children: [
+              const SearchBarWidget(),
+              const SizedBox(height: 16),
+              const CategoryListWidget(),
+              const SizedBox(height: 16),
+              NoticeListWidget(noticeList: noticeList),
+            ],
+          ),
         ),
-      ],
+      ),
     );
   }
 }
