@@ -116,7 +116,7 @@ void main() {
       expect(result, const Left(ServerFailure()));
     });
 
-    test('should return UserNotFoundFailure when sign in is unsuccessful',
+    test('should return FirebaseFailure when sign in is unsuccessful',
         () async {
       when(() => remoteDataSource.signIn(email: tEmail, password: tPassword))
           .thenThrow(FirebaseException(plugin: '', code: 'user-not-found'));
@@ -126,34 +126,7 @@ void main() {
         password: tPassword,
       );
 
-      expect(result, const Left(UserNotFoundFailure()));
-    });
-
-    test('should return WrongPasswordFailure when sign in is unsuccessful',
-        () async {
-      when(() => remoteDataSource.signIn(email: tEmail, password: tPassword))
-          .thenThrow(FirebaseException(plugin: '', code: 'wrong-password'));
-
-      final result = await repository.signIn(
-        email: tEmail,
-        password: tPassword,
-      );
-
-      expect(result, const Left(WrongPasswordFailure()));
-    });
-
-    test('should return EmailAlreadyInUseFailure when sign up is unsuccessful',
-        () async {
-      when(() => remoteDataSource.signUp(email: tEmail, password: tPassword))
-          .thenThrow(
-              FirebaseException(plugin: '', code: 'email-already-in-use'));
-
-      final result = await repository.signUp(
-        email: tEmail,
-        password: tPassword,
-      );
-
-      expect(result, const Left(EmailAlreadyInUseFailure()));
+      expect(result, const Left(FirebaseFailure(message: 'user-not-found')));
     });
 
     test('should return ServerFailure when sign in throws an exception',

@@ -23,7 +23,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
         return const Right(true);
       } on FirebaseException catch (e) {
-        return Left(FirebaseFailure(message: e.message ?? ''));
+        return Left(FirebaseFailure(message: e.code));
       } on Exception {
         return const Left(ServerFailure());
       }
@@ -41,11 +41,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
         return const Right(true);
       } on FirebaseException catch (e) {
-        if (e.code == 'email-already-in-use') {
-          return const Left(EmailAlreadyInUseFailure());
-        } else {
-          return const Left(ServerFailure());
-        }
+        return Left(FirebaseFailure(message: e.code));
       } on Exception {
         return const Left(ServerFailure());
       }

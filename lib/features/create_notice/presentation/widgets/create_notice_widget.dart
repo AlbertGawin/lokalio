@@ -18,17 +18,19 @@ class CreateNoticeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-    String title = '';
-    String description = '';
-    int category = 0;
-    int cashAmount = 0;
-    int peopleAmount = 1;
-    LatLng location = const LatLng(0, 0);
-    DateTimeRange dateTimeRange = DateTimeRange(
-      start: DateTime.now(),
-      end: DateTime.now(),
-    );
-    List<String>? images;
+    Map<String, dynamic> data = {
+      'title': '',
+      'description': '',
+      'category': 0,
+      'cashAmount': 0,
+      'peopleAmount': 1,
+      'location': const LatLng(0, 0),
+      'dateTimeRange': DateTimeRange(
+        start: DateTime.now(),
+        end: DateTime.now(),
+      ),
+      'images': null,
+    };
 
     return Form(
       key: formKey,
@@ -38,43 +40,43 @@ class CreateNoticeWidget extends StatelessWidget {
           children: [
             ImagesInputWidget(
               getImages: (imagesData) {
-                images = imagesData;
+                data['images'] = imagesData;
               },
             ),
             const SizedBox(height: 16),
             TitleDescInputWidget(
               getTitle: (titleData) {
-                title = titleData;
+                data['title'] = titleData;
               },
               getDescription: (descriptionData) {
-                description = descriptionData;
+                data['description'] = descriptionData;
               },
             ),
             const SizedBox(height: 16),
             CategoryInputWidget(
               getCategory: (categoryIndexData) {
-                category = categoryIndexData;
+                data['category'] = categoryIndexData;
               },
             ),
             const SizedBox(height: 16),
             AmountsInputWidget(
               getCashAmount: (cashAmountData) {
-                cashAmount = cashAmountData;
+                data['cashAmount'] = cashAmountData;
               },
               getPeopleAmount: (peopleAmountData) {
-                peopleAmount = peopleAmountData;
+                data['peopleAmount'] = peopleAmountData;
               },
             ),
             const SizedBox(height: 16),
             LocationInputWidget(
               getLocation: (locationData) {
-                location = locationData;
+                data['location'] = locationData;
               },
             ),
             const SizedBox(height: 16),
             DateTimeRangeInputWidget(
               getDateTimeRange: (dateTimeRangeData) {
-                dateTimeRange = dateTimeRangeData;
+                data['dateTimeRange'] = dateTimeRangeData;
               },
             ),
             const SizedBox(height: 16),
@@ -82,39 +84,7 @@ class CreateNoticeWidget extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(20),
               child: FilledButton.icon(
-                onPressed: () {
-                  if (formKey.currentState != null &&
-                      formKey.currentState!.validate()) {
-                    formKey.currentState!.save();
-                    final User? user = FirebaseAuth.instance.currentUser;
-
-                    if (user == null) {
-                      throw FirebaseAuthException(
-                        code: 'USER_NOT_LOGGED_IN',
-                        message: 'User is not logged in.',
-                      );
-                    }
-
-                    final NoticeDetails noticeDetails = NoticeDetails(
-                      id: '',
-                      userId: user.uid,
-                      title: title,
-                      description: description,
-                      category: category,
-                      cashAmount: cashAmount,
-                      peopleAmount: peopleAmount,
-                      location: location,
-                      dateTimeRange: dateTimeRange,
-                      imagesUrl: images,
-                    );
-
-                    context.read<CreateNoticeBloc>().add(
-                          CreateNoticeDetailsEvent(
-                            noticeDetails: noticeDetails,
-                          ),
-                        );
-                  }
-                },
+                onPressed: () => _validate(context, formKey, data),
                 label: const Text('DODAJ OGŁOSZENIE'),
                 icon: const Icon(Icons.note_add),
               ),
@@ -123,5 +93,37 @@ class CreateNoticeWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _validate(BuildContext context, GlobalKey<FormState> formKey,
+      Map<String, dynamic> data) {
+    if (formKey.currentState != null && formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+      final User? user = FirebaseAuth.instance.currentUser;
+
+      if (user == null) {
+        throw FirebaseAuthException(
+          code: 'USER_NOT_LOGGED_IN',
+          message: 'User is not logged in.',
+        );
+      }
+
+      final NoticeDetails noticeDetails = NoticeDetails(
+        id: '',
+        userId: user.uid,
+        title: data['title'],
+        description: data['description'],
+        category: data['category'],
+        cashAmount: data['cashAmount'],
+        peopleAmount: data['peopleAmount'],
+        location: data['location'],
+        dateTimeRange: data['dateTimeRange'],
+        imagesUrl: data['images'],
+      );
+
+      context
+          .read<CreateNoticeBloc>()
+          .add(CreateNoticeDetailsEvent(noticeDetails: noticeDetails));
+    }
   }
 }

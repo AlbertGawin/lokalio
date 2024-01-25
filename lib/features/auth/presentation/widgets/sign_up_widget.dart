@@ -99,14 +99,16 @@ class SignUpWidget extends StatelessWidget {
             BlocBuilder<AuthBloc, AuthState>(
               builder: (context, state) {
                 return ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate() && state is! Loading) {
-                      context.read<AuthBloc>().add(SignUpEvent(
-                            email: emailController.text,
-                            password: passwordController.text,
-                          ));
-                    }
-                  },
+                  onPressed: state is Loading
+                      ? null
+                      : () {
+                          if (formKey.currentState!.validate()) {
+                            context.read<AuthBloc>().add(SignUpEvent(
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                ));
+                          }
+                        },
                   child: state is Loading
                       ? const CircularProgressIndicator()
                       : const Text('Sign Up'),

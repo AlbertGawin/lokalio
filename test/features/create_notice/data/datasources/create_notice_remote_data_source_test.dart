@@ -23,6 +23,8 @@ class MockReference extends Mock implements Reference {}
 
 class MockUploadTask extends Mock implements UploadTask {}
 
+class MockTaskSnapshot extends Mock implements TaskSnapshot {}
+
 class MockCollectionReference extends Mock
     implements CollectionReference<Map<String, dynamic>> {}
 
@@ -41,6 +43,7 @@ void main() {
 
   late MockReference mockReference;
   late MockUploadTask mockUploadTask;
+  late MockTaskSnapshot mockTaskSnapshot;
   late MockCollectionReference mockCollectionReference;
   late MockDocumentReference mockDocumentReference;
   late MockNoticeDetailsModel mockNoticeDetailsModel;
@@ -55,6 +58,7 @@ void main() {
 
     mockReference = MockReference();
     mockUploadTask = MockUploadTask();
+    mockTaskSnapshot = MockTaskSnapshot();
     mockCollectionReference = MockCollectionReference();
     mockDocumentReference = MockDocumentReference();
     mockNoticeDetailsModel = MockNoticeDetailsModel();
@@ -66,6 +70,9 @@ void main() {
   });
 
   const tId = '1';
+  final tNoticeDetailsModel = NoticeDetailsModel.fromJson(
+    json: json.decode(fixture(name: 'notice_details.json')),
+  );
 
   void setUp200() {
     when(() => mockFirestoreFirebase.collection(any()))
@@ -73,17 +80,15 @@ void main() {
     when(() => mockFirebaseStorage.ref()).thenReturn(mockReference);
     when(() => mockReference.child(any())).thenReturn(mockReference);
     when(() => mockReference.putFile(any())).thenAnswer((_) => mockUploadTask);
+    when(() => mockUploadTask.whenComplete(any()))
+        .thenAnswer((invocation) async => mockTaskSnapshot);
     when(() => mockCollectionReference.doc(any()))
         .thenReturn(mockDocumentReference);
     when(() => mockDocumentReference.id).thenReturn(tId);
     when(() => mockDocumentReference.set(any())).thenAnswer((_) async => true);
     when(() => mockNoticeDetailsModel.copyWith(id: any(named: "id")))
-        .thenReturn(mockNoticeDetailsModel);
+        .thenReturn(tNoticeDetailsModel);
   }
-
-  final tNoticeDetailsModel = NoticeDetailsModel.fromJson(
-    json: json.decode(fixture(name: 'notice_details.json')),
-  );
 
   test('should throw ServerException when the notice call is unsuccessful',
       () async {

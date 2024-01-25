@@ -15,7 +15,7 @@ class DateTimeRangeInputWidget extends StatefulWidget {
 class _DateTimeRangeInputWidgetState extends State<DateTimeRangeInputWidget> {
   final TextEditingController _startDateInput = TextEditingController();
   final TextEditingController _endDateInput = TextEditingController();
-  final DateFormat formatter = DateFormat.yMMMMd();
+  final DateFormat formatter = DateFormat.yMd();
 
   @override
   void dispose() {
