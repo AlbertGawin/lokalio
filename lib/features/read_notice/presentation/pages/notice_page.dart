@@ -11,7 +11,10 @@ class NoticePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(), body: _buildBody(context));
+    return Scaffold(
+      appBar: AppBar(toolbarHeight: 0),
+      body: _buildBody(context),
+    );
   }
 
   BlocProvider<ReadNoticeBloc> _buildBody(BuildContext context) {
