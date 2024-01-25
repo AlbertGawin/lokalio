@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
 import 'package:lokalio/features/auth/data/datasources/auth_remote_data_source.dart';
@@ -15,13 +15,13 @@ class AuthRepositoryImpl implements AuthRepository {
   });
 
   @override
-  Future<Either<Failure, bool>> signIn(
-      {required String email, required String password}) async {
+  Future<Either<Failure, void>> signIn(
+      {required AuthCredential credential}) async {
     if (await networkInfo.isConnected) {
       try {
-        await remoteDataSource.signIn(email: email, password: password);
+        await remoteDataSource.signIn(credential: credential);
 
-        return const Right(true);
+        return const Right(null);
       } on FirebaseException catch (e) {
         return Left(FirebaseFailure(message: e.code));
       } on Exception {
@@ -33,13 +33,13 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> signUp(
+  Future<Either<Failure, void>> signUp(
       {required String email, required String password}) async {
     if (await networkInfo.isConnected) {
       try {
         await remoteDataSource.signUp(email: email, password: password);
 
-        return const Right(true);
+        return const Right(null);
       } on FirebaseException catch (e) {
         return Left(FirebaseFailure(message: e.code));
       } on Exception {
@@ -51,12 +51,32 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> signOut() async {
+  Future<Either<Failure, void>> signOut() async {
     if (await networkInfo.isConnected) {
       try {
         await remoteDataSource.signOut();
 
-        return const Right(true);
+        return const Right(null);
+      } on Exception {
+        return const Left(ServerFailure());
+      }
+    } else {
+      return const Left(NoConnectionFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> setProfileInfo({
+    required String name,
+    required String phone,
+    required String smsCode,
+  }) async {
+    if (await networkInfo.isConnected) {
+      try {
+        await remoteDataSource.setProfileInfo(
+            name: name, phone: phone, smsCode: smsCode);
+
+        return const Right(null);
       } on Exception {
         return const Left(ServerFailure());
       }

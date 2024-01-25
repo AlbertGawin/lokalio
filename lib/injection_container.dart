@@ -7,6 +7,7 @@ import 'package:lokalio/core/network/network_info.dart';
 import 'package:lokalio/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:lokalio/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:lokalio/features/auth/domain/repositories/auth_repository.dart';
+import 'package:lokalio/features/auth/domain/usecases/set_profile_info.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_in.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_out.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_up.dart';
@@ -44,12 +45,14 @@ Future<void> init() async {
 
 void initAuth() {
   //Bloc
-  sl.registerFactory(() => AuthBloc(signIn: sl(), signUp: sl(), signOut: sl()));
+  sl.registerFactory(() => AuthBloc(
+      signIn: sl(), signUp: sl(), signOut: sl(), setProfileInfo: sl()));
 
   // Use cases
   sl.registerLazySingleton(() => SignIn(authRepository: sl()));
   sl.registerLazySingleton(() => SignUp(authRepository: sl()));
   sl.registerLazySingleton(() => SignOut(authRepository: sl()));
+  sl.registerLazySingleton(() => SetProfileInfo(authRepository: sl()));
 
   // Repository
   sl.registerLazySingleton<AuthRepository>(

@@ -1,9 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class AuthRemoteDataSource {
-  Future<void> signIn({required String email, required String password});
+  Future<void> signIn({required AuthCredential credential});
   Future<void> signUp({required String email, required String password});
   Future<void> signOut();
+  Future<void> setProfileInfo({
+    required String name,
+    required String phone,
+    required String smsCode,
+  });
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -12,17 +17,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   const AuthRemoteDataSourceImpl({required this.firebaseAuth});
 
   @override
-  Future<void> signIn({required String email, required String password}) async {
+  Future<void> signIn({required AuthCredential credential}) async {
     try {
-      await firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      await firebaseAuth.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
-      throw FirebaseAuthException(
-        message: e.message,
-        code: e.code,
-      );
+      throw FirebaseAuthException(message: e.message, code: e.code);
     }
   }
 
@@ -30,19 +29,58 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> signUp({required String email, required String password}) async {
     try {
       await firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+          email: email, password: password);
     } on FirebaseAuthException catch (e) {
-      throw FirebaseAuthException(
-        message: e.message,
-        code: e.code,
-      );
+      throw FirebaseAuthException(message: e.message, code: e.code);
     }
   }
 
   @override
   Future<void> signOut() async {
-    await firebaseAuth.signOut();
+    try {
+      await firebaseAuth.signOut();
+    } on FirebaseAuthException catch (e) {
+      throw FirebaseAuthException(message: e.message, code: e.code);
+    }
+  }
+
+  @override
+  Future<void> setProfileInfo({
+    required String name,
+    required String phone,
+    required String smsCode,
+  }) async {
+    try {
+      await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: phone,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await updateProfile(name, credential);
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          throw FirebaseAuthException(message: e.message, code: e.code);
+        },
+        codeSent: (String verificationId, int? resendToken) async {
+          final credential = PhoneAuthProvider.credential(
+              verificationId: verificationId, smsCode: smsCode);
+          await updateProfile(name, credential);
+        },
+        codeAutoRetrievalTimeout: (String verId) {
+          throw FirebaseAuthException(
+              message: 'The verification code has expired.', code: 'timeout');
+        },
+      );
+    } on FirebaseAuthException catch (e) {
+      throw FirebaseAuthException(message: e.message, code: e.code);
+    }
+  }
+
+  Future<void> updateProfile(
+      String name, PhoneAuthCredential credential) async {
+    try {
+      await firebaseAuth.currentUser!.updateDisplayName(name);
+      await firebaseAuth.currentUser!.updatePhoneNumber(credential);
+    } on FirebaseAuthException catch (e) {
+      throw FirebaseAuthException(message: e.message, code: e.code);
+    }
   }
 }

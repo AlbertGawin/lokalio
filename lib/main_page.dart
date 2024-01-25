@@ -19,11 +19,17 @@ class _MainPageState extends State<MainPage> {
     const FavoritePage(),
     const CreateNoticePage(),
     Center(
-      child: ElevatedButton(
-        onPressed: () {
-          FirebaseAuth.instance.signOut();
-        },
-        child: const Text('Wyloguj się'),
+      child: Column(
+        children: [
+          Text(FirebaseAuth.instance.currentUser!.displayName!),
+          Text(FirebaseAuth.instance.currentUser!.phoneNumber!),
+          ElevatedButton(
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+            },
+            child: const Text('Wyloguj się'),
+          ),
+        ],
       ),
     ),
   ];
