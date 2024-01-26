@@ -50,15 +50,17 @@ class _MainPageState extends State<MainPage> {
     const FavoritePage(),
     const CreateNoticePage(),
     Center(
-      child: Column(
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-            },
-            child: const Text('Wyloguj się'),
-          ),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
+              child: const Text('Wyloguj się'),
+            ),
+          ],
+        ),
       ),
     ),
   ];
