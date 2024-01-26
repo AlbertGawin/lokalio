@@ -3,17 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lokalio/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:lokalio/features/auth/presentation/widgets/auth_widget.dart';
-import 'package:lokalio/features/auth/presentation/widgets/set_profile_info_widget.dart';
 
 import 'package:lokalio/injection_container.dart';
 import 'package:lokalio/main_page.dart';
 
 class AuthPage extends StatelessWidget {
-  const AuthPage({super.key});
+  final bool signInClicked;
+
+  const AuthPage({super.key, required this.signInClicked});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: buildBody(context));
+    return buildBody(context);
   }
 
   BlocProvider<AuthBloc> buildBody(BuildContext context) {
@@ -37,26 +38,16 @@ class AuthPage extends StatelessWidget {
     return StreamBuilder(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data is User) {
-            final user = snapshot.data as User;
-            if (user.displayName == null ||
-                user.displayName!.isEmpty ||
-                user.phoneNumber == null ||
-                user.phoneNumber!.isEmpty) {
-              return SetProfileInfoWidget(
-                name: user.displayName,
-                phone: user.phoneNumber,
-              );
-            } else {
-              return const MainPage();
-            }
-          } else {
-            return const AuthWidget();
-          }
-        } else {
+        if (snapshot.hasData && snapshot.data!.isAnonymous == false) {
+          return const MainPage(isAnonymous: false);
+        }
+
+        if (signInClicked) {
           return const AuthWidget();
         }
+
+        FirebaseAuth.instance.signInAnonymously();
+        return const MainPage(isAnonymous: true);
       },
     );
   }

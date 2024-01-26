@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Lokalio',
       theme: ThemeData(useMaterial3: true, primaryColor: Colors.blue),
-      home: const AuthPage(),
+      home: const AuthPage(signInClicked: false),
     );
   }
 }
