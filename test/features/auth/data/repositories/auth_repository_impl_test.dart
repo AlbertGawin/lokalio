@@ -10,16 +10,20 @@ import 'package:mocktail/mocktail.dart';
 
 class MockRemoteDataSource extends Mock implements AuthRemoteDataSource {}
 
+class MockAuthCredential extends Mock implements AuthCredential {}
+
 class MockNetworkInfo extends Mock implements NetworkInfo {}
 
 void main() {
   late AuthRepositoryImpl repository;
 
   late MockRemoteDataSource remoteDataSource;
+  late MockAuthCredential mockAuthCredential;
   late MockNetworkInfo networkInfo;
 
   setUp(() {
     remoteDataSource = MockRemoteDataSource();
+    mockAuthCredential = MockAuthCredential();
     networkInfo = MockNetworkInfo();
     repository = AuthRepositoryImpl(
       remoteDataSource: remoteDataSource,
@@ -31,7 +35,7 @@ void main() {
   const tPassword = 'test';
 
   void setUpFunctions() {
-    when(() => remoteDataSource.signIn(email: tEmail, password: tPassword))
+    when(() => remoteDataSource.signIn(credential: mockAuthCredential))
         .thenAnswer((_) async => true);
     when(() => remoteDataSource.signUp(email: tEmail, password: tPassword))
         .thenAnswer((_) async => true);
@@ -42,7 +46,7 @@ void main() {
     when(() => networkInfo.isConnected).thenAnswer((_) async => true);
     setUpFunctions();
 
-    await repository.signIn(email: tEmail, password: tPassword);
+    await repository.signIn(credential: mockAuthCredential);
 
     verify(() => networkInfo.isConnected);
   });
@@ -52,46 +56,40 @@ void main() {
       when(() => networkInfo.isConnected).thenAnswer((_) async => true);
     });
 
-    test('should return true when sign in is successful', () async {
-      when(() => remoteDataSource.signIn(email: tEmail, password: tPassword))
-          .thenAnswer((_) async => true);
+    test('should return null when sign in is successful', () async {
+      when(() => remoteDataSource.signIn(credential: mockAuthCredential))
+          .thenAnswer((_) async {});
 
-      final result = await repository.signIn(
-        email: tEmail,
-        password: tPassword,
-      );
+      final result = await repository.signIn(credential: mockAuthCredential);
 
-      expect(result, const Right(true));
+      expect(result, const Right(null));
     });
 
-    test('should return true when sign up is successful', () async {
+    test('should return null when sign up is successful', () async {
       when(() => remoteDataSource.signUp(email: tEmail, password: tPassword))
-          .thenAnswer((_) async => true);
+          .thenAnswer((_) async => {});
 
       final result = await repository.signUp(
         email: tEmail,
         password: tPassword,
       );
 
-      expect(result, const Right(true));
+      expect(result, const Right(null));
     });
 
-    test('should return true when sign out is successful', () async {
+    test('should return null when sign out is successful', () async {
       when(() => remoteDataSource.signOut()).thenAnswer((_) async => true);
 
       final result = await repository.signOut();
 
-      expect(result, const Right(true));
+      expect(result, const Right(null));
     });
 
     test('should return ServerFailure when sign in is unsuccessful', () async {
-      when(() => remoteDataSource.signIn(email: tEmail, password: tPassword))
+      when(() => remoteDataSource.signIn(credential: mockAuthCredential))
           .thenThrow(ServerException());
 
-      final result = await repository.signIn(
-        email: tEmail,
-        password: tPassword,
-      );
+      final result = await repository.signIn(credential: mockAuthCredential);
 
       expect(result, const Left(ServerFailure()));
     });
@@ -118,26 +116,20 @@ void main() {
 
     test('should return FirebaseFailure when sign in is unsuccessful',
         () async {
-      when(() => remoteDataSource.signIn(email: tEmail, password: tPassword))
+      when(() => remoteDataSource.signIn(credential: mockAuthCredential))
           .thenThrow(FirebaseException(plugin: '', code: 'user-not-found'));
 
-      final result = await repository.signIn(
-        email: tEmail,
-        password: tPassword,
-      );
+      final result = await repository.signIn(credential: mockAuthCredential);
 
       expect(result, const Left(FirebaseFailure(message: 'user-not-found')));
     });
 
     test('should return ServerFailure when sign in throws an exception',
         () async {
-      when(() => remoteDataSource.signIn(email: tEmail, password: tPassword))
+      when(() => remoteDataSource.signIn(credential: mockAuthCredential))
           .thenThrow(Exception());
 
-      final result = await repository.signIn(
-        email: tEmail,
-        password: tPassword,
-      );
+      final result = await repository.signIn(credential: mockAuthCredential);
 
       expect(result, const Left(ServerFailure()));
     });
@@ -150,13 +142,10 @@ void main() {
 
     test('should return ConnectionFailure when sign in is unsuccessful',
         () async {
-      when(() => remoteDataSource.signIn(email: tEmail, password: tPassword))
+      when(() => remoteDataSource.signIn(credential: mockAuthCredential))
           .thenThrow(NoConnectionException());
 
-      final result = await repository.signIn(
-        email: tEmail,
-        password: tPassword,
-      );
+      final result = await repository.signIn(credential: mockAuthCredential);
 
       expect(result, const Left(NoConnectionFailure()));
     });

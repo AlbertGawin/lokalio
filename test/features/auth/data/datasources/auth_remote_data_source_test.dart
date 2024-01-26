@@ -13,6 +13,8 @@ class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 
 class MockUserCredential extends Mock implements UserCredential {}
 
+class MockAuthCredential extends Mock implements AuthCredential {}
+
 class MockQueryDocumentSnapshot extends Mock
     implements QueryDocumentSnapshot<Map<String, dynamic>> {}
 
@@ -29,12 +31,14 @@ void main() {
 
   late MockFirebaseAuth mockFirebaseAuth;
   late MockUserCredential mockUserCredential;
+  late MockAuthCredential mockAuthCredential;
 
   setUp(() {
     mockFirebaseAuth = MockFirebaseAuth();
     dataSource = AuthRemoteDataSourceImpl(firebaseAuth: mockFirebaseAuth);
 
     mockUserCredential = MockUserCredential();
+    mockAuthCredential = MockAuthCredential();
   });
 
   setUpAll(() async {
@@ -45,23 +49,20 @@ void main() {
   const tPassword = 'test';
 
   group('signIn', () {
-    test('should sign in with email and password', () async {
-      when(() => mockFirebaseAuth.signInWithEmailAndPassword(
-              email: any(named: 'email'), password: any(named: 'password')))
+    test('should sign in with AuthCredential', () async {
+      when(() => mockFirebaseAuth.signInWithCredential(mockAuthCredential))
           .thenAnswer((_) async => mockUserCredential);
 
-      await dataSource.signIn(email: tEmail, password: tPassword);
+      await dataSource.signIn(credential: mockAuthCredential);
 
-      verify(() => mockFirebaseAuth.signInWithEmailAndPassword(
-          email: tEmail, password: tPassword));
+      verify(() => mockFirebaseAuth.signInWithCredential(mockAuthCredential));
     });
 
     test('should throw FirebaseAuthException when sign in fails', () async {
-      when(() => mockFirebaseAuth.signInWithEmailAndPassword(
-              email: any(named: 'email'), password: any(named: 'password')))
+      when(() => mockFirebaseAuth.signInWithCredential(mockAuthCredential))
           .thenThrow(FirebaseAuthException(code: 'code', message: 'message'));
 
-      expect(() => dataSource.signIn(email: tEmail, password: tPassword),
+      expect(() => dataSource.signIn(credential: mockAuthCredential),
           throwsA(isA<FirebaseAuthException>()));
     });
   });

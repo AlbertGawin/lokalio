@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/usecases/usecase.dart';
+import 'package:lokalio/features/auth/domain/usecases/set_profile_info.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_in.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_out.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_up.dart';
@@ -14,30 +16,39 @@ class MockSignUp extends Mock implements SignUp {}
 
 class MockSignOut extends Mock implements SignOut {}
 
+class MockSetProfileInfo extends Mock implements SetProfileInfo {}
+
+class MockAuthCredential extends Mock implements AuthCredential {}
+
 void main() {
   late AuthBloc bloc;
 
   late MockSignIn mockSignIn;
   late MockSignUp mockSignUp;
   late MockSignOut mockSignOut;
+  late MockSetProfileInfo mockSetProfileInfo;
+
+  late MockAuthCredential mockAuthCredential;
 
   setUp(() {
     mockSignIn = MockSignIn();
     mockSignUp = MockSignUp();
     mockSignOut = MockSignOut();
+    mockSetProfileInfo = MockSetProfileInfo();
 
     bloc = AuthBloc(
       signIn: mockSignIn,
       signUp: mockSignUp,
       signOut: mockSignOut,
+      setProfileInfo: mockSetProfileInfo,
     );
   });
 
   const tEmail = 'test@mail.com';
   const tPassword = 'password';
   setUpAll(() {
-    registerFallbackValue(
-        const SignInParams(email: tEmail, password: tPassword));
+    mockAuthCredential = MockAuthCredential();
+    registerFallbackValue(SignInParams(credential: mockAuthCredential));
     registerFallbackValue(
         const SignUpParams(email: tEmail, password: tPassword));
     registerFallbackValue(NoParams());
@@ -49,24 +60,23 @@ void main() {
 
   group('SignIn', () {
     test('should get data from the SignIn use case', () async {
-      when(() => mockSignIn(any())).thenAnswer((_) async => const Right(true));
+      when(() => mockSignIn(any())).thenAnswer((_) async => const Right(null));
 
-      bloc.add(const SignInEvent(email: tEmail, password: tPassword));
+      bloc.add(SignInEvent(credential: mockAuthCredential));
       await untilCalled(() => mockSignIn(any()));
 
-      verify(() =>
-          mockSignIn(const SignInParams(email: tEmail, password: tPassword)));
+      verify(() => mockSignIn(SignInParams(credential: mockAuthCredential)));
     });
 
     test(
         'should emit [Loading, Done] when data is gotten successfully from the use case',
         () async {
-      when(() => mockSignIn(any())).thenAnswer((_) async => const Right(true));
+      when(() => mockSignIn(any())).thenAnswer((_) async => const Right(null));
 
       final expected = [Loading(), Done()];
       expectLater(bloc.stream, emitsInOrder(expected));
 
-      bloc.add(const SignInEvent(email: tEmail, password: tPassword));
+      bloc.add(SignInEvent(credential: mockAuthCredential));
     });
 
     test(
@@ -81,13 +91,13 @@ void main() {
       ];
       expectLater(bloc.stream, emitsInOrder(expected));
 
-      bloc.add(const SignInEvent(email: tEmail, password: tPassword));
+      bloc.add(SignInEvent(credential: mockAuthCredential));
     });
   });
 
   group('SignUp', () {
     test('should get data from the SignUp use case', () async {
-      when(() => mockSignUp(any())).thenAnswer((_) async => const Right(true));
+      when(() => mockSignUp(any())).thenAnswer((_) async => const Right(null));
 
       bloc.add(const SignUpEvent(email: tEmail, password: tPassword));
       await untilCalled(() => mockSignUp(any()));
