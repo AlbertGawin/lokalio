@@ -53,7 +53,7 @@ void main() {
     test('should get data from the GetAllNotices usecase', () async {
       setUpMockGetAllNoticesSuccess();
 
-      bloc.add(GetAllNoticesEvent());
+      bloc.add(const GetAllNoticesEvent());
       await untilCalled(() => mockGetAllNotices(any()));
 
       verify(() => mockGetAllNotices(NoParams()));
@@ -67,7 +67,7 @@ void main() {
       final expected = [Loading(), Done(noticeList: tNoticesList)];
       expectLater(bloc.stream, emitsInOrder(expected));
 
-      bloc.add(GetAllNoticesEvent());
+      bloc.add(const GetAllNoticesEvent());
     });
 
     test(
@@ -82,7 +82,7 @@ void main() {
       ];
       expectLater(bloc.stream, emitsInOrder(expected));
 
-      bloc.add(GetAllNoticesEvent());
+      bloc.add(const GetAllNoticesEvent());
     });
   });
 
@@ -95,7 +95,7 @@ void main() {
     test('should get data from the GetMyNotices usecase', () async {
       setUpMockGetMyNoticesSuccess();
 
-      bloc.add(GetMyNoticesEvent());
+      bloc.add(const GetMyNoticesEvent());
       await untilCalled(() => mockGetMyNotices(any()));
 
       verify(() => mockGetMyNotices(NoParams()));
@@ -109,7 +109,7 @@ void main() {
       final expected = [Loading(), Done(noticeList: tNoticesList)];
       expectLater(bloc.stream, emitsInOrder(expected));
 
-      bloc.add(GetMyNoticesEvent());
+      bloc.add(const GetMyNoticesEvent());
     });
 
     test(
@@ -124,7 +124,7 @@ void main() {
       ];
       expectLater(bloc.stream, emitsInOrder(expected));
 
-      bloc.add(GetMyNoticesEvent());
+      bloc.add(const GetMyNoticesEvent());
     });
   });
 

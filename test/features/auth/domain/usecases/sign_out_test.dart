@@ -18,7 +18,7 @@ void main() {
 
   test('should get bool from the repository', () async {
     when(() => mockAuthRepository.signOut())
-        .thenAnswer((_) async => const Right(true));
+        .thenAnswer((_) async => const Right(null));
 
     final result = await usecase(NoParams());
 

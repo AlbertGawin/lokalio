@@ -140,21 +140,17 @@ void main() {
       when(() => networkInfo.isConnected).thenAnswer((_) async => false);
     });
 
-    test('should return ConnectionFailure when sign in is unsuccessful',
+    test(
+        'should return NoConnectionFailure when the device is offline for SignIn',
         () async {
-      when(() => remoteDataSource.signIn(credential: mockAuthCredential))
-          .thenThrow(NoConnectionException());
-
       final result = await repository.signIn(credential: mockAuthCredential);
 
       expect(result, const Left(NoConnectionFailure()));
     });
 
-    test('should return ConnectionFailure when sign up is unsuccessful',
+    test(
+        'should return NoConnectionFailure when the device is offline for SignUp',
         () async {
-      when(() => remoteDataSource.signUp(email: tEmail, password: tPassword))
-          .thenThrow(NoConnectionException());
-
       final result = await repository.signUp(
         email: tEmail,
         password: tPassword,
@@ -163,10 +159,9 @@ void main() {
       expect(result, const Left(NoConnectionFailure()));
     });
 
-    test('should return ConnectionFailure when sign out is unsuccessful',
+    test(
+        'should return NoConnectionFailure when the device is offline for SignOut',
         () async {
-      when(() => remoteDataSource.signOut()).thenThrow(NoConnectionException());
-
       final result = await repository.signOut();
 
       expect(result, const Left(NoConnectionFailure()));

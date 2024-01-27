@@ -38,7 +38,7 @@ void main() {
 
   late NoticeListRemoteDataSourceImpl noticeListRemoteDataSourceImpl;
 
-  late MockFirestore mockFirestoreFirebase;
+  late MockFirestore mockFirestore;
   late MockFirebaseAuth mockFirebaseAuth;
   late MockUserCredential mockUserCredential;
   late MockUser mockUser;
@@ -48,10 +48,10 @@ void main() {
   late MockQueryMapSnapshot mockQueryMapSnapshot;
 
   setUp(() {
-    mockFirestoreFirebase = MockFirestore();
+    mockFirestore = MockFirestore();
     mockFirebaseAuth = MockFirebaseAuth();
     noticeListRemoteDataSourceImpl = NoticeListRemoteDataSourceImpl(
-      firebaseFirestore: mockFirestoreFirebase,
+      firebaseFirestore: mockFirestore,
       firebaseAuth: mockFirebaseAuth,
     );
     mockUserCredential = MockUserCredential();
@@ -67,7 +67,7 @@ void main() {
   });
 
   void setUp200() {
-    when(() => mockFirestoreFirebase.collection(any()))
+    when(() => mockFirestore.collection(any()))
         .thenReturn(mockCollectionReference);
     when(() => mockQueryMapSnapshot.get())
         .thenAnswer((_) => Future.value(mockQuerySnapshot));
@@ -118,7 +118,7 @@ void main() {
 
       await noticeListRemoteDataSourceImpl.getAllNotices();
 
-      verify(() => mockFirestoreFirebase.collection('notice').get());
+      verify(() => mockFirestore.collection('notice').get());
     });
 
     test('should return a list of NoticeModel when the response code is 200',
@@ -179,7 +179,7 @@ void main() {
 
       await noticeListRemoteDataSourceImpl.getMyNotices();
 
-      verify(() => mockFirestoreFirebase.collection('notice').get());
+      verify(() => mockFirestore.collection('notice').get());
     });
 
     test('should return a list of NoticeModel when the response code is 200',
@@ -241,7 +241,7 @@ void main() {
 
       noticeListRemoteDataSourceImpl.getUserNotices(userId: tUserId);
 
-      verify(() => mockFirestoreFirebase.collection('notice').get());
+      verify(() => mockFirestore.collection('notice').get());
     });
 
     test('should return a list of NoticeModel when the response code is 200',

@@ -44,7 +44,7 @@ class ReadNoticeRepositoryImpl implements ReadNoticeRepository {
         return const Left(ServerFailure());
       }
     } else {
-      return const Left(ServerFailure());
+      return const Left(NoConnectionFailure());
     }
   }
 }

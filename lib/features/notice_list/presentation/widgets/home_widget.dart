@@ -17,7 +17,7 @@ class HomeWidget extends StatelessWidget {
       height: double.infinity,
       child: RefreshIndicator(
         onRefresh: () {
-          context.read<NoticeListBloc>().add(GetAllNoticesEvent());
+          context.read<NoticeListBloc>().add(const GetAllNoticesEvent());
           return Future.delayed(const Duration(seconds: 1));
         },
         child: SingleChildScrollView(

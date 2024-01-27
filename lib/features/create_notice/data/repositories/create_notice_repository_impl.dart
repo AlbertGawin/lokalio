@@ -34,7 +34,7 @@ class CreateNoticeRepositoryImpl implements CreateNoticeRepository {
         return const Left(ServerFailure());
       }
     } else {
-      return const Left(ServerFailure());
+      return const Left(NoConnectionFailure());
     }
   }
 }

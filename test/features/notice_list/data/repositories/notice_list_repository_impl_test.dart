@@ -86,16 +86,12 @@ void main() {
         when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
       });
 
-      test(
-          'should return ServerFailure when the call to remote data source is unsuccessful',
+      test('should return NoConnectionFailure when the device is offline',
           () async {
-        when(() => mockRemoteDataSource.getAllNotices())
-            .thenThrow(ServerException());
-
         final result = await repository.getAllNotices();
 
         verifyZeroInteractions(mockRemoteDataSource);
-        expect(result, equals(const Left(ServerFailure())));
+        expect(result, equals(const Left(NoConnectionFailure())));
       });
     });
   });
@@ -155,16 +151,12 @@ void main() {
         when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
       });
 
-      test(
-          'should return ServerFailure when the call to remote data source is unsuccessful',
+      test('should return NoConnectionFailure when the device is offline',
           () async {
-        when(() => mockRemoteDataSource.getMyNotices())
-            .thenThrow(ServerException());
-
         final result = await repository.getMyNotices();
 
         verifyZeroInteractions(mockRemoteDataSource);
-        expect(result, equals(const Left(ServerFailure())));
+        expect(result, equals(const Left(NoConnectionFailure())));
       });
     });
   });
@@ -227,16 +219,12 @@ void main() {
         when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
       });
 
-      test(
-          'should return ServerFailure when the call to remote data source is unsuccessful',
+      test('should return NoConnectionFailure when the device is offline',
           () async {
-        when(() => mockRemoteDataSource.getUserNotices(userId: tUserId))
-            .thenThrow(ServerException());
-
         final result = await repository.getUserNotices(userId: tUserId);
 
         verifyZeroInteractions(mockRemoteDataSource);
-        expect(result, equals(const Left(ServerFailure())));
+        expect(result, equals(const Left(NoConnectionFailure())));
       });
     });
   });

@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final bloc = sl<NoticeListBloc>();
-        bloc.add(GetAllNoticesEvent());
+        bloc.add(const GetAllNoticesEvent());
 
         return bloc;
       },

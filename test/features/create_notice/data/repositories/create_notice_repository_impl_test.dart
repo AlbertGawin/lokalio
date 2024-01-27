@@ -87,18 +87,13 @@ void main() {
       setUpFunctions();
     });
 
-    test(
-        'should return ServerFailure when the remote data source is unsuccessful',
+    test('should return NoConnectionFailure when the device is offline',
         () async {
-      when(() =>
-              mockRemoteDataSource.createNotice(noticeDetails: tNoticeDetails))
-          .thenThrow(ServerException());
-
       final result =
           await repository.createNotice(noticeDetails: tNoticeDetails);
 
       verifyZeroInteractions(mockRemoteDataSource);
-      expect(result, equals(const Left(ServerFailure())));
+      expect(result, equals(const Left(NoConnectionFailure())));
     });
   });
 }

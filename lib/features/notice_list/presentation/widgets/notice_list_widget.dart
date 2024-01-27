@@ -34,7 +34,9 @@ class NoticeListWidget extends StatelessWidget {
                 const Text('No notices found'),
                 ElevatedButton(
                   onPressed: () {
-                    context.read<NoticeListBloc>().add(GetAllNoticesEvent());
+                    context
+                        .read<NoticeListBloc>()
+                        .add(const GetAllNoticesEvent());
                   },
                   child: const Text('Refresh'),
                 ),

@@ -109,7 +109,7 @@ void main() {
     test(
         'should emit [Loading, Done] when data is gotten successfully from the use case',
         () async {
-      when(() => mockSignUp(any())).thenAnswer((_) async => const Right(true));
+      when(() => mockSignUp(any())).thenAnswer((_) async => const Right(null));
 
       final expected = [Loading(), Done()];
       expectLater(bloc.stream, emitsInOrder(expected));
@@ -135,7 +135,7 @@ void main() {
 
   group('SignOut', () {
     test('should get data from the SignOut use case', () async {
-      when(() => mockSignOut(any())).thenAnswer((_) async => const Right(true));
+      when(() => mockSignOut(any())).thenAnswer((_) async => const Right(null));
 
       bloc.add(const SignOutEvent());
       await untilCalled(() => mockSignOut(any()));
@@ -146,7 +146,7 @@ void main() {
     test(
         'should emit [Loading, Done] when data is gotten successfully from the use case',
         () async {
-      when(() => mockSignOut(any())).thenAnswer((_) async => const Right(true));
+      when(() => mockSignOut(any())).thenAnswer((_) async => const Right(null));
 
       final expected = [Loading(), Done()];
       expectLater(bloc.stream, emitsInOrder(expected));

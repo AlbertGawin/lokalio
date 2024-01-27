@@ -22,7 +22,7 @@ void main() {
     when(() => mockAuthRepository.signUp(
           email: any(named: 'email'),
           password: any(named: 'password'),
-        )).thenAnswer((_) async => const Right(true));
+        )).thenAnswer((_) async => const Right(null));
 
     final result =
         await usecase(const SignUpParams(email: tEmail, password: tPassword));

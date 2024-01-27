@@ -5,19 +5,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
-import 'package:lokalio/features/read_notice/data/datasources/read_notice_remote_data_source.dart';
-import 'package:lokalio/features/read_notice/data/models/notice_details.dart';
-import 'package:lokalio/features/read_notice/data/repositories/read_notice_repository_impl.dart';
+import 'package:lokalio/features/profile/data/datasources/profile_remote_data_source.dart';
+import 'package:lokalio/features/profile/data/models/profile.dart';
+import 'package:lokalio/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../fixtures/fixture_reader.dart';
 
-class MockRemoteDataSource extends Mock implements ReadNoticeRemoteDataSource {}
+class MockRemoteDataSource extends Mock implements ProfileRemoteDataSource {}
 
 class MockNetworkInfo extends Mock implements NetworkInfo {}
 
 void main() {
-  late ReadNoticeRepositoryImpl repository;
+  late ProfileRepositoryImpl repository;
   late MockRemoteDataSource mockRemoteDataSource;
 
   late MockNetworkInfo mockNetworkInfo;
@@ -26,27 +26,27 @@ void main() {
     mockNetworkInfo = MockNetworkInfo();
     mockRemoteDataSource = MockRemoteDataSource();
 
-    repository = ReadNoticeRepositoryImpl(
+    repository = ProfileRepositoryImpl(
       remoteDataSource: mockRemoteDataSource,
       networkInfo: mockNetworkInfo,
     );
   });
 
-  const tNoticeId = '1';
-  final tNoticeDetails = NoticeDetailsModel.fromJson(
-    json: json.decode(fixture(name: 'notice_details.json')),
+  const tProfileId = '1';
+  final tProfile = ProfileModel.fromJson(
+    json: json.decode(fixture(name: 'profile.json')),
   );
 
   void setUpFunctions() {
-    when(() => mockRemoteDataSource.readNotice(noticeId: tNoticeId))
-        .thenAnswer((_) async => tNoticeDetails);
+    when(() => mockRemoteDataSource.readProfile(profileId: tProfileId))
+        .thenAnswer((_) async => tProfile);
   }
 
   test('should check if the device is online', () async {
     when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     setUpFunctions();
 
-    await repository.readNotice(noticeId: tNoticeId);
+    await repository.readProfile(profileId: tProfileId);
 
     verify(() => mockNetworkInfo.isConnected);
   });
@@ -60,34 +60,31 @@ void main() {
     test(
         'should return remote data when the call to remote data source is successful',
         () async {
-      final result = await repository.readNotice(noticeId: tNoticeId);
+      final result = await repository.readProfile(profileId: tProfileId);
 
-      verify(() => mockRemoteDataSource.readNotice(noticeId: tNoticeId));
-
-      expect(result, equals(Right(tNoticeDetails)));
+      verify(() => mockRemoteDataSource.readProfile(profileId: tProfileId));
+      expect(result, equals(Right(tProfile)));
     });
 
     test(
         'should return ServerFailure when the call to remote data source is unsuccessful',
         () async {
-      when(() => mockRemoteDataSource.readNotice(noticeId: tNoticeId))
+      when(() => mockRemoteDataSource.readProfile(profileId: tProfileId))
           .thenThrow(ServerException());
 
-      final result = await repository.readNotice(noticeId: tNoticeId);
+      final result = await repository.readProfile(profileId: tProfileId);
 
-      verify(() => mockRemoteDataSource.readNotice(noticeId: tNoticeId));
+      verify(() => mockRemoteDataSource.readProfile(profileId: tProfileId));
       expect(result, equals(const Left(ServerFailure())));
     });
 
-    test(
-        'should return NoDataFailure when there is no data present in the remote data source',
-        () async {
-      when(() => mockRemoteDataSource.readNotice(noticeId: tNoticeId))
+    test('should return NoDataFailure when the profile is not found', () async {
+      when(() => mockRemoteDataSource.readProfile(profileId: tProfileId))
           .thenThrow(NoDataException());
 
-      final result = await repository.readNotice(noticeId: tNoticeId);
+      final result = await repository.readProfile(profileId: tProfileId);
 
-      verify(() => mockRemoteDataSource.readNotice(noticeId: tNoticeId));
+      verify(() => mockRemoteDataSource.readProfile(profileId: tProfileId));
       expect(result, equals(const Left(NoDataFailure())));
     });
   });
@@ -99,9 +96,10 @@ void main() {
 
     test('should return NoConnectionFailure when the device is offline',
         () async {
-      final result = await repository.readNotice(noticeId: tNoticeId);
+      final result = await repository.readProfile(profileId: tProfileId);
 
-      verifyZeroInteractions(mockRemoteDataSource);
+      verifyNever(
+          () => mockRemoteDataSource.readProfile(profileId: tProfileId));
       expect(result, equals(const Left(NoConnectionFailure())));
     });
   });
