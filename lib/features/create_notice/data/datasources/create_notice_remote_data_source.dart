@@ -24,33 +24,39 @@ class CreateNoticeRemoteDataSourceImpl implements CreateNoticeRemoteDataSource {
     noticeDetails = noticeDetails.copyWith(id: noticeRef.id);
 
     if (noticeDetails.imagesUrl != null) {
-      final List<String> imagesUrl = [];
-      final storageRef = firebaseStorage.ref();
-
-      int index = 0;
-      for (final image in noticeDetails.imagesUrl!) {
-        final uploadTask = storageRef
-            .child('noticeImages/${noticeRef.id}/$index.webp')
-            .putFile(File(image));
-        await uploadTask.whenComplete(() async {
-          final imageUrl = await uploadTask.snapshot.ref.getDownloadURL();
-          imagesUrl.add(imageUrl);
-          index++;
-        }).onError((error, stackTrace) => throw ServerException());
-      }
-      noticeDetails = noticeDetails.copyWith(imagesUrl: imagesUrl);
+      noticeDetails = await _uploadImages(
+        images: noticeDetails.imagesUrl!,
+        noticeDetails: noticeDetails,
+      );
     }
 
     await noticeRef.set(noticeDetails.toNoticeJson()).then(
       (_) async {
         final noticeDetailsRef =
             firebaseFirestore.collection('noticeDetails').doc(noticeRef.id);
-        await noticeDetailsRef.set(noticeDetails.toJson()).then(
-          (_) {
-            return;
-          },
-        ).onError((error, stackTrace) => throw ServerException());
+        await noticeDetailsRef.set(noticeDetails.toJson());
       },
     ).onError((error, stackTrace) => throw ServerException());
+  }
+
+  Future<NoticeDetailsModel> _uploadImages({
+    required List<String> images,
+    required NoticeDetailsModel noticeDetails,
+  }) async {
+    final List<String> imagesUrl = [];
+    final storageRef = firebaseStorage.ref();
+
+    int index = 0;
+    for (final image in images) {
+      final uploadTask = storageRef
+          .child('noticeImages/${noticeDetails.id}/$index.webp')
+          .putFile(File(image));
+      await uploadTask.whenComplete(() async {
+        final imageUrl = await uploadTask.snapshot.ref.getDownloadURL();
+        imagesUrl.add(imageUrl);
+        index++;
+      }).onError((error, stackTrace) => throw ServerException());
+    }
+    return noticeDetails.copyWith(imagesUrl: imagesUrl);
   }
 }

@@ -5,11 +5,10 @@ import 'package:lokalio/core/util/create_route.dart';
 import 'package:lokalio/features/create_notice/presentation/pages/create_notice_page.dart';
 import 'package:lokalio/features/notice_list/presentation/pages/favorite_page.dart';
 import 'package:lokalio/features/notice_list/presentation/pages/home_page.dart';
+import 'package:lokalio/features/profile/presentation/pages/profile_page.dart';
 
 class MainPage extends StatefulWidget {
-  final bool isAnonymous;
-
-  const MainPage({super.key, required this.isAnonymous});
+  const MainPage({super.key});
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -19,7 +18,7 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
-    if (index == 2 && !widget.isAnonymous) {
+    if (index == 2) {
       Navigator.of(context).push(
         createRoute(const CreateNoticePage()),
       );
@@ -32,10 +31,12 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isAnonymous = FirebaseAuth.instance.currentUser!.isAnonymous;
+
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
-        children: widget.isAnonymous ? _anonymousWidgetOptions : _widgetOptions,
+        children: isAnonymous ? _anonymousWidgetOptions : _widgetOptions,
       ),
       bottomNavigationBar: NavigationBar(
         destinations: _widgetDestinations,
@@ -49,20 +50,7 @@ class _MainPageState extends State<MainPage> {
     const HomePage(),
     const FavoritePage(),
     const CreateNoticePage(),
-    Center(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              child: const Text('Wyloguj się'),
-            ),
-          ],
-        ),
-      ),
-    ),
+    const MyProfilePage(),
   ];
 
   static final List<Widget> _anonymousWidgetOptions = <Widget>[

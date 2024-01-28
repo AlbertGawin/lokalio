@@ -76,7 +76,6 @@ class _TitleDescInputWidgetState extends State<TitleDescInputWidget> {
       maxLines: maxLines,
       keyboardType: keyboardType,
       decoration: InputDecoration(
-        border: const OutlineInputBorder(),
         labelText: label,
       ),
       validator: (value) {

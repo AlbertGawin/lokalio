@@ -6,8 +6,11 @@ class SearchBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
-      child: SearchBar(),
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      child: SearchBar(
+        leading: Row(children: [SizedBox(width: 8), Icon(Icons.menu)]),
+        trailing: [Icon(Icons.search), SizedBox(width: 8)],
+      ),
     );
   }
 }

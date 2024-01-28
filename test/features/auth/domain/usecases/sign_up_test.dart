@@ -27,7 +27,7 @@ void main() {
     final result =
         await usecase(const SignUpParams(email: tEmail, password: tPassword));
 
-    expect(result, const Right(true));
+    expect(result, const Right(null));
     verify(() => mockAuthRepository.signUp(email: tEmail, password: tPassword));
     verifyNoMoreInteractions(mockAuthRepository);
   });

@@ -16,6 +16,10 @@ final class SignInEvent extends AuthEvent {
   List<Object> get props => [credential];
 }
 
+final class SignInAnonymouslyEvent extends AuthEvent {
+  const SignInAnonymouslyEvent();
+}
+
 final class SignUpEvent extends AuthEvent {
   final String email;
   final String password;

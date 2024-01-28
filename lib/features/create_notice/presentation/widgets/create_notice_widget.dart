@@ -35,7 +35,12 @@ class CreateNoticeWidget extends StatelessWidget {
     return Form(
       key: formKey,
       child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.only(
+          right: 16,
+          left: 16,
+          top: 8,
+          bottom: kBottomNavigationBarHeight,
+        ),
         child: Column(
           children: [
             ImagesInputWidget(
@@ -43,7 +48,7 @@ class CreateNoticeWidget extends StatelessWidget {
                 data['images'] = imagesData;
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             TitleDescInputWidget(
               getTitle: (titleData) {
                 data['title'] = titleData;
@@ -52,13 +57,13 @@ class CreateNoticeWidget extends StatelessWidget {
                 data['description'] = descriptionData;
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             CategoryInputWidget(
               getCategory: (categoryIndexData) {
                 data['category'] = categoryIndexData;
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             AmountsInputWidget(
               getCashAmount: (cashAmountData) {
                 data['cashAmount'] = cashAmountData;
@@ -67,26 +72,27 @@ class CreateNoticeWidget extends StatelessWidget {
                 data['peopleAmount'] = peopleAmountData;
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             LocationInputWidget(
               getLocation: (locationData) {
                 data['location'] = locationData;
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             DateTimeRangeInputWidget(
               getDateTimeRange: (dateTimeRangeData) {
                 data['dateTimeRange'] = dateTimeRangeData;
               },
             ),
-            const SizedBox(height: 16),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              child: FilledButton.icon(
-                onPressed: () => _validate(context, formKey, data),
-                label: const Text('DODAJ OGŁOSZENIE'),
-                icon: const Icon(Icons.note_add),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  onPressed: () => _validate(context, formKey, data),
+                  label: const Text('DODAJ OGŁOSZENIE'),
+                  icon: const Icon(Icons.note_add),
+                ),
               ),
             ),
           ],

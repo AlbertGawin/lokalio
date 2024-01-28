@@ -82,7 +82,6 @@ class _AmountsInputWidgetState extends State<AmountsInputWidget> {
       inputFormatters: inputFormatters,
       maxLength: maxLength,
       decoration: InputDecoration(
-        border: const OutlineInputBorder(),
         label: Text(label),
         suffix: suffix != null ? Text(suffix) : null,
         counterText: '',

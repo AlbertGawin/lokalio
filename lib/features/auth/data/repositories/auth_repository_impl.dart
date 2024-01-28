@@ -33,6 +33,23 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<Either<Failure, void>> signInAnonymously() async {
+    if (await networkInfo.isConnected) {
+      try {
+        await remoteDataSource.signInAnonymously();
+
+        return const Right(null);
+      } on FirebaseException catch (e) {
+        return Left(FirebaseFailure(message: e.code));
+      } on Exception {
+        return const Left(ServerFailure());
+      }
+    } else {
+      return const Left(NoConnectionFailure());
+    }
+  }
+
+  @override
   Future<Either<Failure, void>> signUp(
       {required String email, required String password}) async {
     if (await networkInfo.isConnected) {
@@ -57,6 +74,8 @@ class AuthRepositoryImpl implements AuthRepository {
         await remoteDataSource.signOut();
 
         return const Right(null);
+      } on FirebaseException catch (e) {
+        return Left(FirebaseFailure(message: e.code));
       } on Exception {
         return const Left(ServerFailure());
       }
@@ -77,6 +96,8 @@ class AuthRepositoryImpl implements AuthRepository {
             name: name, phone: phone, smsCode: smsCode);
 
         return const Right(null);
+      } on FirebaseException catch (e) {
+        return Left(FirebaseFailure(message: e.code));
       } on Exception {
         return const Left(ServerFailure());
       }

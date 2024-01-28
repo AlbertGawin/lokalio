@@ -18,7 +18,7 @@ class AnonymousPage extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(
-                    createRoute(const AuthPage(signInClicked: true)),
+                    createRoute(const AuthPage()),
                   );
                 },
                 child: const Text('Zaloguj się'),

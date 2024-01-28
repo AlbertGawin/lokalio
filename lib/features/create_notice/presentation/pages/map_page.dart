@@ -39,93 +39,99 @@ class _MapPageState extends State<MapPage> {
       appBar: AppBar(
         title: Text(_isSelected ? 'Twoja lokalizacja' : 'Wybierz lokalizację'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                GoogleMap(
-                  onMapCreated: (controller) {
-                    _controller = controller;
-                  },
-                  onLongPress: (location) async {
-                    setState(() {
-                      _isSelected = true;
-                      _pickedLocation = location;
-                    });
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: kBottomNavigationBarHeight),
+        child: Column(
+          children: [
+            Expanded(
+              child: Stack(
+                children: [
+                  GoogleMap(
+                    onMapCreated: (controller) {
+                      _controller = controller;
+                    },
+                    onLongPress: (location) async {
+                      setState(() {
+                        _isSelected = true;
+                        _pickedLocation = location;
+                      });
 
-                    if (_controller == null) {
-                      return;
-                    }
+                      if (_controller == null) {
+                        return;
+                      }
 
-                    double currentZoom = await _controller!.getZoomLevel();
-                    _controller!.animateCamera(
-                      CameraUpdate.newCameraPosition(
-                        CameraPosition(
-                          target: location,
-                          zoom: 12 > currentZoom ? 12 : currentZoom,
-                        ),
-                      ),
-                    );
-                  },
-                  circles: {
-                    if (_isSelected)
-                      Circle(
-                        circleId: const CircleId('Okolica'),
-                        center: _pickedLocation,
-                        radius: 500,
-                        strokeWidth: 2,
-                        fillColor: Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withOpacity(0.5),
-                        strokeColor: Theme.of(context).colorScheme.primary,
-                      ),
-                  },
-                  zoomControlsEnabled: true,
-                  myLocationEnabled: true,
-                  initialCameraPosition: CameraPosition(
-                    target: _pickedLocation,
-                    zoom: _isSelected ? 12 : 6,
-                  ),
-                  markers: (!_isSelected)
-                      ? {}
-                      : {
-                          Marker(
-                            markerId: const MarkerId('m1'),
-                            position: _pickedLocation,
+                      double currentZoom = await _controller!.getZoomLevel();
+                      _controller!.animateCamera(
+                        CameraUpdate.newCameraPosition(
+                          CameraPosition(
+                            target: location,
+                            zoom: 12 > currentZoom ? 12 : currentZoom,
                           ),
-                        },
-                ),
-              ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Wpisz lokalizację powyżej lub przytrzymaj palcem wybrane miejsce na mapie.',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: double.infinity,
-                  child: FilledButton(
-                    onPressed: _isSelected
-                        ? () {
-                            Navigator.of(context).pop(_pickedLocation);
-                          }
-                        : null,
-                    child: const Text('Wybierz'),
+                        ),
+                      );
+                    },
+                    circles: {
+                      if (_isSelected)
+                        Circle(
+                          circleId: const CircleId('Okolica'),
+                          center: _pickedLocation,
+                          radius: 500,
+                          strokeWidth: 2,
+                          fillColor: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.5),
+                          strokeColor: Theme.of(context).colorScheme.primary,
+                        ),
+                    },
+                    zoomControlsEnabled: true,
+                    myLocationEnabled: true,
+                    initialCameraPosition: CameraPosition(
+                      target: _pickedLocation,
+                      zoom: _isSelected ? 12 : 6,
+                    ),
+                    markers: (!_isSelected)
+                        ? {}
+                        : {
+                            Marker(
+                              markerId: const MarkerId('m1'),
+                              position: _pickedLocation,
+                            ),
+                          },
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          )
-        ],
+            Container(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Wpisz lokalizację powyżej lub przytrzymaj palcem wybrane miejsce na mapie.',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      onPressed: _isSelected
+                          ? () {
+                              Navigator.of(context).pop(_pickedLocation);
+                            }
+                          : null,
+                      style: FilledButton.styleFrom(
+                        padding: const EdgeInsets.all(16),
+                      ),
+                      child: const Text('Wybierz'),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

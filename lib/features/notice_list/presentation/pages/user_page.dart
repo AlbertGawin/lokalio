@@ -11,7 +11,7 @@ class UserPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(), body: buildBody(context));
+    return Scaffold(appBar: AppBar(toolbarHeight: 0), body: buildBody(context));
   }
 
   BlocProvider<NoticeListBloc> buildBody(BuildContext context) {

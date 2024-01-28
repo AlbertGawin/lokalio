@@ -5,12 +5,15 @@ import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/usecases/usecase.dart';
 import 'package:lokalio/features/auth/domain/usecases/set_profile_info.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_in.dart';
+import 'package:lokalio/features/auth/domain/usecases/sign_in_anonymously.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_out.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_up.dart';
 import 'package:lokalio/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockSignIn extends Mock implements SignIn {}
+
+class MockSignInAnonymously extends Mock implements SignInAnonymously {}
 
 class MockSignUp extends Mock implements SignUp {}
 
@@ -24,6 +27,7 @@ void main() {
   late AuthBloc bloc;
 
   late MockSignIn mockSignIn;
+  late MockSignInAnonymously mockSignInAnonymously;
   late MockSignUp mockSignUp;
   late MockSignOut mockSignOut;
   late MockSetProfileInfo mockSetProfileInfo;
@@ -32,12 +36,14 @@ void main() {
 
   setUp(() {
     mockSignIn = MockSignIn();
+    mockSignInAnonymously = MockSignInAnonymously();
     mockSignUp = MockSignUp();
     mockSignOut = MockSignOut();
     mockSetProfileInfo = MockSetProfileInfo();
 
     bloc = AuthBloc(
       signIn: mockSignIn,
+      signInAnonymously: mockSignInAnonymously,
       signUp: mockSignUp,
       signOut: mockSignOut,
       setProfileInfo: mockSetProfileInfo,
@@ -52,6 +58,8 @@ void main() {
     registerFallbackValue(
         const SignUpParams(email: tEmail, password: tPassword));
     registerFallbackValue(NoParams());
+    registerFallbackValue(
+        const ProfileParams(name: '', phone: '', smsCode: ''));
   });
 
   test('initialState should be Done', () {
@@ -59,7 +67,7 @@ void main() {
   });
 
   group('SignIn', () {
-    test('should get data from the SignIn use case', () async {
+    test('should get data from the usecase', () async {
       when(() => mockSignIn(any())).thenAnswer((_) async => const Right(null));
 
       bloc.add(SignInEvent(credential: mockAuthCredential));
@@ -69,7 +77,7 @@ void main() {
     });
 
     test(
-        'should emit [Loading, Done] when data is gotten successfully from the use case',
+        'should emit [Loading, Done] when data is gotten successfully from the usecase',
         () async {
       when(() => mockSignIn(any())).thenAnswer((_) async => const Right(null));
 
@@ -80,7 +88,7 @@ void main() {
     });
 
     test(
-        'should emit [Loading, Error] when getting data fails from the use case',
+        'should emit [Loading, Error] when getting data fails from the usecase',
         () async {
       when(() => mockSignIn(any()))
           .thenAnswer((_) async => const Left(ServerFailure()));
@@ -95,8 +103,47 @@ void main() {
     });
   });
 
+  group('SignInAnonymously', () {
+    test('should get data from the usecase', () async {
+      when(() => mockSignInAnonymously(any()))
+          .thenAnswer((_) async => const Right(null));
+
+      bloc.add(const SignInAnonymouslyEvent());
+      await untilCalled(() => mockSignInAnonymously(any()));
+
+      verify(() => mockSignInAnonymously(NoParams()));
+    });
+
+    test(
+        'should emit [Loading, Done] when data is gotten successfully from the usecase',
+        () async {
+      when(() => mockSignInAnonymously(any()))
+          .thenAnswer((_) async => const Right(null));
+
+      final expected = [Loading(), Done()];
+      expectLater(bloc.stream, emitsInOrder(expected));
+
+      bloc.add(const SignInAnonymouslyEvent());
+    });
+
+    test(
+        'should emit [Loading, Error] when getting data fails from the usecase',
+        () async {
+      when(() => mockSignInAnonymously(any()))
+          .thenAnswer((_) async => const Left(ServerFailure()));
+
+      final expected = [
+        Loading(),
+        Error(message: failureMessages[FailureType.serverFailure]!),
+      ];
+      expectLater(bloc.stream, emitsInOrder(expected));
+
+      bloc.add(const SignInAnonymouslyEvent());
+    });
+  });
+
   group('SignUp', () {
-    test('should get data from the SignUp use case', () async {
+    test('should get data from the usecase', () async {
       when(() => mockSignUp(any())).thenAnswer((_) async => const Right(null));
 
       bloc.add(const SignUpEvent(email: tEmail, password: tPassword));
@@ -107,7 +154,7 @@ void main() {
     });
 
     test(
-        'should emit [Loading, Done] when data is gotten successfully from the use case',
+        'should emit [Loading, Done] when data is gotten successfully from the usecase',
         () async {
       when(() => mockSignUp(any())).thenAnswer((_) async => const Right(null));
 
@@ -118,7 +165,7 @@ void main() {
     });
 
     test(
-        'should emit [Loading, Error] when getting data fails from the use case',
+        'should emit [Loading, Error] when getting data fails from the usecase',
         () async {
       when(() => mockSignUp(any()))
           .thenAnswer((_) async => const Left(ServerFailure()));
@@ -134,7 +181,7 @@ void main() {
   });
 
   group('SignOut', () {
-    test('should get data from the SignOut use case', () async {
+    test('should get data from the usecase', () async {
       when(() => mockSignOut(any())).thenAnswer((_) async => const Right(null));
 
       bloc.add(const SignOutEvent());
@@ -144,7 +191,7 @@ void main() {
     });
 
     test(
-        'should emit [Loading, Done] when data is gotten successfully from the use case',
+        'should emit [Loading, Done] when data is gotten successfully from the usecase',
         () async {
       when(() => mockSignOut(any())).thenAnswer((_) async => const Right(null));
 
@@ -155,7 +202,7 @@ void main() {
     });
 
     test(
-        'should emit [Loading, Error] when getting data fails from the use case',
+        'should emit [Loading, Error] when getting data fails from the usecase',
         () async {
       when(() => mockSignOut(any()))
           .thenAnswer((_) async => const Left(ServerFailure()));
@@ -167,6 +214,53 @@ void main() {
       expectLater(bloc.stream, emitsInOrder(expected));
 
       bloc.add(const SignOutEvent());
+    });
+  });
+
+  group('SetProfileInfo', () {
+    const tName = 'name';
+    const tPhone = 'phone';
+    const tSmsCode = 'smsCode';
+
+    test('should get data from the usecase', () async {
+      when(() => mockSetProfileInfo(any()))
+          .thenAnswer((_) async => const Right(null));
+
+      bloc.add(const SetProfileInfoEvent(
+          name: tName, phone: tPhone, smsCode: tSmsCode));
+      await untilCalled(() => mockSetProfileInfo(any()));
+
+      verify(() => mockSetProfileInfo(
+          const ProfileParams(name: tName, phone: tPhone, smsCode: tSmsCode)));
+    });
+
+    test(
+        'should emit [Loading, Done] when data is gotten successfully from the usecase',
+        () async {
+      when(() => mockSetProfileInfo(any()))
+          .thenAnswer((_) async => const Right(null));
+
+      final expected = [Loading(), Done()];
+      expectLater(bloc.stream, emitsInOrder(expected));
+
+      bloc.add(const SetProfileInfoEvent(
+          name: tName, phone: tPhone, smsCode: tSmsCode));
+    });
+
+    test(
+        'should emit [Loading, Error] when getting data fails from the usecase',
+        () async {
+      when(() => mockSetProfileInfo(any()))
+          .thenAnswer((_) async => const Left(ServerFailure()));
+
+      final expected = [
+        Loading(),
+        Error(message: failureMessages[FailureType.serverFailure]!),
+      ];
+      expectLater(bloc.stream, emitsInOrder(expected));
+
+      bloc.add(const SetProfileInfoEvent(
+          name: tName, phone: tPhone, smsCode: tSmsCode));
     });
   });
 }

@@ -9,6 +9,7 @@ import 'package:lokalio/features/auth/data/repositories/auth_repository_impl.dar
 import 'package:lokalio/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lokalio/features/auth/domain/usecases/set_profile_info.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_in.dart';
+import 'package:lokalio/features/auth/domain/usecases/sign_in_anonymously.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_out.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_up.dart';
 import 'package:lokalio/features/auth/presentation/bloc/auth_bloc.dart';
@@ -18,6 +19,12 @@ import 'package:lokalio/features/create_notice/domain/repositories/create_notice
 import 'package:lokalio/features/create_notice/domain/usecases/create_notice.dart';
 import 'package:lokalio/features/create_notice/presentation/bloc/create_notice_bloc.dart';
 import 'package:lokalio/features/notice_list/domain/usecases/get_my_notices.dart';
+import 'package:lokalio/features/profile/data/datasources/profile_remote_data_source.dart';
+import 'package:lokalio/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:lokalio/features/profile/domain/repositories/profile_repository.dart';
+import 'package:lokalio/features/profile/domain/usecases/read_my_profile.dart';
+import 'package:lokalio/features/profile/domain/usecases/read_profile.dart';
+import 'package:lokalio/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:lokalio/features/read_notice/data/datasources/read_notice_remote_data_source.dart';
 import 'package:lokalio/features/read_notice/data/repositories/read_notice_repository_impl.dart';
 import 'package:lokalio/features/read_notice/domain/repositories/read_notice_repository.dart';
@@ -38,6 +45,7 @@ Future<void> init() async {
   initAuth();
   initCreateNotice();
   initNoticeList();
+  initProfile();
   initReadNotice();
   initCore();
   await initExternal();
@@ -46,10 +54,16 @@ Future<void> init() async {
 void initAuth() {
   //Bloc
   sl.registerFactory(() => AuthBloc(
-      signIn: sl(), signUp: sl(), signOut: sl(), setProfileInfo: sl()));
+        signIn: sl(),
+        signInAnonymously: sl(),
+        signUp: sl(),
+        signOut: sl(),
+        setProfileInfo: sl(),
+      ));
 
   // Use cases
   sl.registerLazySingleton(() => SignIn(authRepository: sl()));
+  sl.registerLazySingleton(() => SignInAnonymously(authRepository: sl()));
   sl.registerLazySingleton(() => SignUp(authRepository: sl()));
   sl.registerLazySingleton(() => SignOut(authRepository: sl()));
   sl.registerLazySingleton(() => SetProfileInfo(authRepository: sl()));
@@ -59,8 +73,8 @@ void initAuth() {
       () => AuthRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()));
 
   // Data sources
-  sl.registerLazySingleton<AuthRemoteDataSource>(
-      () => AuthRemoteDataSourceImpl(firebaseAuth: sl()));
+  sl.registerLazySingleton<AuthRemoteDataSource>(() =>
+      AuthRemoteDataSourceImpl(firebaseAuth: sl(), firebaseFirestore: sl()));
 }
 
 void initCreateNotice() {
@@ -78,6 +92,23 @@ void initCreateNotice() {
   sl.registerLazySingleton<CreateNoticeRemoteDataSource>(() =>
       CreateNoticeRemoteDataSourceImpl(
           firebaseFirestore: sl(), firebaseStorage: sl()));
+}
+
+void initProfile() {
+  //Bloc
+  sl.registerFactory(() => ProfileBloc(readProfile: sl(), readMyProfile: sl()));
+
+  // Use cases
+  sl.registerLazySingleton(() => ReadProfile(repository: sl()));
+  sl.registerLazySingleton(() => ReadMyProfile(repository: sl()));
+
+  // Repository
+  sl.registerLazySingleton<ProfileRepository>(
+      () => ProfileRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()));
+
+  // Data sources
+  sl.registerLazySingleton<ProfileRemoteDataSource>(() =>
+      ProfileRemoteDataSourceImpl(firebaseFirestore: sl(), firebaseAuth: sl()));
 }
 
 void initReadNotice() {

@@ -11,6 +11,8 @@ import '../../../../mock.dart';
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 
+class MockFirebaseFirestore extends Mock implements FirebaseFirestore {}
+
 class MockUserCredential extends Mock implements UserCredential {}
 
 class MockAuthCredential extends Mock implements AuthCredential {}
@@ -30,12 +32,19 @@ void main() {
   late AuthRemoteDataSourceImpl dataSource;
 
   late MockFirebaseAuth mockFirebaseAuth;
+  late MockFirebaseFirestore mockFirebaseFirestore;
+
   late MockUserCredential mockUserCredential;
   late MockAuthCredential mockAuthCredential;
 
   setUp(() {
     mockFirebaseAuth = MockFirebaseAuth();
-    dataSource = AuthRemoteDataSourceImpl(firebaseAuth: mockFirebaseAuth);
+    mockFirebaseFirestore = MockFirebaseFirestore();
+
+    dataSource = AuthRemoteDataSourceImpl(
+      firebaseAuth: mockFirebaseAuth,
+      firebaseFirestore: mockFirebaseFirestore,
+    );
 
     mockUserCredential = MockUserCredential();
     mockAuthCredential = MockAuthCredential();
@@ -63,6 +72,26 @@ void main() {
           .thenThrow(FirebaseAuthException(code: 'code', message: 'message'));
 
       expect(() => dataSource.signIn(credential: mockAuthCredential),
+          throwsA(isA<FirebaseAuthException>()));
+    });
+  });
+
+  group('signInAnonymously', () {
+    test('should sign in anonymously', () async {
+      when(() => mockFirebaseAuth.signInAnonymously())
+          .thenAnswer((_) async => mockUserCredential);
+
+      await dataSource.signInAnonymously();
+
+      verify(() => mockFirebaseAuth.signInAnonymously());
+    });
+
+    test('should throw FirebaseAuthException when sign in anonymously fails',
+        () async {
+      when(() => mockFirebaseAuth.signInAnonymously())
+          .thenThrow(FirebaseAuthException(code: 'code', message: 'message'));
+
+      expect(() => dataSource.signInAnonymously(),
           throwsA(isA<FirebaseAuthException>()));
     });
   });

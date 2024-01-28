@@ -11,16 +11,22 @@ class UserWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Column(
-        children: [
-          UserDetailsWidget(userId: userId),
-          const SizedBox(height: 16),
-          NoticeListWidget(noticeList: noticeList),
-        ],
-      ),
+    final ScrollController scrollController = ScrollController();
+
+    return CustomScrollView(
+      controller: scrollController,
+      slivers: [
+        const SliverAppBar(backgroundColor: Colors.transparent, pinned: true),
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              UserDetailsWidget(userId: userId),
+              const SizedBox(height: 16),
+              NoticeListWidget(noticeList: noticeList),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

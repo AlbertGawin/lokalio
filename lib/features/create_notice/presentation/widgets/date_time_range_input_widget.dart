@@ -76,7 +76,6 @@ class _DateTimeRangeInputWidgetState extends State<DateTimeRangeInputWidget> {
       controller: controller,
       decoration: InputDecoration(
         labelText: labelText,
-        border: const OutlineInputBorder(),
       ),
       readOnly: true,
       autovalidateMode: AutovalidateMode.onUserInteraction,

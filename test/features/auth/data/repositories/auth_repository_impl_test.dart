@@ -56,7 +56,7 @@ void main() {
       when(() => networkInfo.isConnected).thenAnswer((_) async => true);
     });
 
-    test('should return null when sign in is successful', () async {
+    test('should return null when SignIn is successful', () async {
       when(() => remoteDataSource.signIn(credential: mockAuthCredential))
           .thenAnswer((_) async {});
 
@@ -65,7 +65,16 @@ void main() {
       expect(result, const Right(null));
     });
 
-    test('should return null when sign up is successful', () async {
+    test('should return null when SignInAnonymously is successful', () async {
+      when(() => remoteDataSource.signInAnonymously())
+          .thenAnswer((_) async => {});
+
+      final result = await repository.signInAnonymously();
+
+      expect(result, const Right(null));
+    });
+
+    test('should return null when SignUp is successful', () async {
       when(() => remoteDataSource.signUp(email: tEmail, password: tPassword))
           .thenAnswer((_) async => {});
 
@@ -77,7 +86,7 @@ void main() {
       expect(result, const Right(null));
     });
 
-    test('should return null when sign out is successful', () async {
+    test('should return null when SignOut is successful', () async {
       when(() => remoteDataSource.signOut()).thenAnswer((_) async => true);
 
       final result = await repository.signOut();
@@ -85,7 +94,18 @@ void main() {
       expect(result, const Right(null));
     });
 
-    test('should return ServerFailure when sign in is unsuccessful', () async {
+    test('should return null when SetProfileInfo is successful', () async {
+      when(() =>
+              remoteDataSource.setProfileInfo(name: '', phone: '', smsCode: ''))
+          .thenAnswer((_) async => {});
+
+      final result =
+          await repository.setProfileInfo(name: '', phone: '', smsCode: '');
+
+      expect(result, const Right(null));
+    });
+
+    test('should return ServerFailure when SignIn is unsuccessful', () async {
       when(() => remoteDataSource.signIn(credential: mockAuthCredential))
           .thenThrow(ServerException());
 
@@ -94,7 +114,17 @@ void main() {
       expect(result, const Left(ServerFailure()));
     });
 
-    test('should return ServerFailure when sign up is unsuccessful', () async {
+    test('should return ServerFailure when SignInAnonymously is unsuccessful',
+        () async {
+      when(() => remoteDataSource.signInAnonymously())
+          .thenThrow(ServerException());
+
+      final result = await repository.signInAnonymously();
+
+      expect(result, const Left(ServerFailure()));
+    });
+
+    test('should return ServerFailure when SignUp is unsuccessful', () async {
       when(() => remoteDataSource.signUp(email: tEmail, password: tPassword))
           .thenThrow(ServerException());
 
@@ -106,7 +136,7 @@ void main() {
       expect(result, const Left(ServerFailure()));
     });
 
-    test('should return ServerFailure when sign out is unsuccessful', () async {
+    test('should return ServerFailure when SignOut is unsuccessful', () async {
       when(() => remoteDataSource.signOut()).thenThrow(ServerException());
 
       final result = await repository.signOut();
@@ -114,8 +144,19 @@ void main() {
       expect(result, const Left(ServerFailure()));
     });
 
-    test('should return FirebaseFailure when sign in is unsuccessful',
+    test('should return ServerFailure when SetProfileInfo is unsuccessful',
         () async {
+      when(() =>
+              remoteDataSource.setProfileInfo(name: '', phone: '', smsCode: ''))
+          .thenThrow(ServerException());
+
+      final result =
+          await repository.setProfileInfo(name: '', phone: '', smsCode: '');
+
+      expect(result, const Left(ServerFailure()));
+    });
+
+    test('should return FirebaseFailure when SignIn is unsuccessful', () async {
       when(() => remoteDataSource.signIn(credential: mockAuthCredential))
           .thenThrow(FirebaseException(plugin: '', code: 'user-not-found'));
 
@@ -124,14 +165,48 @@ void main() {
       expect(result, const Left(FirebaseFailure(message: 'user-not-found')));
     });
 
-    test('should return ServerFailure when sign in throws an exception',
+    test('should return FirebaseFailure when SignInAnonymously is unsuccessful',
         () async {
-      when(() => remoteDataSource.signIn(credential: mockAuthCredential))
-          .thenThrow(Exception());
+      when(() => remoteDataSource.signInAnonymously())
+          .thenThrow(FirebaseException(plugin: '', code: 'user-not-found'));
 
-      final result = await repository.signIn(credential: mockAuthCredential);
+      final result = await repository.signInAnonymously();
 
-      expect(result, const Left(ServerFailure()));
+      expect(result, const Left(FirebaseFailure(message: 'user-not-found')));
+    });
+
+    test('should return FirebaseFailure when SignUp is unsuccessful', () async {
+      when(() => remoteDataSource.signUp(email: tEmail, password: tPassword))
+          .thenThrow(FirebaseException(plugin: '', code: 'user-not-found'));
+
+      final result = await repository.signUp(
+        email: tEmail,
+        password: tPassword,
+      );
+
+      expect(result, const Left(FirebaseFailure(message: 'user-not-found')));
+    });
+
+    test('should return FirebaseFailure when SignOut is unsuccessful',
+        () async {
+      when(() => remoteDataSource.signOut())
+          .thenThrow(FirebaseException(plugin: '', code: 'user-not-found'));
+
+      final result = await repository.signOut();
+
+      expect(result, const Left(FirebaseFailure(message: 'user-not-found')));
+    });
+
+    test('shoul return FirebaseFailure when SetProfileInfo is unsuccessful',
+        () async {
+      when(() =>
+              remoteDataSource.setProfileInfo(name: '', phone: '', smsCode: ''))
+          .thenThrow(FirebaseException(plugin: '', code: 'user-not-found'));
+
+      final result =
+          await repository.setProfileInfo(name: '', phone: '', smsCode: '');
+
+      expect(result, const Left(FirebaseFailure(message: 'user-not-found')));
     });
   });
 
@@ -144,6 +219,14 @@ void main() {
         'should return NoConnectionFailure when the device is offline for SignIn',
         () async {
       final result = await repository.signIn(credential: mockAuthCredential);
+
+      expect(result, const Left(NoConnectionFailure()));
+    });
+
+    test(
+        'should return NoConnectionFailure when the device is offline for SignInAnonymously',
+        () async {
+      final result = await repository.signInAnonymously();
 
       expect(result, const Left(NoConnectionFailure()));
     });
@@ -163,6 +246,15 @@ void main() {
         'should return NoConnectionFailure when the device is offline for SignOut',
         () async {
       final result = await repository.signOut();
+
+      expect(result, const Left(NoConnectionFailure()));
+    });
+
+    test(
+        'should return NoConnectionFailure when the device is offline for SetProfileInfo',
+        () async {
+      final result =
+          await repository.setProfileInfo(name: '', phone: '', smsCode: '');
 
       expect(result, const Left(NoConnectionFailure()));
     });

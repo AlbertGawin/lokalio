@@ -15,6 +15,8 @@ class CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.zero,
+      elevation: 4,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
