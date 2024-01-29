@@ -32,70 +32,63 @@ class CreateNoticeWidget extends StatelessWidget {
       'images': null,
     };
 
-    return Form(
-      key: formKey,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.only(
-          right: 16,
-          left: 16,
-          top: 8,
-          bottom: kBottomNavigationBarHeight,
+    return Scaffold(
+      bottomNavigationBar: BottomAppBar(
+        child: FilledButton.icon(
+          onPressed: () => _validate(context, formKey, data),
+          label: const Text('DODAJ OGŁOSZENIE'),
+          icon: const Icon(Icons.note_add),
         ),
-        child: Column(
-          children: [
-            ImagesInputWidget(
-              getImages: (imagesData) {
-                data['images'] = imagesData;
-              },
-            ),
-            const SizedBox(height: 8),
-            TitleDescInputWidget(
-              getTitle: (titleData) {
-                data['title'] = titleData;
-              },
-              getDescription: (descriptionData) {
-                data['description'] = descriptionData;
-              },
-            ),
-            const SizedBox(height: 8),
-            CategoryInputWidget(
-              getCategory: (categoryIndexData) {
-                data['category'] = categoryIndexData;
-              },
-            ),
-            const SizedBox(height: 8),
-            AmountsInputWidget(
-              getCashAmount: (cashAmountData) {
-                data['cashAmount'] = cashAmountData;
-              },
-              getPeopleAmount: (peopleAmountData) {
-                data['peopleAmount'] = peopleAmountData;
-              },
-            ),
-            const SizedBox(height: 8),
-            LocationInputWidget(
-              getLocation: (locationData) {
-                data['location'] = locationData;
-              },
-            ),
-            const SizedBox(height: 8),
-            DateTimeRangeInputWidget(
-              getDateTimeRange: (dateTimeRangeData) {
-                data['dateTimeRange'] = dateTimeRangeData;
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: SizedBox(
-                width: double.infinity,
-                child: FilledButton.icon(
-                  onPressed: () => _validate(context, formKey, data),
-                  label: const Text('DODAJ OGŁOSZENIE'),
-                  icon: const Icon(Icons.note_add),
-                ),
+      ),
+      body: Form(
+        key: formKey,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Column(
+            children: [
+              ImagesInputWidget(
+                getImages: (imagesData) {
+                  data['images'] = imagesData;
+                },
               ),
-            ),
-          ],
+              const SizedBox(height: 8),
+              TitleDescInputWidget(
+                getTitle: (titleData) {
+                  data['title'] = titleData;
+                },
+                getDescription: (descriptionData) {
+                  data['description'] = descriptionData;
+                },
+              ),
+              const SizedBox(height: 8),
+              CategoryInputWidget(
+                getCategory: (categoryIndexData) {
+                  data['category'] = categoryIndexData;
+                },
+              ),
+              const SizedBox(height: 8),
+              AmountsInputWidget(
+                getCashAmount: (cashAmountData) {
+                  data['cashAmount'] = cashAmountData;
+                },
+                getPeopleAmount: (peopleAmountData) {
+                  data['peopleAmount'] = peopleAmountData;
+                },
+              ),
+              const SizedBox(height: 8),
+              LocationInputWidget(
+                getLocation: (locationData) {
+                  data['location'] = locationData;
+                },
+              ),
+              const SizedBox(height: 8),
+              DateTimeRangeInputWidget(
+                getDateTimeRange: (dateTimeRangeData) {
+                  data['dateTimeRange'] = dateTimeRangeData;
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

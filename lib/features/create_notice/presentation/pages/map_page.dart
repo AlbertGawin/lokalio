@@ -40,7 +40,7 @@ class _MapPageState extends State<MapPage> {
         title: Text(_isSelected ? 'Twoja lokalizacja' : 'Wybierz lokalizację'),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(bottom: kBottomNavigationBarHeight),
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
         child: Column(
           children: [
             Expanded(
@@ -122,7 +122,7 @@ class _MapPageState extends State<MapPage> {
                             }
                           : null,
                       style: FilledButton.styleFrom(
-                        padding: const EdgeInsets.all(16),
+                        elevation: _isSelected ? 4 : 0,
                       ),
                       child: const Text('Wybierz'),
                     ),

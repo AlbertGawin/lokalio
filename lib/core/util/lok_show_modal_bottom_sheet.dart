@@ -14,6 +14,7 @@ void lokShowModalBottomSheet({
         mainAxisSize: MainAxisSize.min,
         children: [
           ListView.builder(
+            padding: EdgeInsets.zero,
             shrinkWrap: true,
             itemCount: titleList.length,
             itemBuilder: (context, index) {
@@ -29,12 +30,10 @@ void lokShowModalBottomSheet({
           ),
           ListTile(
             onTap: () => Navigator.of(context).pop(),
-            title: const Text(
-              'ANULUJ',
-              textAlign: TextAlign.center,
-            ),
+            title: const Text('ANULUJ', textAlign: TextAlign.center),
             textColor: Theme.of(context).colorScheme.primary,
           ),
+          SizedBox(height: MediaQuery.of(context).padding.bottom)
         ],
       );
     },

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lokalio/features/create_notice/presentation/widgets/card_widget.dart';
 
-class TitleDescInputWidget extends StatefulWidget {
+class TitleDescInputWidget extends StatelessWidget {
   const TitleDescInputWidget({
     super.key,
     required this.getTitle,
@@ -12,40 +12,31 @@ class TitleDescInputWidget extends StatefulWidget {
   final void Function(String description) getDescription;
 
   @override
-  State<TitleDescInputWidget> createState() => _TitleDescInputWidgetState();
-}
-
-class _TitleDescInputWidgetState extends State<TitleDescInputWidget> {
-  final _titleController = TextEditingController();
-  final _descController = TextEditingController();
-
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _descController.dispose();
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final _titleController = TextEditingController();
+    final _descController = TextEditingController();
+    final _titleFocusNode = FocusNode();
+    final _descFocusNode = FocusNode();
+
     return CardWidget(
       title: 'Tytuł i opis*',
       content: [
         buildTextFormField(
           controller: _titleController,
+          focusNode: _titleFocusNode,
           label: 'Tytuł*',
           errorMessage: 'Tytuł musi posiadać minimum 5 znaków.',
-          onSaved: widget.getTitle,
+          onSaved: getTitle,
           minLength: 5,
           maxLength: 50,
           autocorrect: false,
         ),
         buildTextFormField(
           controller: _descController,
+          focusNode: _descFocusNode,
           label: 'Opis*',
           errorMessage: 'Opis musi posiadać minimum 10 znaków.',
-          onSaved: widget.getDescription,
+          onSaved: getDescription,
           minLength: 10,
           maxLength: 200,
           maxLines: 3,
@@ -57,6 +48,7 @@ class _TitleDescInputWidgetState extends State<TitleDescInputWidget> {
 
   TextFormField buildTextFormField({
     required TextEditingController controller,
+    required FocusNode focusNode,
     required String label,
     required String errorMessage,
     required void Function(String value) onSaved,
@@ -69,6 +61,7 @@ class _TitleDescInputWidgetState extends State<TitleDescInputWidget> {
   }) {
     return TextFormField(
       controller: controller,
+      focusNode: focusNode,
       textCapitalization: textCapitalization,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       autocorrect: autocorrect,

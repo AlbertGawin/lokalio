@@ -25,10 +25,8 @@ class CreateNoticePage extends StatelessWidget {
       create: (_) => sl<CreateNoticeBloc>(),
       child: BlocBuilder<CreateNoticeBloc, CreateNoticeState>(
         builder: (context, state) {
-          if (state is CreateNoticeInitial) {
+          if (state is CreateNoticeInitial || state is Loading) {
             return const CreateNoticeWidget();
-          } else if (state is Loading) {
-            return const Center(child: CircularProgressIndicator());
           } else if (state is Done) {
             return const Center(child: Text('Done'));
           } else if (state is Error) {
