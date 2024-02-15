@@ -29,7 +29,7 @@ class MyProfilePage extends StatelessWidget {
           } else if (state is Loading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is Done) {
-            return const MyProfileWidget();
+            return MyProfileWidget(profile: state.profile);
           } else if (state is Error) {
             return Center(child: Text(state.message));
           } else {
