@@ -13,17 +13,17 @@ class TitleDescInputWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _titleController = TextEditingController();
-    final _descController = TextEditingController();
-    final _titleFocusNode = FocusNode();
-    final _descFocusNode = FocusNode();
+    final titleController = TextEditingController();
+    final descController = TextEditingController();
+    final titleFocusNode = FocusNode();
+    final descFocusNode = FocusNode();
 
     return CardWidget(
       title: 'Tytuł i opis*',
       content: [
         buildTextFormField(
-          controller: _titleController,
-          focusNode: _titleFocusNode,
+          controller: titleController,
+          focusNode: titleFocusNode,
           label: 'Tytuł*',
           errorMessage: 'Tytuł musi posiadać minimum 5 znaków.',
           onSaved: getTitle,
@@ -32,8 +32,8 @@ class TitleDescInputWidget extends StatelessWidget {
           autocorrect: false,
         ),
         buildTextFormField(
-          controller: _descController,
-          focusNode: _descFocusNode,
+          controller: descController,
+          focusNode: descFocusNode,
           label: 'Opis*',
           errorMessage: 'Opis musi posiadać minimum 10 znaków.',
           onSaved: getDescription,

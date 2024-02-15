@@ -94,8 +94,11 @@ class CreateNoticeWidget extends StatelessWidget {
     );
   }
 
-  void _validate(BuildContext context, GlobalKey<FormState> formKey,
-      Map<String, dynamic> data) {
+  void _validate(
+    BuildContext context,
+    GlobalKey<FormState> formKey,
+    Map<String, dynamic> data,
+  ) {
     if (formKey.currentState != null && formKey.currentState!.validate()) {
       formKey.currentState!.save();
       final User? user = FirebaseAuth.instance.currentUser;
