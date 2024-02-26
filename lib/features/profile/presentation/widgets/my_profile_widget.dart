@@ -6,6 +6,8 @@ import 'package:lokalio/features/notice_list/presentation/pages/my_notices_page.
 import 'package:lokalio/features/profile/domain/entities/profile.dart';
 import 'package:lokalio/features/profile/presentation/widgets/menu_item_widget.dart';
 import 'package:lokalio/features/profile/presentation/widgets/profile_info_widget.dart';
+import 'package:lokalio/features/profile/presentation/widgets/settings_widget.dart';
+import 'package:lokalio/features/profile/presentation/widgets/wallet_widget.dart';
 
 class MyProfileWidget extends StatelessWidget {
   final Profile profile;
@@ -27,11 +29,15 @@ class MyProfileWidget extends StatelessWidget {
             label: 'Moje ogłoszenia',
           ),
           MenuItemWidget(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(createRoute(const WalletWidget()));
+            },
             label: 'Portfel',
           ),
           MenuItemWidget(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(createRoute(const SettingsWidget()));
+            },
             label: 'Ustawienia',
           ),
           const SizedBox(height: 16),

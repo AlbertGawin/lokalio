@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
 Route createRoute(Widget page) {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => page,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(1.0, 0.0);
-      const end = Offset.zero;
-      const curve = Curves.easeInOutSine;
+  return MaterialPageRoute(builder: (context) => page);
+  // PageRouteBuilder(
+  //   pageBuilder: (context, animation, secondaryAnimation) => page,
+  // transitionsBuilder: (context, animation, secondaryAnimation, child) {
+  //   const begin = Offset(1.0, 0.0);
+  //   const end = Offset.zero;
+  //   const curve = Curves.easeInOutSine;
 
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+  //   var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-      return SlideTransition(position: animation.drive(tween), child: child);
-    },
-  );
+  //   return SlideTransition(position: animation.drive(tween), child: child);
+  // },
+  // );
 }
