@@ -50,6 +50,9 @@ class _MainPageState extends State<MainPage> {
     const HomePage(),
     const FavoritePage(),
     const CreateNoticePage(),
+    const Scaffold(
+      body: Center(child: Text('ChatPage')),
+    ),
     const MyProfilePage(),
   ];
 
@@ -60,6 +63,9 @@ class _MainPageState extends State<MainPage> {
     ),
     const AnonymousPage(
       title: 'Tutaj możesz dodawać swoje ogłoszenia.',
+    ),
+    const AnonymousPage(
+      title: 'Tutaj możesz rozmawiać z innymi użytkownikami.',
     ),
     const AnonymousPage(
       title: 'Tutaj znajdziesz swój profil.',
@@ -81,6 +87,11 @@ class _MainPageState extends State<MainPage> {
       icon: Icon(Icons.add),
       selectedIcon: Icon(Icons.add),
       label: 'Dodaj',
+    ),
+    const NavigationDestination(
+      icon: Icon(Icons.chat_bubble_outline),
+      selectedIcon: Icon(Icons.chat_bubble),
+      label: 'Chat',
     ),
     const NavigationDestination(
       icon: Icon(Icons.account_circle_outlined),
