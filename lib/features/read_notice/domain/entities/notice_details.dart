@@ -1,22 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lokalio/features/notice_list/domain/entities/notice.dart';
 
 class NoticeDetails extends Notice {
   final String description;
   final int peopleAmount;
-  final List<String>? imagesUrl;
+  final List<String> imagesUrl;
+  final Timestamp createdAt;
 
   const NoticeDetails({
     required super.id,
     required super.userId,
     required super.title,
     required super.category,
-    required super.cashAmount,
+    required super.moneyAmount,
     required super.location,
-    required super.dateTimeRange,
     required this.description,
     required this.peopleAmount,
-    this.imagesUrl,
-  });
+    required this.imagesUrl,
+    required this.createdAt,
+  }) : super(thumbnailUrl: '');
 
   @override
   List<Object?> get props => [
@@ -24,12 +26,11 @@ class NoticeDetails extends Notice {
         userId,
         title,
         category,
-        cashAmount,
+        moneyAmount,
         location,
-        dateTimeRange,
         description,
-        location,
         peopleAmount,
         imagesUrl,
+        createdAt,
       ];
 }

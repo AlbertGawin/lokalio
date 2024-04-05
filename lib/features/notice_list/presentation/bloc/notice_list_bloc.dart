@@ -4,7 +4,6 @@ import 'package:lokalio/core/usecases/usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:lokalio/features/notice_list/domain/entities/notice.dart';
 import 'package:lokalio/features/notice_list/domain/usecases/get_all_notices.dart';
-import 'package:lokalio/features/notice_list/domain/usecases/get_my_notices.dart';
 import 'package:lokalio/features/notice_list/domain/usecases/get_user_notices.dart';
 
 part 'notice_list_event.dart';
@@ -12,26 +11,16 @@ part 'notice_list_state.dart';
 
 class NoticeListBloc extends Bloc<NoticeListEvent, NoticeListState> {
   final GetAllNotices getAllNotices;
-  final GetMyNotices getMyNotices;
   final GetUserNotices getUserNotices;
 
   NoticeListBloc({
     required this.getAllNotices,
-    required this.getMyNotices,
     required this.getUserNotices,
   }) : super(NoticeListInitial()) {
     on<NoticeListEvent>((event, emit) async {
       if (event is GetAllNoticesEvent) {
         emit(Loading());
         await getAllNotices(NoParams()).then((notices) {
-          notices.fold(
-            (failure) => emit(Error(message: failureMessages[failure.type]!)),
-            (noticeList) => emit(Done(noticeList: noticeList)),
-          );
-        });
-      } else if (event is GetMyNoticesEvent) {
-        emit(Loading());
-        await getMyNotices(NoParams()).then((notices) {
           notices.fold(
             (failure) => emit(Error(message: failureMessages[failure.type]!)),
             (noticeList) => emit(Done(noticeList: noticeList)),

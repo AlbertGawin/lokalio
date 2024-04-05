@@ -6,11 +6,8 @@ import 'package:lokalio/features/profile/data/datasources/profile_remote_data_so
 import 'package:lokalio/features/profile/domain/entities/profile.dart';
 import 'package:lokalio/features/profile/domain/repositories/profile_repository.dart';
 
-typedef _Chooser = Future<Profile> Function();
-
 class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileRemoteDataSource remoteDataSource;
-
   final NetworkInfo networkInfo;
 
   const ProfileRepositoryImpl({
@@ -19,29 +16,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
   });
 
   @override
-  Future<Either<Failure, Profile>> readMyProfile() {
-    return _readProfile(
-      chooserFunction: () async {
-        return await remoteDataSource.readMyProfile();
-      },
-    );
-  }
-
-  @override
-  Future<Either<Failure, Profile>> readProfile({required String profileId}) {
-    return _readProfile(
-      chooserFunction: () async {
-        return await remoteDataSource.readProfile(profileId: profileId);
-      },
-    );
-  }
-
-  Future<Either<Failure, Profile>> _readProfile({
-    required _Chooser chooserFunction,
-  }) async {
+  Future<Either<Failure, Profile>> readProfile({required String userId}) async {
     if (await networkInfo.isConnected) {
       try {
-        final profile = await chooserFunction();
+        final profile = await remoteDataSource.readProfile(userId: userId);
 
         return Right(profile);
       } on NoDataException {

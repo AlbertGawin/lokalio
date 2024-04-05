@@ -94,17 +94,6 @@ void main() {
       expect(result, const Right(null));
     });
 
-    test('should return null when SetProfileInfo is successful', () async {
-      when(() =>
-              remoteDataSource.setProfileInfo(name: '', phone: '', smsCode: ''))
-          .thenAnswer((_) async => {});
-
-      final result =
-          await repository.setProfileInfo(name: '', phone: '', smsCode: '');
-
-      expect(result, const Right(null));
-    });
-
     test('should return ServerFailure when SignIn is unsuccessful', () async {
       when(() => remoteDataSource.signIn(credential: mockAuthCredential))
           .thenThrow(ServerException());
@@ -140,18 +129,6 @@ void main() {
       when(() => remoteDataSource.signOut()).thenThrow(ServerException());
 
       final result = await repository.signOut();
-
-      expect(result, const Left(ServerFailure()));
-    });
-
-    test('should return ServerFailure when SetProfileInfo is unsuccessful',
-        () async {
-      when(() =>
-              remoteDataSource.setProfileInfo(name: '', phone: '', smsCode: ''))
-          .thenThrow(ServerException());
-
-      final result =
-          await repository.setProfileInfo(name: '', phone: '', smsCode: '');
 
       expect(result, const Left(ServerFailure()));
     });
@@ -196,18 +173,6 @@ void main() {
 
       expect(result, const Left(FirebaseFailure(message: 'user-not-found')));
     });
-
-    test('shoul return FirebaseFailure when SetProfileInfo is unsuccessful',
-        () async {
-      when(() =>
-              remoteDataSource.setProfileInfo(name: '', phone: '', smsCode: ''))
-          .thenThrow(FirebaseException(plugin: '', code: 'user-not-found'));
-
-      final result =
-          await repository.setProfileInfo(name: '', phone: '', smsCode: '');
-
-      expect(result, const Left(FirebaseFailure(message: 'user-not-found')));
-    });
   });
 
   group('device is offline', () {
@@ -246,15 +211,6 @@ void main() {
         'should return NoConnectionFailure when the device is offline for SignOut',
         () async {
       final result = await repository.signOut();
-
-      expect(result, const Left(NoConnectionFailure()));
-    });
-
-    test(
-        'should return NoConnectionFailure when the device is offline for SetProfileInfo',
-        () async {
-      final result =
-          await repository.setProfileInfo(name: '', phone: '', smsCode: '');
 
       expect(result, const Left(NoConnectionFailure()));
     });

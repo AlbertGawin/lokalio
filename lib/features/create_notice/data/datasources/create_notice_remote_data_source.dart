@@ -23,12 +23,10 @@ class CreateNoticeRemoteDataSourceImpl implements CreateNoticeRemoteDataSource {
     final noticeRef = firebaseFirestore.collection('notice').doc();
     noticeDetails = noticeDetails.copyWith(id: noticeRef.id);
 
-    if (noticeDetails.imagesUrl != null) {
-      noticeDetails = await _uploadImages(
-        images: noticeDetails.imagesUrl!,
-        noticeDetails: noticeDetails,
-      );
-    }
+    noticeDetails = await _uploadImages(
+      images: noticeDetails.imagesUrl,
+      noticeDetails: noticeDetails,
+    );
 
     await noticeRef.set(noticeDetails.toNoticeJson()).then(
       (_) async {
@@ -57,6 +55,7 @@ class CreateNoticeRemoteDataSourceImpl implements CreateNoticeRemoteDataSource {
         index++;
       }).onError((error, stackTrace) => throw ServerException());
     }
+
     return noticeDetails.copyWith(imagesUrl: imagesUrl);
   }
 }

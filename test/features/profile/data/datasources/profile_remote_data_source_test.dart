@@ -60,7 +60,7 @@ void main() {
     await Firebase.initializeApp();
   });
 
-  const tProfileId = '1';
+  const tuserId = '1';
   final tProfile = ProfileModel.fromJson(
     json: json.decode(fixture(name: 'profile.json')),
   );
@@ -74,7 +74,7 @@ void main() {
         .thenAnswer((_) => Future.value(mockQueryDocumentSnapshot));
     when(() => mockQueryDocumentSnapshot.exists).thenReturn(true);
     when(() => mockFirebaseAuth.currentUser).thenReturn(mockUser);
-    when(() => mockUser.uid).thenReturn(tProfileId);
+    when(() => mockUser.uid).thenReturn(tuserId);
   }
 
   group('getProfile', () {
@@ -84,7 +84,7 @@ void main() {
       when(() => mockQueryDocumentSnapshot.data())
           .thenReturn(tProfile.toJson());
 
-      final result = await dataSource.readProfile(profileId: tProfileId);
+      final result = await dataSource.readProfile(userId: tuserId);
 
       expect(result, equals(tProfile));
     });
@@ -96,7 +96,7 @@ void main() {
 
       final call = dataSource.readProfile;
 
-      expect(() async => await call(profileId: tProfileId),
+      expect(() async => await call(userId: tuserId),
           throwsA(isA<ServerException>()));
     });
 
@@ -107,41 +107,8 @@ void main() {
 
       final call = dataSource.readProfile;
 
-      expect(() async => await call(profileId: tProfileId),
+      expect(() async => await call(userId: tuserId),
           throwsA(isA<NoDataException>()));
-    });
-  });
-
-  group('getMyProfile', () {
-    test('should return Profile from Firebase when the call is successful',
-        () async {
-      setUp200();
-      when(() => mockQueryDocumentSnapshot.data())
-          .thenReturn(tProfile.toJson());
-
-      final result = await dataSource.readMyProfile();
-
-      expect(result, equals(tProfile));
-    });
-
-    test('should throw ServerException when the call is unsuccessful',
-        () async {
-      setUp200();
-      when(() => mockDocumentReference.get()).thenThrow(ServerException());
-
-      final call = dataSource.readMyProfile;
-
-      expect(() async => await call(), throwsA(isA<ServerException>()));
-    });
-
-    test('should throw NoDataException when the document does not exist',
-        () async {
-      setUp200();
-      when(() => mockQueryDocumentSnapshot.exists).thenReturn(false);
-
-      final call = dataSource.readMyProfile;
-
-      expect(() async => await call(), throwsA(isA<NoDataException>()));
     });
   });
 }

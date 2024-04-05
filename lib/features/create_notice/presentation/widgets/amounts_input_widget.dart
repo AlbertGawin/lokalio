@@ -5,11 +5,11 @@ import 'package:lokalio/features/create_notice/presentation/widgets/card_widget.
 class AmountsInputWidget extends StatefulWidget {
   const AmountsInputWidget({
     super.key,
-    required this.getCashAmount,
+    required this.getmoneyAmount,
     required this.getPeopleAmount,
   });
 
-  final void Function(int cashAmount) getCashAmount;
+  final void Function(int moneyAmount) getmoneyAmount;
   final void Function(int peopleAmount) getPeopleAmount;
 
   @override
@@ -44,7 +44,7 @@ class _AmountsInputWidgetState extends State<AmountsInputWidget> {
           controller: _cashController,
           label: 'Kwota*',
           errorMessage: 'Podaj kwotę.',
-          onSaved: widget.getCashAmount,
+          onSaved: widget.getmoneyAmount,
           inputFormatters: [
             FilteringTextInputFormatter.allow(RegExp(r'^[1-9]\d{0,2}')),
           ],

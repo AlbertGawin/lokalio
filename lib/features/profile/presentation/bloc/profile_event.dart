@@ -8,12 +8,12 @@ sealed class ProfileEvent extends Equatable {
 }
 
 final class ReadProfileEvent extends ProfileEvent {
-  final String profileId;
+  final String userId;
 
-  const ReadProfileEvent({required this.profileId});
+  const ReadProfileEvent({required this.userId});
 
   @override
-  List<Object> get props => [profileId];
+  List<Object> get props => [userId];
 }
 
 final class ReadMyProfileEvent extends ProfileEvent {

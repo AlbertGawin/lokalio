@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lokalio/features/profile/domain/entities/profile.dart';
@@ -16,23 +17,24 @@ void main() {
     usecase = ReadProfile(repository: mockProfileRepository);
   });
 
-  const tProfileId = '1';
-  const Profile tProfile = Profile(
-    id: tProfileId,
-    name: 'Albert',
+  const tuserId = '1';
+  Profile tProfile = Profile(
+    id: tuserId,
+    username: 'Albert Gawin',
     email: 'albertg952@gmail.com',
     phoneNumber: '+48881657238',
+    city: 'Rzeszów',
+    createdAt: Timestamp.now(),
   );
 
   test('should get NoticeDetails from the repository', () async {
-    when(() => mockProfileRepository.readProfile(
-            profileId: any(named: 'profileId')))
-        .thenAnswer((_) async => const Right(tProfile));
+    when(() => mockProfileRepository.readProfile(userId: any(named: 'userId')))
+        .thenAnswer((_) async => Right(tProfile));
 
-    final result = await usecase(const Params(profileId: tProfileId));
+    final result = await usecase(const Params(userId: tuserId));
 
-    expect(result, const Right(tProfile));
-    verify(() => mockProfileRepository.readProfile(profileId: tProfileId));
+    expect(result, Right(tProfile));
+    verify(() => mockProfileRepository.readProfile(userId: tuserId));
     verifyNoMoreInteractions(mockProfileRepository);
   });
 }

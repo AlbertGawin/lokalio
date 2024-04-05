@@ -27,15 +27,6 @@ class NoticeListRepositoryImpl implements NoticeListRepository {
   }
 
   @override
-  Future<Either<Failure, List<Notice>>> getMyNotices() {
-    return _getNoticeList(
-      remoteFunction: () async {
-        return await remoteDataSource.getMyNotices();
-      },
-    );
-  }
-
-  @override
   Future<Either<Failure, List<Notice>>> getUserNotices(
       {required String userId}) async {
     return await _getNoticeList(

@@ -83,26 +83,4 @@ class AuthRepositoryImpl implements AuthRepository {
       return const Left(NoConnectionFailure());
     }
   }
-
-  @override
-  Future<Either<Failure, void>> setProfileInfo({
-    required String name,
-    required String phone,
-    required String smsCode,
-  }) async {
-    if (await networkInfo.isConnected) {
-      try {
-        await remoteDataSource.setProfileInfo(
-            name: name, phone: phone, smsCode: smsCode);
-
-        return const Right(null);
-      } on FirebaseException catch (e) {
-        return Left(FirebaseFailure(message: e.code));
-      } on Exception {
-        return const Left(ServerFailure());
-      }
-    } else {
-      return const Left(NoConnectionFailure());
-    }
-  }
 }

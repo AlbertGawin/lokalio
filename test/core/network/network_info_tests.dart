@@ -1,33 +1,29 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:lokalio/core/network/network_info.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockInternetConnectionChecker extends Mock
-    implements InternetConnectionChecker {}
+class MockConnectivity extends Mock implements Connectivity {}
 
 void networkInfoTests() {
   late NetworkInfoImpl networkInfoImpl;
-  late MockInternetConnectionChecker mockInternetConnectionChecker;
+  late MockConnectivity mockConnectivity;
 
   setUp(() {
-    mockInternetConnectionChecker = MockInternetConnectionChecker();
-    networkInfoImpl = NetworkInfoImpl(
-      internetConnectionChecker: mockInternetConnectionChecker,
-    );
+    mockConnectivity = MockConnectivity();
+    networkInfoImpl = NetworkInfoImpl(connectivity: mockConnectivity);
   });
 
   group('isConnected', () {
     test('should forward the call to InternetConnectionChecker.hasConnection',
         () async {
       final tHasConnectionFuture = Future.value(true);
-      when(() => mockInternetConnectionChecker.hasConnection).thenAnswer(
-        (_) => tHasConnectionFuture,
-      );
+      when(() => mockConnectivity.checkConnectivity())
+          .thenAnswer((_) async => [ConnectivityResult.wifi]);
 
       final result = networkInfoImpl.isConnected;
 
-      verify(() => mockInternetConnectionChecker.hasConnection);
+      verify(() => mockConnectivity.checkConnectivity());
       expect(result, tHasConnectionFuture);
     });
   });

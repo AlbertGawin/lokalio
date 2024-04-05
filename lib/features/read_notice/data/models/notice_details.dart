@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lokalio/features/read_notice/domain/entities/notice_details.dart';
 
@@ -8,45 +8,27 @@ class NoticeDetailsModel extends NoticeDetails {
     required super.userId,
     required super.title,
     required super.category,
-    required super.cashAmount,
+    required super.moneyAmount,
     required super.location,
-    required super.dateTimeRange,
     required super.description,
     required super.peopleAmount,
-    super.imagesUrl,
+    required super.imagesUrl,
+    required super.createdAt,
   });
 
-  Map<String, dynamic> toNoticeJson() {
-    return {
-      'id': id,
-      'userId': userId,
-      'title': title,
-      'category': category,
-      'cashAmount': cashAmount,
-      'location': location.toJson(),
-      'dateTimeRange': {
-        'start': dateTimeRange.start.toIso8601String(),
-        'end': dateTimeRange.end.toIso8601String(),
-      },
-      'thumbnailUrl':
-          imagesUrl != null && imagesUrl!.isNotEmpty ? imagesUrl!.first : null,
-    };
-  }
-
-  factory NoticeDetailsModel.fromNoticeDetails({
-    required NoticeDetails noticeDetails,
-  }) {
+  factory NoticeDetailsModel.fromNoticeDetails(
+      {required NoticeDetails noticeDetails}) {
     return NoticeDetailsModel(
       id: noticeDetails.id,
       userId: noticeDetails.userId,
       title: noticeDetails.title,
       category: noticeDetails.category,
-      cashAmount: noticeDetails.cashAmount,
+      moneyAmount: noticeDetails.moneyAmount,
       location: noticeDetails.location,
-      dateTimeRange: noticeDetails.dateTimeRange,
       description: noticeDetails.description,
       peopleAmount: noticeDetails.peopleAmount,
       imagesUrl: noticeDetails.imagesUrl,
+      createdAt: noticeDetails.createdAt,
     );
   }
 
@@ -56,16 +38,12 @@ class NoticeDetailsModel extends NoticeDetails {
       userId: json['userId'] as String,
       title: json['title'] as String,
       category: json['category'] as int,
-      cashAmount: json['cashAmount'] as int,
+      moneyAmount: json['moneyAmount'] as int,
       location: LatLng.fromJson(json['location']) as LatLng,
-      dateTimeRange: DateTimeRange(
-        start: DateTime.parse(json['dateTimeRange']['start'] as String),
-        end: DateTime.parse(json['dateTimeRange']['end'] as String),
-      ),
       description: json['description'] as String,
       peopleAmount: json['peopleAmount'] as int,
-      imagesUrl:
-          json['imagesUrl'] != null ? List<String>.from(json['imagesUrl']) : [],
+      imagesUrl: List<String>.from(json['imagesUrl']),
+      createdAt: Timestamp.fromMillisecondsSinceEpoch(json['createdAt'] * 1000),
     );
   }
 
@@ -75,15 +53,24 @@ class NoticeDetailsModel extends NoticeDetails {
       'userId': userId,
       'title': title,
       'category': category,
-      'cashAmount': cashAmount,
+      'moneyAmount': moneyAmount,
       'location': location.toJson(),
-      'dateTimeRange': {
-        'start': dateTimeRange.start.toIso8601String(),
-        'end': dateTimeRange.end.toIso8601String(),
-      },
       'description': description,
       'peopleAmount': peopleAmount,
       'imagesUrl': imagesUrl,
+      'createdAt': createdAt.seconds,
+    };
+  }
+
+  Map<String, dynamic> toNoticeJson() {
+    return {
+      'id': id,
+      'userId': userId,
+      'title': title,
+      'category': category,
+      'moneyAmount': moneyAmount,
+      'location': location.toJson(),
+      'thumbnailUrl': imagesUrl.first,
     };
   }
 
@@ -92,24 +79,24 @@ class NoticeDetailsModel extends NoticeDetails {
     String? userId,
     String? title,
     int? category,
-    int? cashAmount,
+    int? moneyAmount,
     LatLng? location,
-    DateTimeRange? dateTimeRange,
     String? description,
     int? peopleAmount,
     List<String>? imagesUrl,
+    Timestamp? createdAt,
   }) {
     return NoticeDetailsModel(
       id: id ?? this.id,
       userId: userId ?? this.userId,
       title: title ?? this.title,
       category: category ?? this.category,
-      cashAmount: cashAmount ?? this.cashAmount,
+      moneyAmount: moneyAmount ?? this.moneyAmount,
       location: location ?? this.location,
-      dateTimeRange: dateTimeRange ?? this.dateTimeRange,
       description: description ?? this.description,
       peopleAmount: peopleAmount ?? this.peopleAmount,
       imagesUrl: imagesUrl ?? this.imagesUrl,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 }

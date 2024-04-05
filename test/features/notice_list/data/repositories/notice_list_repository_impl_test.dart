@@ -96,73 +96,8 @@ void main() {
     });
   });
 
-  group('getMyNotices', () {
-    final tNoticeModelList = List<NoticeModel>.from(json
-            .decode(fixture(name: 'notice_list.json'))
-            .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
-        .where((element) => element.userId == '1')
-        .toList();
-
-    void setUpFunctions() {
-      when(() => mockRemoteDataSource.getMyNotices())
-          .thenAnswer((_) async => tNoticeModelList);
-    }
-
-    test('should check if the device is online', () async {
-      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      setUpFunctions();
-
-      await repository.getMyNotices();
-
-      verify(() => mockNetworkInfo.isConnected);
-    });
-
-    group('device is online', () {
-      setUp(() {
-        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      });
-
-      test(
-          'should return remote data when the call to remote data source is successful',
-          () async {
-        setUpFunctions();
-
-        final result = await repository.getMyNotices();
-
-        verify(() => mockRemoteDataSource.getMyNotices());
-        expect(result, equals(Right(tNoticeModelList)));
-      });
-
-      test(
-          'should return ServerFailure when the call to remote data source is unsuccessful',
-          () async {
-        when(() => mockRemoteDataSource.getMyNotices())
-            .thenThrow(ServerException());
-
-        final result = await repository.getMyNotices();
-
-        verify(() => mockRemoteDataSource.getMyNotices());
-        expect(result, equals(const Left(ServerFailure())));
-      });
-    });
-
-    group('device is offline', () {
-      setUp(() {
-        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
-      });
-
-      test('should return NoConnectionFailure when the device is offline',
-          () async {
-        final result = await repository.getMyNotices();
-
-        verifyZeroInteractions(mockRemoteDataSource);
-        expect(result, equals(const Left(NoConnectionFailure())));
-      });
-    });
-  });
-
   group('getUserNotices', () {
-    const tUserId = '3';
+    const tuserId = '3';
     final tNoticeModelList = List<NoticeModel>.from(json
             .decode(fixture(name: 'notice_list.json'))
             .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
@@ -170,7 +105,7 @@ void main() {
         .toList();
 
     void setUpFunctions() {
-      when(() => mockRemoteDataSource.getUserNotices(userId: tUserId))
+      when(() => mockRemoteDataSource.getUserNotices(userId: tuserId))
           .thenAnswer((_) async => tNoticeModelList);
     }
 
@@ -178,7 +113,7 @@ void main() {
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       setUpFunctions();
 
-      await repository.getUserNotices(userId: tUserId);
+      await repository.getUserNotices(userId: tuserId);
 
       verify(() => mockNetworkInfo.isConnected);
     });
@@ -193,9 +128,9 @@ void main() {
           () async {
         setUpFunctions();
 
-        final result = await repository.getUserNotices(userId: tUserId);
+        final result = await repository.getUserNotices(userId: tuserId);
 
-        verify(() => mockRemoteDataSource.getUserNotices(userId: tUserId));
+        verify(() => mockRemoteDataSource.getUserNotices(userId: tuserId));
 
         expect(result, equals(Right(tNoticeModelList)));
       });
@@ -203,12 +138,12 @@ void main() {
       test(
           'should return ServerFailure when the call to remote data source is unsuccessful',
           () async {
-        when(() => mockRemoteDataSource.getUserNotices(userId: tUserId))
+        when(() => mockRemoteDataSource.getUserNotices(userId: tuserId))
             .thenThrow(ServerException());
 
-        final result = await repository.getUserNotices(userId: tUserId);
+        final result = await repository.getUserNotices(userId: tuserId);
 
-        verify(() => mockRemoteDataSource.getUserNotices(userId: tUserId));
+        verify(() => mockRemoteDataSource.getUserNotices(userId: tuserId));
 
         expect(result, equals(const Left(ServerFailure())));
       });
@@ -221,7 +156,7 @@ void main() {
 
       test('should return NoConnectionFailure when the device is offline',
           () async {
-        final result = await repository.getUserNotices(userId: tUserId);
+        final result = await repository.getUserNotices(userId: tuserId);
 
         verifyZeroInteractions(mockRemoteDataSource);
         expect(result, equals(const Left(NoConnectionFailure())));

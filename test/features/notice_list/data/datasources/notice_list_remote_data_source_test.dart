@@ -82,14 +82,6 @@ void main() {
     when(() => mockUser.uid).thenReturn('1');
   }
 
-  void setUpMyNotices() {
-    when(() => mockCollectionReference.where(any(),
-        isEqualTo: any(named: 'isEqualTo'))).thenReturn(mockQueryMapSnapshot);
-    when(() => mockFirebaseAuth.currentUser).thenReturn(mockUser);
-    when(() => mockUserCredential.user).thenReturn(mockUser);
-    when(() => mockUser.uid).thenReturn('1');
-  }
-
   void setUpUserNotices() {
     when(() => mockCollectionReference.where(any(),
         isEqualTo: any(named: 'isEqualTo'))).thenReturn(mockQueryMapSnapshot);
@@ -156,73 +148,12 @@ void main() {
     });
   });
 
-  group('getMyNotices', () {
-    final tNoticeModelList = List<NoticeModel>.from(json
-            .decode(fixture(name: 'notice_list.json'))
-            .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
-        .where((element) => element.userId == '1')
-        .toList();
-
-    final tQueryDocumentSnapshotList = tNoticeModelList.map((noticeModel) {
-      final mockDocSnapshot = MockQueryDocumentSnapshot();
-      when(() => mockDocSnapshot.data()).thenReturn(noticeModel.toJson());
-      return mockDocSnapshot;
-    }).toList();
-
-    test('should perform and GET request on a Firebase collection', () async {
-      setUp200();
-      setUpMyNotices();
-
-      when(() => mockQuerySnapshot.docs).thenReturn(tQueryDocumentSnapshotList
-          .where((element) => element.data()['userId'] == '1')
-          .toList());
-
-      await noticeListRemoteDataSourceImpl.getMyNotices();
-
-      verify(() => mockFirestore.collection('notice').get());
-    });
-
-    test('should return a list of NoticeModel when the response code is 200',
-        () async {
-      setUp200();
-      setUpMyNotices();
-
-      when(() => mockQuerySnapshot.docs).thenReturn(tQueryDocumentSnapshotList
-          .where((element) => element.data()['userId'] == '1')
-          .toList());
-
-      final result = await noticeListRemoteDataSourceImpl.getMyNotices();
-
-      expect(result, equals(tNoticeModelList));
-    });
-
-    test('should return empty list when there are no documents', () async {
-      setUp200();
-      setUpMyNotices();
-
-      when(() => mockQuerySnapshot.docs).thenReturn([]);
-
-      final result = await noticeListRemoteDataSourceImpl.getMyNotices();
-
-      expect(result, equals([]));
-    });
-
-    test('should throw a FirebaseAuthException when the user is not found',
-        () async {
-      when(() => mockFirebaseAuth.currentUser).thenReturn(null);
-
-      final call = noticeListRemoteDataSourceImpl.getMyNotices;
-
-      expect(() => call(), throwsA(isA<FirebaseAuthException>()));
-    });
-  });
-
   group('getUserNotices', () {
-    const tUserId = '3';
+    const tuserId = '3';
     final tNoticeModelList = List<NoticeModel>.from(json
             .decode(fixture(name: 'notice_list.json'))
             .map<NoticeModel>((e) => NoticeModel.fromJson(json: e)))
-        .where((element) => element.userId == tUserId)
+        .where((element) => element.userId == tuserId)
         .toList();
 
     final tQueryDocumentSnapshotList = tNoticeModelList.map((noticeModel) {
@@ -236,10 +167,10 @@ void main() {
       setUpUserNotices();
 
       when(() => mockQuerySnapshot.docs).thenReturn(tQueryDocumentSnapshotList
-          .where((element) => element.data()['userId'] == tUserId)
+          .where((element) => element.data()['userId'] == tuserId)
           .toList());
 
-      noticeListRemoteDataSourceImpl.getUserNotices(userId: tUserId);
+      noticeListRemoteDataSourceImpl.getUserNotices(userId: tuserId);
 
       verify(() => mockFirestore.collection('notice').get());
     });
@@ -250,11 +181,11 @@ void main() {
       setUpUserNotices();
 
       when(() => mockQuerySnapshot.docs).thenReturn(tQueryDocumentSnapshotList
-          .where((element) => element.data()['userId'] == tUserId)
+          .where((element) => element.data()['userId'] == tuserId)
           .toList());
 
       final result =
-          await noticeListRemoteDataSourceImpl.getUserNotices(userId: tUserId);
+          await noticeListRemoteDataSourceImpl.getUserNotices(userId: tuserId);
 
       expect(result, equals(tNoticeModelList));
     });
@@ -266,7 +197,7 @@ void main() {
       when(() => mockQuerySnapshot.docs).thenReturn([]);
 
       final result =
-          await noticeListRemoteDataSourceImpl.getUserNotices(userId: tUserId);
+          await noticeListRemoteDataSourceImpl.getUserNotices(userId: tuserId);
 
       expect(result, equals([]));
     });

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,7 +23,7 @@ class CreateNoticeWidget extends StatelessWidget {
       'title': '',
       'description': '',
       'category': 0,
-      'cashAmount': 0,
+      'moneyAmount': 0,
       'peopleAmount': 1,
       'location': const LatLng(0, 0),
       'dateTimeRange': DateTimeRange(
@@ -68,8 +69,8 @@ class CreateNoticeWidget extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               AmountsInputWidget(
-                getCashAmount: (cashAmountData) {
-                  data['cashAmount'] = cashAmountData;
+                getmoneyAmount: (moneyAmountData) {
+                  data['moneyAmount'] = moneyAmountData;
                 },
                 getPeopleAmount: (peopleAmountData) {
                   data['peopleAmount'] = peopleAmountData;
@@ -114,13 +115,13 @@ class CreateNoticeWidget extends StatelessWidget {
         id: '',
         userId: user.uid,
         title: data['title'],
-        description: data['description'],
         category: data['category'],
-        cashAmount: data['cashAmount'],
-        peopleAmount: data['peopleAmount'],
+        moneyAmount: data['moneyAmount'],
         location: data['location'],
-        dateTimeRange: data['dateTimeRange'],
+        description: data['description'],
+        peopleAmount: data['peopleAmount'],
         imagesUrl: data['images'],
+        createdAt: Timestamp.now(),
       );
 
       context

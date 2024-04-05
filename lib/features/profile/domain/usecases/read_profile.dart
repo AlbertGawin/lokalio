@@ -12,15 +12,15 @@ class ReadProfile implements UseCase<Profile, Params> {
 
   @override
   Future<Either<Failure, Profile>> call(Params params) async {
-    return await repository.readProfile(profileId: params.profileId);
+    return await repository.readProfile(userId: params.userId);
   }
 }
 
 class Params extends Equatable {
-  final String profileId;
+  final String userId;
 
-  const Params({required this.profileId});
+  const Params({required this.userId});
 
   @override
-  List<Object?> get props => [profileId];
+  List<Object?> get props => [userId];
 }

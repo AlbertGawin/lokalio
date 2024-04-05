@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lokalio/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:lokalio/features/auth/presentation/widgets/auth_widget.dart';
-import 'package:lokalio/features/auth/presentation/widgets/set_profile_info_widget.dart';
 
 import 'package:lokalio/injection_container.dart';
 import 'package:lokalio/main_page.dart';
@@ -41,8 +40,6 @@ class AuthPage extends StatelessWidget {
 
         if (user == null) {
           return const AuthWidget();
-        } else if (user.displayName == null || user.phoneNumber == null) {
-          return const SetProfileInfoWidget();
         } else {
           return const MainPage();
         }

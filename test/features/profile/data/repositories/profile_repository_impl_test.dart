@@ -32,13 +32,13 @@ void main() {
     );
   });
 
-  const tProfileId = '1';
+  const tuserId = '1';
   final tProfile = ProfileModel.fromJson(
     json: json.decode(fixture(name: 'profile.json')),
   );
 
   void setUpFunctions() {
-    when(() => mockRemoteDataSource.readProfile(profileId: tProfileId))
+    when(() => mockRemoteDataSource.readProfile(userId: tuserId))
         .thenAnswer((_) async => tProfile);
   }
 
@@ -46,7 +46,7 @@ void main() {
     when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     setUpFunctions();
 
-    await repository.readProfile(profileId: tProfileId);
+    await repository.readProfile(userId: tuserId);
 
     verify(() => mockNetworkInfo.isConnected);
   });
@@ -60,31 +60,31 @@ void main() {
     test(
         'should return remote data when the call to remote data source is successful',
         () async {
-      final result = await repository.readProfile(profileId: tProfileId);
+      final result = await repository.readProfile(userId: tuserId);
 
-      verify(() => mockRemoteDataSource.readProfile(profileId: tProfileId));
+      verify(() => mockRemoteDataSource.readProfile(userId: tuserId));
       expect(result, equals(Right(tProfile)));
     });
 
     test(
         'should return ServerFailure when the call to remote data source is unsuccessful',
         () async {
-      when(() => mockRemoteDataSource.readProfile(profileId: tProfileId))
+      when(() => mockRemoteDataSource.readProfile(userId: tuserId))
           .thenThrow(ServerException());
 
-      final result = await repository.readProfile(profileId: tProfileId);
+      final result = await repository.readProfile(userId: tuserId);
 
-      verify(() => mockRemoteDataSource.readProfile(profileId: tProfileId));
+      verify(() => mockRemoteDataSource.readProfile(userId: tuserId));
       expect(result, equals(const Left(ServerFailure())));
     });
 
     test('should return NoDataFailure when the profile is not found', () async {
-      when(() => mockRemoteDataSource.readProfile(profileId: tProfileId))
+      when(() => mockRemoteDataSource.readProfile(userId: tuserId))
           .thenThrow(NoDataException());
 
-      final result = await repository.readProfile(profileId: tProfileId);
+      final result = await repository.readProfile(userId: tuserId);
 
-      verify(() => mockRemoteDataSource.readProfile(profileId: tProfileId));
+      verify(() => mockRemoteDataSource.readProfile(userId: tuserId));
       expect(result, equals(const Left(NoDataFailure())));
     });
   });
@@ -96,10 +96,9 @@ void main() {
 
     test('should return NoConnectionFailure when the device is offline',
         () async {
-      final result = await repository.readProfile(profileId: tProfileId);
+      final result = await repository.readProfile(userId: tuserId);
 
-      verifyNever(
-          () => mockRemoteDataSource.readProfile(profileId: tProfileId));
+      verifyNever(() => mockRemoteDataSource.readProfile(userId: tuserId));
       expect(result, equals(const Left(NoConnectionFailure())));
     });
   });

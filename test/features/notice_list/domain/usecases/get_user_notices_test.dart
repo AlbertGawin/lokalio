@@ -17,7 +17,7 @@ void main() {
   });
 
   const List<Notice> tNoticeList = [];
-  const tUserId = '8ab7sdt';
+  const tuserId = '8ab7sdt';
 
   test('should get List<Notice> for the user from the repository', () async {
     when(() => mockNoticeListRepository.getUserNotices(
@@ -25,10 +25,10 @@ void main() {
       (_) async => const Right(tNoticeList),
     );
 
-    final result = await usecase(const Params(userId: tUserId));
+    final result = await usecase(const Params(userId: tuserId));
 
     expect(result, const Right(tNoticeList));
-    verify(() => mockNoticeListRepository.getUserNotices(userId: tUserId));
+    verify(() => mockNoticeListRepository.getUserNotices(userId: tuserId));
     verifyNoMoreInteractions(mockNoticeListRepository);
   });
 }

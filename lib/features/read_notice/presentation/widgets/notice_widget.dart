@@ -19,14 +19,12 @@ class NoticeWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (noticeDetails.imagesUrl != null)
-                ImageListWidget(imageUrls: noticeDetails.imagesUrl!),
+              ImageListWidget(imageUrls: noticeDetails.imagesUrl),
               const SizedBox(height: 16),
               NoticeInfoWidget(
                 title: noticeDetails.title,
-                cashAmount: noticeDetails.cashAmount,
+                moneyAmount: noticeDetails.moneyAmount,
                 peopleAmount: noticeDetails.peopleAmount,
-                dateTimeRange: noticeDetails.dateTimeRange,
               ),
               const SizedBox(height: 16),
               NoticeDescriptionWidget(description: noticeDetails.description),

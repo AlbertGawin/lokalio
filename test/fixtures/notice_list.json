@@ -4,7 +4,7 @@
         "userId": "1",
         "title": "title1",
         "category": 1,
-        "cashAmount": 100,
+        "moneyAmount": 100,
         "location": [50.5, 50.5],
         "dateTimeRange": {
             "start": "2020-01-01T00:00:00.000Z",
@@ -17,7 +17,7 @@
         "userId": "2",
         "title": "title2",
         "category": 2,
-        "cashAmount": 200,
+        "moneyAmount": 200,
         "location": [50.5, 50.5],
         "dateTimeRange": {
             "start": "2020-01-01T00:00:00.000Z",
@@ -30,7 +30,7 @@
         "userId": "3",
         "title": "title3",
         "category": 3,
-        "cashAmount": 300,
+        "moneyAmount": 300,
         "location": [50.5, 50.5],
         "dateTimeRange": {
             "start": "2020-01-01T00:00:00.000Z",
@@ -43,7 +43,7 @@
         "userId": "1",
         "title": "title4",
         "category": 1,
-        "cashAmount": 400,
+        "moneyAmount": 400,
         "location": [50.5, 50.5],
         "dateTimeRange": {
             "start": "2020-01-01T00:00:00.000Z",
@@ -56,7 +56,7 @@
         "userId": "2",
         "title": "title5",
         "category": 2,
-        "cashAmount": 500,
+        "moneyAmount": 500,
         "location": [50.5, 50.5],
         "dateTimeRange": {
             "start": "2020-01-01T00:00:00.000Z",

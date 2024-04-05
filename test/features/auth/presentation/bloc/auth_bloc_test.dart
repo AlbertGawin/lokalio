@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/usecases/usecase.dart';
-import 'package:lokalio/features/auth/domain/usecases/set_profile_info.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_in.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_in_anonymously.dart';
 import 'package:lokalio/features/auth/domain/usecases/sign_out.dart';
@@ -19,8 +18,6 @@ class MockSignUp extends Mock implements SignUp {}
 
 class MockSignOut extends Mock implements SignOut {}
 
-class MockSetProfileInfo extends Mock implements SetProfileInfo {}
-
 class MockAuthCredential extends Mock implements AuthCredential {}
 
 void main() {
@@ -30,7 +27,6 @@ void main() {
   late MockSignInAnonymously mockSignInAnonymously;
   late MockSignUp mockSignUp;
   late MockSignOut mockSignOut;
-  late MockSetProfileInfo mockSetProfileInfo;
 
   late MockAuthCredential mockAuthCredential;
 
@@ -39,14 +35,12 @@ void main() {
     mockSignInAnonymously = MockSignInAnonymously();
     mockSignUp = MockSignUp();
     mockSignOut = MockSignOut();
-    mockSetProfileInfo = MockSetProfileInfo();
 
     bloc = AuthBloc(
       signIn: mockSignIn,
       signInAnonymously: mockSignInAnonymously,
       signUp: mockSignUp,
       signOut: mockSignOut,
-      setProfileInfo: mockSetProfileInfo,
     );
   });
 
@@ -58,8 +52,6 @@ void main() {
     registerFallbackValue(
         const SignUpParams(email: tEmail, password: tPassword));
     registerFallbackValue(NoParams());
-    registerFallbackValue(
-        const ProfileParams(name: '', phone: '', smsCode: ''));
   });
 
   test('initialState should be Done', () {
@@ -214,53 +206,6 @@ void main() {
       expectLater(bloc.stream, emitsInOrder(expected));
 
       bloc.add(const SignOutEvent());
-    });
-  });
-
-  group('SetProfileInfo', () {
-    const tName = 'name';
-    const tPhone = 'phone';
-    const tSmsCode = 'smsCode';
-
-    test('should get data from the usecase', () async {
-      when(() => mockSetProfileInfo(any()))
-          .thenAnswer((_) async => const Right(null));
-
-      bloc.add(const SetProfileInfoEvent(
-          name: tName, phone: tPhone, smsCode: tSmsCode));
-      await untilCalled(() => mockSetProfileInfo(any()));
-
-      verify(() => mockSetProfileInfo(
-          const ProfileParams(name: tName, phone: tPhone, smsCode: tSmsCode)));
-    });
-
-    test(
-        'should emit [Loading, Done] when data is gotten successfully from the usecase',
-        () async {
-      when(() => mockSetProfileInfo(any()))
-          .thenAnswer((_) async => const Right(null));
-
-      final expected = [Loading(), Done()];
-      expectLater(bloc.stream, emitsInOrder(expected));
-
-      bloc.add(const SetProfileInfoEvent(
-          name: tName, phone: tPhone, smsCode: tSmsCode));
-    });
-
-    test(
-        'should emit [Loading, Error] when getting data fails from the usecase',
-        () async {
-      when(() => mockSetProfileInfo(any()))
-          .thenAnswer((_) async => const Left(ServerFailure()));
-
-      final expected = [
-        Loading(),
-        Error(message: failureMessages[FailureType.serverFailure]!),
-      ];
-      expectLater(bloc.stream, emitsInOrder(expected));
-
-      bloc.add(const SetProfileInfoEvent(
-          name: tName, phone: tPhone, smsCode: tSmsCode));
     });
   });
 }

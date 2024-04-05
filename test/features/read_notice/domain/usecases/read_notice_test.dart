@@ -1,5 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lokalio/features/read_notice/domain/entities/notice_details.dart';
@@ -24,13 +24,12 @@ void main() {
     userId: '1',
     title: 'Test',
     category: 1,
-    cashAmount: 0,
-    dateTimeRange: DateTimeRange(
-        start: DateTime.now(),
-        end: DateTime.now().add(const Duration(days: 1))),
-    description: 'Test',
+    moneyAmount: 0,
     location: const LatLng(0, 0),
+    description: 'Test',
     peopleAmount: 0,
+    imagesUrl: List.empty(),
+    createdAt: Timestamp.now(),
   );
 
   test('should get NoticeDetails from the repository', () async {

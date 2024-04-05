@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class NoticeInfoWidget extends StatelessWidget {
   final String title;
-  final int cashAmount;
+  final int moneyAmount;
   final int peopleAmount;
-  final DateTimeRange dateTimeRange;
 
   const NoticeInfoWidget({
     super.key,
     required this.title,
-    required this.cashAmount,
+    required this.moneyAmount,
     required this.peopleAmount,
-    required this.dateTimeRange,
   });
 
   @override
@@ -31,7 +28,7 @@ class NoticeInfoWidget extends StatelessWidget {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: '$cashAmount',
+                  text: '$moneyAmount',
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -44,18 +41,6 @@ class NoticeInfoWidget extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          const SizedBox(height: 10),
-          _buildIconRow(
-            icon: Icons.date_range,
-            text: DateFormat('dd.MM.yyyy').format(dateTimeRange.start),
-            context: context,
-          ),
-          const SizedBox(height: 10),
-          _buildIconRow(
-            icon: Icons.access_time,
-            text: DateFormat('HH:mm').format(dateTimeRange.start),
-            context: context,
           ),
           const SizedBox(height: 10),
           _buildIconRow(

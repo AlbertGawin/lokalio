@@ -3,7 +3,7 @@
     "userId": "1",
     "title": "title1",
     "category": 1,
-    "cashAmount": 1000,
+    "moneyAmount": 1000,
     "location": [50.5,50.5],
     "dateTimeRange": {
         "start": "2020-01-01T00:00:00.000Z",

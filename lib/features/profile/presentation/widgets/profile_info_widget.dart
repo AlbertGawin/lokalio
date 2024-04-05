@@ -21,7 +21,7 @@ class ProfileInfoWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                profile.name,
+                profile.username,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ],

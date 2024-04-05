@@ -4,31 +4,25 @@ import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/usecases/usecase.dart';
 import 'package:lokalio/features/notice_list/domain/entities/notice.dart';
 import 'package:lokalio/features/notice_list/domain/usecases/get_all_notices.dart';
-import 'package:lokalio/features/notice_list/domain/usecases/get_my_notices.dart';
 import 'package:lokalio/features/notice_list/domain/usecases/get_user_notices.dart';
 import 'package:lokalio/features/notice_list/presentation/bloc/notice_list_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockGetAllNotices extends Mock implements GetAllNotices {}
 
-class MockGetMyNotices extends Mock implements GetMyNotices {}
-
 class MockGetUserNotices extends Mock implements GetUserNotices {}
 
 void main() {
   late NoticeListBloc bloc;
   late MockGetAllNotices mockGetAllNotices;
-  late MockGetMyNotices mockGetMyNotices;
   late MockGetUserNotices mockGetUserNotices;
 
   setUp(() {
     mockGetAllNotices = MockGetAllNotices();
-    mockGetMyNotices = MockGetMyNotices();
     mockGetUserNotices = MockGetUserNotices();
 
     bloc = NoticeListBloc(
       getAllNotices: mockGetAllNotices,
-      getMyNotices: mockGetMyNotices,
       getUserNotices: mockGetUserNotices,
     );
   });
@@ -86,50 +80,8 @@ void main() {
     });
   });
 
-  group('GetMyNotices', () {
-    void setUpMockGetMyNoticesSuccess() {
-      when(() => mockGetMyNotices(any()))
-          .thenAnswer((_) async => Right(tNoticesList));
-    }
-
-    test('should get data from the GetMyNotices usecase', () async {
-      setUpMockGetMyNoticesSuccess();
-
-      bloc.add(const GetMyNoticesEvent());
-      await untilCalled(() => mockGetMyNotices(any()));
-
-      verify(() => mockGetMyNotices(NoParams()));
-    });
-
-    test(
-        'should emit [Loading, Done] when data is gotten successfully from the usecase',
-        () async {
-      setUpMockGetMyNoticesSuccess();
-
-      final expected = [Loading(), Done(noticeList: tNoticesList)];
-      expectLater(bloc.stream, emitsInOrder(expected));
-
-      bloc.add(const GetMyNoticesEvent());
-    });
-
-    test(
-        'should emit [Loading, Error] when getting data fails from the usecase',
-        () async {
-      when(() => mockGetMyNotices(any()))
-          .thenAnswer((_) async => const Left(ServerFailure()));
-
-      final expected = [
-        Loading(),
-        Error(message: failureMessages[FailureType.serverFailure]!)
-      ];
-      expectLater(bloc.stream, emitsInOrder(expected));
-
-      bloc.add(const GetMyNoticesEvent());
-    });
-  });
-
   group('GetUserNotices', () {
-    const tUserId = '1';
+    const tuserId = '1';
 
     void setUpMockGetUserNoticesSuccess() {
       when(() => mockGetUserNotices(any()))
@@ -139,10 +91,10 @@ void main() {
     test('should get data from the GetUserNotices usecase', () async {
       setUpMockGetUserNoticesSuccess();
 
-      bloc.add(const GetUserNoticesEvent(userId: tUserId));
+      bloc.add(const GetUserNoticesEvent(userId: tuserId));
       await untilCalled(() => mockGetUserNotices(any()));
 
-      verify(() => mockGetUserNotices(const Params(userId: tUserId)));
+      verify(() => mockGetUserNotices(const Params(userId: tuserId)));
     });
 
     test(
@@ -153,7 +105,7 @@ void main() {
       final expected = [Loading(), Done(noticeList: tNoticesList)];
       expectLater(bloc.stream, emitsInOrder(expected));
 
-      bloc.add(const GetUserNoticesEvent(userId: tUserId));
+      bloc.add(const GetUserNoticesEvent(userId: tuserId));
     });
 
     test(
@@ -168,7 +120,7 @@ void main() {
       ];
       expectLater(bloc.stream, emitsInOrder(expected));
 
-      bloc.add(const GetUserNoticesEvent(userId: tUserId));
+      bloc.add(const GetUserNoticesEvent(userId: tuserId));
     });
   });
 }

@@ -33,18 +33,3 @@ final class SignUpEvent extends AuthEvent {
 final class SignOutEvent extends AuthEvent {
   const SignOutEvent();
 }
-
-final class SetProfileInfoEvent extends AuthEvent {
-  final String name;
-  final String phone;
-  final String smsCode;
-
-  const SetProfileInfoEvent({
-    required this.name,
-    required this.phone,
-    required this.smsCode,
-  });
-
-  @override
-  List<Object> get props => [name, phone, smsCode];
-}
