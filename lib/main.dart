@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lokalio/core/theme/theme.dart';
-import 'package:lokalio/features/auth/presentation/pages/auth_page.dart';
 
+import 'core/theme/theme.dart';
+import 'features/auth/presentation/pages/auth_page.dart';
 import 'firebase_options.dart';
 
 import 'injection_container.dart' as di;

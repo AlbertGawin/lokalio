@@ -19,7 +19,8 @@ class ProfileModel extends Profile {
       email: json['email'] as String,
       phoneNumber: json['phoneNumber'] as String,
       city: json['city'] as String,
-      createdAt: json['createdAt'] as Timestamp,
+      createdAt: Timestamp.fromMillisecondsSinceEpoch(
+          int.parse(json['createdAt']) * 1000),
       imageUrl: json['imageUrl'] as String?,
     );
   }
@@ -31,7 +32,7 @@ class ProfileModel extends Profile {
       'email': email,
       'phoneNumber': phoneNumber,
       'city': city,
-      'createdAt': createdAt,
+      'createdAt': createdAt.seconds.toString(),
       'imageUrl': imageUrl,
     };
   }

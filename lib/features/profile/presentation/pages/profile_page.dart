@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lokalio/features/profile/presentation/bloc/profile_bloc.dart';
@@ -19,7 +20,10 @@ class MyProfilePage extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final bloc = sl<ProfileBloc>();
-        bloc.add(const ReadMyProfileEvent());
+
+        final userId = FirebaseAuth.instance.currentUser!.uid;
+        bloc.add(ReadProfileEvent(userId: userId));
+
         return bloc;
       },
       child: BlocBuilder<ProfileBloc, ProfileState>(

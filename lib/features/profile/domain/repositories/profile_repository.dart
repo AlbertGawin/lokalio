@@ -1,4 +1,4 @@
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/features/profile/domain/entities/profile.dart';
 

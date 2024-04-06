@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lokalio/features/create_notice/domain/repositories/create_notice_repository.dart';
 import 'package:lokalio/features/create_notice/domain/usecases/create_notice.dart';

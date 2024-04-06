@@ -1,5 +1,5 @@
-import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
 import 'package:lokalio/features/auth/data/datasources/auth_remote_data_source.dart';

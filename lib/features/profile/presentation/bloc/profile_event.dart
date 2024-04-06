@@ -15,7 +15,3 @@ final class ReadProfileEvent extends ProfileEvent {
   @override
   List<Object> get props => [userId];
 }
-
-final class ReadMyProfileEvent extends ProfileEvent {
-  const ReadMyProfileEvent();
-}

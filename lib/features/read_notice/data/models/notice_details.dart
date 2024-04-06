@@ -43,7 +43,8 @@ class NoticeDetailsModel extends NoticeDetails {
       description: json['description'] as String,
       peopleAmount: json['peopleAmount'] as int,
       imagesUrl: List<String>.from(json['imagesUrl']),
-      createdAt: Timestamp.fromMillisecondsSinceEpoch(json['createdAt'] * 1000),
+      createdAt: Timestamp.fromMillisecondsSinceEpoch(
+          int.parse(json['createdAt']) * 1000),
     );
   }
 
@@ -58,7 +59,7 @@ class NoticeDetailsModel extends NoticeDetails {
       'description': description,
       'peopleAmount': peopleAmount,
       'imagesUrl': imagesUrl,
-      'createdAt': createdAt.seconds,
+      'createdAt': createdAt.seconds.toString(),
     };
   }
 

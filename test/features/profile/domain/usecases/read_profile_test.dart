@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lokalio/features/profile/domain/entities/profile.dart';
 import 'package:lokalio/features/profile/domain/repositories/profile_repository.dart';
