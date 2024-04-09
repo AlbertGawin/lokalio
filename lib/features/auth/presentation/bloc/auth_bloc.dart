@@ -1,63 +1,43 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:lokalio/core/usecases/usecase.dart';
-import 'package:lokalio/features/auth/domain/usecases/sign_in.dart';
-import 'package:lokalio/features/auth/domain/usecases/sign_in_anonymously.dart';
-import 'package:lokalio/features/auth/domain/usecases/sign_up.dart';
-import 'package:lokalio/features/auth/domain/usecases/sign_out.dart';
+
+import '../../domain/entities/user.dart';
+import '../../domain/repositories/auth_repository.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final SignIn signIn;
-  final SignInAnonymously signInAnonymously;
-  final SignUp signUp;
-  final SignOut signOut;
+  final AuthRepository _repository;
+  late final StreamSubscription<User> _userSubscription;
 
-  AuthBloc({
-    required this.signIn,
-    required this.signInAnonymously,
-    required this.signUp,
-    required this.signOut,
-  }) : super(Done()) {
-    on<AuthEvent>((event, emit) async {
-      if (event is SignInEvent) {
-        emit(Loading());
-        await signIn(SignInParams(credential: event.credential))
-            .then((failure) {
-          failure.fold(
-            (failure) => emit(Error(message: failure.message)),
-            (_) => emit(Done()),
-          );
-        });
-      } else if (event is SignInAnonymouslyEvent) {
-        emit(Loading());
-        await signInAnonymously(NoParams()).then((failure) {
-          failure.fold(
-            (failure) => emit(Error(message: failure.message)),
-            (_) => emit(Done()),
-          );
-        });
-      } else if (event is SignUpEvent) {
-        emit(Loading());
-        await signUp(SignUpParams(email: event.email, password: event.password))
-            .then((failure) {
-          failure.fold(
-            (failure) => emit(Error(message: failure.message)),
-            (_) => emit(Done()),
-          );
-        });
-      } else if (event is SignOutEvent) {
-        emit(Loading());
-        await signOut(NoParams()).then((failure) {
-          failure.fold(
-            (failure) => emit(Error(message: failure.message)),
-            (_) => emit(Done()),
-          );
-        });
-      }
-    });
+  AuthBloc({required AuthRepository repository})
+      : _repository = repository,
+        super(const AuthState.unauthenticated()) {
+    on<_AuthUserChanged>(_onUserChanged);
+    on<SignOutEvent>(_onLogoutRequested);
+    _userSubscription = _repository.user.listen(
+      (user) => add(_AuthUserChanged(user: user)),
+    );
+  }
+
+  void _onUserChanged(_AuthUserChanged event, Emitter<AuthState> emit) {
+    emit(
+      event.user.isNotEmpty
+          ? AuthState.authenticated(user: event.user)
+          : const AuthState.unauthenticated(),
+    );
+  }
+
+  void _onLogoutRequested(SignOutEvent event, Emitter<AuthState> emit) {
+    unawaited(_repository.signOut());
+  }
+
+  @override
+  Future<void> close() {
+    _userSubscription.cancel();
+    return super.close();
   }
 }

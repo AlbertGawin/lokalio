@@ -1,45 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lokalio/features/notice_list/presentation/bloc/notice_list_bloc.dart';
-import 'package:lokalio/features/notice_list/presentation/widgets/home_widget.dart';
+import 'package:lokalio/features/notice_list/notice_list.dart';
 import 'package:lokalio/injection_container.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  static Page<void> page() => const MaterialPage<void>(child: HomePage());
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        appBar: AppBar(toolbarHeight: 0),
-        body: buildBody(context),
-      ),
-    );
-  }
-
-  BlocProvider<NoticeListBloc> buildBody(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        final bloc = sl<NoticeListBloc>();
-        bloc.add(const GetAllNoticesEvent());
-
-        return bloc;
-      },
-      child: BlocBuilder<NoticeListBloc, NoticeListState>(
-        builder: (context, state) {
-          if (state is NoticeListInitial) {
-            return const Center(child: Text('NoticeInitial'));
-          } else if (state is Loading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is Done) {
-            return HomeWidget(noticeList: state.noticeList);
-          } else if (state is Error) {
-            return Center(child: Text(state.message));
-          } else {
-            return const Center(child: Text('Something went wrong'));
-          }
+    return Scaffold(
+      appBar: AppBar(title: const Text('Dom')),
+      body: BlocProvider(
+        create: (_) {
+          final bloc = sl<NoticeListBloc>();
+          bloc.add(const GetAllNoticesEvent());
+          return bloc;
         },
+        child: const NoticeListWidget(),
       ),
     );
   }

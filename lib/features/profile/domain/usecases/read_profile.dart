@@ -1,6 +1,4 @@
-import 'package:fpdart/fpdart.dart';
 import 'package:equatable/equatable.dart';
-import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/usecases/usecase.dart';
 import 'package:lokalio/features/profile/domain/entities/profile.dart';
 import 'package:lokalio/features/profile/domain/repositories/profile_repository.dart';
@@ -11,7 +9,7 @@ class ReadProfile implements UseCase<Profile, Params> {
   const ReadProfile({required this.repository});
 
   @override
-  Future<Either<Failure, Profile>> call(Params params) async {
+  Future<Profile> call(Params params) async {
     return await repository.readProfile(userId: params.userId);
   }
 }

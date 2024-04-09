@@ -1,11 +1,13 @@
-import 'package:fpdart/fpdart.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:lokalio/core/error/failures.dart';
+import '../entities/user.dart';
 
 abstract class AuthRepository {
-  Future<Either<Failure, void>> signIn({required AuthCredential credential});
-  Future<Either<Failure, void>> signInAnonymously();
-  Future<Either<Failure, void>> signUp(
+  Stream<User> get user;
+  User get currentUser;
+
+  Future<void> signUp({required String email, required String password});
+  Future<void> signInWithGoogle();
+  Future<void> signInWithEmailAndPassword(
       {required String email, required String password});
-  Future<Either<Failure, void>> signOut();
+  Future<void> signInAnonymously();
+  Future<void> signOut();
 }

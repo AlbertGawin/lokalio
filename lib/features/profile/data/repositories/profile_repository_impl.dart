@@ -1,4 +1,3 @@
-import 'package:fpdart/fpdart.dart';
 import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
@@ -16,19 +15,19 @@ class ProfileRepositoryImpl implements ProfileRepository {
   });
 
   @override
-  Future<Either<Failure, Profile>> readProfile({required String userId}) async {
+  Future<Profile> readProfile({required String userId}) async {
     if (await networkInfo.isConnected) {
       try {
         final profile = await remoteDataSource.readProfile(userId: userId);
 
-        return Right(profile);
+        return profile;
       } on NoDataException {
-        return const Left(NoDataFailure());
+        throw const NoDataFailure();
       } on Exception {
-        return const Left(ServerFailure());
+        throw const ServerFailure();
       }
     } else {
-      return const Left(NoConnectionFailure());
+      throw const NoConnectionFailure();
     }
   }
 }

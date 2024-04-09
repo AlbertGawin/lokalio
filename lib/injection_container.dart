@@ -3,6 +3,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:lokalio/core/cache/cache.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -27,12 +29,7 @@ Future<void> init() async {
 
 void initAuth() {
   //Bloc
-  sl.registerFactory(() => AuthBloc(
-        signIn: sl(),
-        signInAnonymously: sl(),
-        signUp: sl(),
-        signOut: sl(),
-      ));
+  sl.registerFactory(() => AuthBloc(repository: sl()));
 
   // Use cases
   sl.registerLazySingleton(() => SignIn(authRepository: sl()));
@@ -41,8 +38,8 @@ void initAuth() {
   sl.registerLazySingleton(() => SignOut(authRepository: sl()));
 
   // Repository
-  sl.registerLazySingleton<AuthRepository>(
-      () => AuthRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()));
+  sl.registerLazySingleton<AuthRepository>(() =>
+      AuthRepositoryImpl(cache: sl(), firebaseAuth: sl(), googleSignIn: sl()));
 
   // Data sources
   sl.registerLazySingleton<AuthRemoteDataSource>(() =>
@@ -100,8 +97,7 @@ void initReadNotice() {
 
 void initNoticeList() {
   //Bloc
-  sl.registerFactory(
-      () => NoticeListBloc(getAllNotices: sl(), getUserNotices: sl()));
+  sl.registerFactory(() => NoticeListBloc(repository: sl()));
 
   // Use cases
   sl.registerLazySingleton(() => GetAllNotices(noticeListRepository: sl()));
@@ -134,4 +130,6 @@ Future<void> initExternal() async {
   sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => http.Client());
   sl.registerLazySingleton(() => Connectivity());
+  sl.registerLazySingleton(() => CacheClient());
+  sl.registerLazySingleton(() => GoogleSignIn());
 }

@@ -1,30 +1,27 @@
 part of 'notice_list_bloc.dart';
 
-sealed class NoticeListState extends Equatable {
-  const NoticeListState();
-
-  @override
-  List<Object> get props => [];
+enum NoticeListStatus {
+  loading,
+  success,
+  failure,
 }
 
-final class NoticeListInitial extends NoticeListState {}
+final class NoticeListState extends Equatable {
+  final NoticeListStatus status;
+  final List<Notice> notices;
 
-final class Loading extends NoticeListState {}
+  const NoticeListState._({
+    required this.status,
+    this.notices = const [],
+  });
 
-final class Done extends NoticeListState {
-  final List<Notice> noticeList;
+  const NoticeListState.loading() : this._(status: NoticeListStatus.loading);
 
-  const Done({required this.noticeList});
+  const NoticeListState.done({required List<Notice> notices})
+      : this._(status: NoticeListStatus.success, notices: notices);
 
-  @override
-  List<Object> get props => [noticeList];
-}
-
-final class Error extends NoticeListState {
-  final String message;
-
-  const Error({required this.message});
+  const NoticeListState.error() : this._(status: NoticeListStatus.failure);
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [status, notices];
 }

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lokalio/core/util/create_route.dart';
-import 'package:lokalio/features/auth/presentation/pages/auth_page.dart';
 
 class AnonymousPage extends StatelessWidget {
   final String title;
@@ -16,11 +14,7 @@ class AnonymousPage extends StatelessWidget {
             children: [
               Text(title),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    createRoute(const AuthPage()),
-                  );
-                },
+                onPressed: () {},
                 child: const Text('Zaloguj się'),
               ),
             ],

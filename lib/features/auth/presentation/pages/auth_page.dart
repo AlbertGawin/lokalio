@@ -1,49 +1,40 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lokalio/core/routes/routes.dart';
+import 'package:lokalio/core/theme/theme.dart';
+import 'package:lokalio/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lokalio/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:lokalio/features/auth/presentation/widgets/auth_widget.dart';
-
-import 'package:lokalio/injection_container.dart';
-import 'package:lokalio/main_page.dart';
 
 class AuthPage extends StatelessWidget {
-  const AuthPage({super.key});
+  const AuthPage({required AuthRepository repository, super.key})
+      : _repository = repository;
+
+  final AuthRepository _repository;
 
   @override
   Widget build(BuildContext context) {
-    return buildBody(context);
-  }
-
-  BlocProvider<AuthBloc> buildBody(BuildContext context) {
-    return BlocProvider(
-      create: (_) => sl<AuthBloc>(),
-      child: BlocBuilder<AuthBloc, AuthState>(
-        builder: (context, state) {
-          if (state is AuthInitial) {
-            return const Center(child: Text('Auth Initial'));
-          } else if (state is Loading || state is Done || state is Error) {
-            return _streamLogic();
-          } else {
-            return const Center(child: Text('Something went wrong'));
-          }
-        },
+    return RepositoryProvider.value(
+      value: _repository,
+      child: BlocProvider(
+        create: (_) => AuthBloc(repository: _repository),
+        child: const AuthView(),
       ),
     );
   }
+}
 
-  StreamBuilder<User?> _streamLogic() {
-    return StreamBuilder(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        final user = snapshot.data;
+class AuthView extends StatelessWidget {
+  const AuthView({super.key});
 
-        if (user == null) {
-          return const AuthWidget();
-        } else {
-          return const MainPage();
-        }
-      },
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: theme,
+      home: FlowBuilder<AuthStatus>(
+        state: context.select((AuthBloc bloc) => bloc.state.status),
+        onGeneratePages: onGenerateAppViewPages,
+      ),
     );
   }
 }

@@ -1,4 +1,3 @@
-import 'package:fpdart/fpdart.dart';
 import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
@@ -21,8 +20,7 @@ class ReadNoticeRepositoryImpl implements ReadNoticeRepository {
   });
 
   @override
-  Future<Either<Failure, NoticeDetails>> readNotice(
-      {required String noticeId}) async {
+  Future<NoticeDetails> readNotice({required String noticeId}) async {
     return await _readNoticeDetails(
       chooserFunction: () async {
         return await remoteDataSource.readNotice(noticeId: noticeId);
@@ -30,21 +28,21 @@ class ReadNoticeRepositoryImpl implements ReadNoticeRepository {
     );
   }
 
-  Future<Either<Failure, NoticeDetails>> _readNoticeDetails({
+  Future<NoticeDetails> _readNoticeDetails({
     required _Chooser chooserFunction,
   }) async {
     if (await networkInfo.isConnected) {
       try {
         final noticeDetails = await chooserFunction();
 
-        return Right(noticeDetails);
+        return noticeDetails;
       } on NoDataException {
-        return const Left(NoDataFailure());
+        throw const NoDataFailure();
       } on Exception {
-        return const Left(ServerFailure());
+        throw const ServerFailure();
       }
     } else {
-      return const Left(NoConnectionFailure());
+      throw const NoConnectionFailure();
     }
   }
 }

@@ -1,40 +1,18 @@
+import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:lokalio/features/auth/auth.dart';
 
-import 'core/theme/theme.dart';
-import 'features/auth/presentation/pages/auth_page.dart';
-import 'firebase_options.dart';
+import 'core/bloc/bloc_observer.dart';
 
-import 'injection_container.dart' as di;
-
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = const AppBlocObserver();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp();
 
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
+  final authenticationRepository = AuthRepositoryImpl();
+  await authenticationRepository.user.first;
 
-  await di.init();
-
-  runApp(const MyApp());
-}
-
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Lokalio',
-      theme: getTheme(),
-      home: const AuthPage(),
-    );
-  }
+  runApp(AuthPage(repository: authenticationRepository));
 }

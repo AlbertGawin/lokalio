@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/features/profile/domain/entities/profile.dart';
 import 'package:lokalio/features/profile/domain/usecases/read_profile.dart';
 
@@ -15,10 +14,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       if (event is ReadProfileEvent) {
         emit(Loading());
         await readProfile(Params(userId: event.userId)).then((profile) {
-          profile.fold(
-            (failure) => emit(Error(message: failureMessages[failure.type]!)),
-            (profile) => emit(Done(profile: profile)),
-          );
+          emit(Done(profile: profile));
         });
       }
     });

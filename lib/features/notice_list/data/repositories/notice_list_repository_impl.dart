@@ -1,4 +1,3 @@
-import 'package:fpdart/fpdart.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
 import 'package:lokalio/features/notice_list/data/datasources/notice_list_remote_data_source.dart';
@@ -18,7 +17,7 @@ class NoticeListRepositoryImpl implements NoticeListRepository {
   });
 
   @override
-  Future<Either<Failure, List<Notice>>> getAllNotices() async {
+  Future<List<Notice>> getAllNotices() async {
     return await _getNoticeList(
       remoteFunction: () async {
         return await remoteDataSource.getAllNotices();
@@ -27,8 +26,7 @@ class NoticeListRepositoryImpl implements NoticeListRepository {
   }
 
   @override
-  Future<Either<Failure, List<Notice>>> getUserNotices(
-      {required String userId}) async {
+  Future<List<Notice>> getUserNotices({required String userId}) async {
     return await _getNoticeList(
       remoteFunction: () async {
         return await remoteDataSource.getUserNotices(userId: userId);
@@ -36,19 +34,19 @@ class NoticeListRepositoryImpl implements NoticeListRepository {
     );
   }
 
-  Future<Either<Failure, List<Notice>>> _getNoticeList({
+  Future<List<Notice>> _getNoticeList({
     required _Chooser remoteFunction,
   }) async {
     if (await networkInfo.isConnected) {
       try {
         final noticeList = await remoteFunction();
 
-        return Right(noticeList);
+        return noticeList;
       } on Exception {
-        return const Left(ServerFailure());
+        throw const ServerFailure();
       }
     } else {
-      return const Left(NoConnectionFailure());
+      throw const NoConnectionFailure();
     }
   }
 }
