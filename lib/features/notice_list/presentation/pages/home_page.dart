@@ -8,6 +8,8 @@ import 'package:lokalio/injection_container.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  static Page page() => const MaterialPage(child: HomePage());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
