@@ -9,6 +9,9 @@ class NoticePage extends StatelessWidget {
 
   const NoticePage({super.key, required this.noticeId});
 
+  static Page<void> page(String noticeId) =>
+      MaterialPage<void>(child: NoticePage(noticeId: noticeId));
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

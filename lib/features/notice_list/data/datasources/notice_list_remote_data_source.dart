@@ -11,7 +11,7 @@ class NoticeListRemoteDataSourceImpl implements NoticeListRemoteDataSource {
   final FirebaseFirestore firebaseFirestore;
   final FirebaseAuth firebaseAuth;
 
-  NoticeListRemoteDataSourceImpl({
+  const NoticeListRemoteDataSourceImpl({
     required this.firebaseFirestore,
     required this.firebaseAuth,
   });

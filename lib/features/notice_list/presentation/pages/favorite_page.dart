@@ -6,8 +6,6 @@ import 'package:lokalio/injection_container.dart';
 class FavoritePage extends StatelessWidget {
   const FavoritePage({super.key});
 
-  static Page<void> page() => const MaterialPage<void>(child: FavoritePage());
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

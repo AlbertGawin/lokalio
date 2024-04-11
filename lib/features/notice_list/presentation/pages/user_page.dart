@@ -9,9 +9,6 @@ class UserPage extends StatelessWidget {
 
   const UserPage({super.key, required this.userId});
 
-  static Page<void> page({required String userId}) =>
-      MaterialPage<void>(child: UserPage(userId: userId));
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

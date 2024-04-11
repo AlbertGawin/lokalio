@@ -1,4 +1,3 @@
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:lokalio/features/notice_list/domain/domain.dart';
@@ -15,11 +14,11 @@ class NoticeListBloc extends Bloc<NoticeListEvent, NoticeListState> {
     on<NoticeListEvent>((event, emit) async {
       if (event is GetAllNoticesEvent) {
         await _repository.getAllNotices().then((notices) {
-          emit(NoticeListState.done(notices: notices));
+          emit(NoticeListState.success(notices: notices));
         });
       } else if (event is GetUserNoticesEvent) {
         await _repository.getUserNotices(userId: event.userId).then((notices) {
-          emit(NoticeListState.done(notices: notices));
+          emit(NoticeListState.success(notices: notices));
         });
       }
     });
