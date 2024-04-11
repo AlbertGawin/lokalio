@@ -4,9 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:lokalio/features/notice_list/notice_list.dart';
 
 class NoticeListWidget extends StatelessWidget {
-  const NoticeListWidget({
-    super.key,
-  });
+  const NoticeListWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

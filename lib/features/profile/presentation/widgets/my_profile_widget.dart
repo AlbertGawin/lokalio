@@ -24,9 +24,8 @@ class MyProfileWidget extends StatelessWidget {
           const SizedBox(height: 16),
           MenuItemWidget(
             onPressed: () {
-              Navigator.of(context).push(createRoute(UserPage(
-                userId: profile.id,
-              )));
+              Navigator.of(context)
+                  .push(createRoute(UserPage(userId: profile.id),));
             },
             label: 'Moje ogłoszenia',
           ),

@@ -13,11 +13,8 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Dom')),
       body: BlocProvider(
-        create: (_) {
-          final bloc = sl<NoticeListBloc>();
-          bloc.add(const GetAllNoticesEvent());
-          return bloc;
-        },
+        create: (_) => NoticeListBloc(repository: sl<NoticeListRepository>())
+          ..add(const GetAllNoticesEvent()),
         child: const NoticeListWidget(),
       ),
     );
