@@ -55,7 +55,6 @@ class NoticeItemWidget extends StatelessWidget {
                       notice.title,
                       style: const TextStyle(fontSize: 14),
                     ),
-                    const SizedBox(height: 8),
                   ],
                 ),
               ),
