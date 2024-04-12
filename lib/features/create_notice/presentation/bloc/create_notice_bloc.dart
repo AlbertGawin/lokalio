@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/features/create_notice/domain/usecases/create_notice.dart';
-import 'package:lokalio/features/read_notice/domain/entities/notice_details.dart';
+import 'package:lokalio/features/notice/domain/entities/notice_details.dart';
 
 part 'create_notice_event.dart';
 part 'create_notice_state.dart';

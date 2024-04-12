@@ -13,6 +13,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(toolbarHeight: 0),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(createRoute(const CreateNoticePage()));
@@ -21,7 +22,7 @@ class HomePage extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (_) => NoticeListBloc(repository: sl<NoticeListRepository>())
-          ..add(const GetAllNoticesEvent()),
+          ..add(const ReadAllNoticesEvent()),
         child: const Padding(
           padding: EdgeInsets.all(16),
           child: NoticeListWidget(),

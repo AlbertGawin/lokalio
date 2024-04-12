@@ -4,8 +4,8 @@ import 'package:fpdart/fpdart.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lokalio/features/create_notice/domain/repositories/create_notice_repository.dart';
 import 'package:lokalio/features/create_notice/domain/usecases/create_notice.dart';
-import 'package:lokalio/features/read_notice/data/models/notice_details.dart';
-import 'package:lokalio/features/read_notice/domain/entities/notice_details.dart';
+import 'package:lokalio/features/notice/data/models/notice_details.dart';
+import 'package:lokalio/features/notice/domain/entities/notice_details.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../fixtures/fixture_reader.dart';

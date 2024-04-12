@@ -12,11 +12,11 @@ class NoticeListBloc extends Bloc<NoticeListEvent, NoticeListState> {
       : _repository = repository,
         super(const NoticeListState.loading()) {
     on<NoticeListEvent>((event, emit) async {
-      if (event is GetAllNoticesEvent) {
+      if (event is ReadAllNoticesEvent) {
         await _repository.getAllNotices().then((notices) {
           emit(NoticeListState.success(notices: notices));
         });
-      } else if (event is GetUserNoticesEvent) {
+      } else if (event is ReadUserNoticesEvent) {
         await _repository.getUserNotices(userId: event.userId).then((notices) {
           emit(NoticeListState.success(notices: notices));
         });

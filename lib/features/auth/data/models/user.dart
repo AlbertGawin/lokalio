@@ -4,7 +4,7 @@ class UserModel extends User {
   const UserModel({
     required super.id,
     required super.email,
-    required super.name,
+    required super.username,
     required super.photoUrl,
   });
 
@@ -12,7 +12,7 @@ class UserModel extends User {
     return UserModel(
       id: json['id'],
       email: json['email'],
-      name: json['name'],
+      username: json['username'],
       photoUrl: json['photoUrl'],
     );
   }
@@ -21,7 +21,7 @@ class UserModel extends User {
     return {
       'id': id,
       'email': email,
-      'name': name,
+      'username': username,
       'photoUrl': photoUrl,
     };
   }

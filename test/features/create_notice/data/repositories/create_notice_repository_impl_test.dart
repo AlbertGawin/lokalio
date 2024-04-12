@@ -7,7 +7,7 @@ import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
 import 'package:lokalio/features/create_notice/data/datasources/create_notice_remote_data_source.dart';
 import 'package:lokalio/features/create_notice/data/repositories/create_notice_repository_impl.dart';
-import 'package:lokalio/features/read_notice/data/models/notice_details.dart';
+import 'package:lokalio/features/notice/data/models/notice_details.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../fixtures/fixture_reader.dart';

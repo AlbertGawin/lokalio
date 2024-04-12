@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:lokalio/core/error/exceptions.dart';
-import 'package:lokalio/features/read_notice/data/models/notice_details.dart';
+import 'package:lokalio/features/notice/data/models/notice_details.dart';
 
 abstract class CreateNoticeRemoteDataSource {
   Future<void> createNotice({required NoticeDetailsModel noticeDetails});

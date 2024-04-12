@@ -5,6 +5,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lokalio/core/cache/cache.dart';
+import 'package:lokalio/features/notice/data/datasources/notice_remote_data_source.dart';
+import 'package:lokalio/features/notice/data/repositories/notice_repository_impl.dart';
+import 'package:lokalio/features/notice/domain/repositories/notice_repository.dart';
+import 'package:lokalio/features/notice/presentation/bloc/notice_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,7 +17,6 @@ import 'features/auth/auth.dart';
 import 'features/create_notice/create_notice.dart';
 import 'features/notice_list/notice_list.dart';
 import 'features/profile/profile.dart';
-import 'features/read_notice/read_notice.dart';
 
 final sl = GetIt.instance;
 
@@ -81,18 +84,15 @@ void initProfile() {
 
 void initReadNotice() {
   //Bloc
-  sl.registerFactory(() => ReadNoticeBloc(readNotice: sl()));
-
-  // Use cases
-  sl.registerLazySingleton(() => ReadNotice(repository: sl()));
+  sl.registerFactory(() => NoticeBloc(repository: sl()));
 
   // Repository
-  sl.registerLazySingleton<ReadNoticeRepository>(() =>
-      ReadNoticeRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()));
+  sl.registerLazySingleton<NoticeRepository>(
+      () => NoticeRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()));
 
   // Data sources
-  sl.registerLazySingleton<ReadNoticeRemoteDataSource>(
-      () => ReadNoticeRemoteDataSourceImpl(firebaseFirestore: sl()));
+  sl.registerLazySingleton<NoticeRemoteDataSource>(
+      () => NoticeRemoteDataSourceImpl(firebaseFirestore: sl()));
 }
 
 void initNoticeList() {

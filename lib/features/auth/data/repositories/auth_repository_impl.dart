@@ -247,6 +247,11 @@ class AuthRepositoryImpl implements AuthRepository {
 
 extension on firebase_auth.User {
   User get toUser {
-    return User(id: uid, email: email, name: displayName, photoUrl: photoURL);
+    return User(
+      id: uid,
+      email: email,
+      username: displayName,
+      photoUrl: photoURL,
+    );
   }
 }

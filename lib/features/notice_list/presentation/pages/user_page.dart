@@ -17,7 +17,7 @@ class UserPage extends StatelessWidget {
         create: (_) {
           final bloc = sl<NoticeListBloc>();
 
-          bloc.add(GetUserNoticesEvent(userId: userId));
+          bloc.add(ReadUserNoticesEvent(userId: userId));
           return bloc;
         },
         child: const NoticeListWidget(),

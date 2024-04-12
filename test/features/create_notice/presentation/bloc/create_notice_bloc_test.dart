@@ -6,7 +6,7 @@ import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/usecases/usecase.dart';
 import 'package:lokalio/features/create_notice/domain/usecases/create_notice.dart';
 import 'package:lokalio/features/create_notice/presentation/bloc/create_notice_bloc.dart';
-import 'package:lokalio/features/read_notice/data/models/notice_details.dart';
+import 'package:lokalio/features/notice/data/models/notice_details.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../fixtures/fixture_reader.dart';

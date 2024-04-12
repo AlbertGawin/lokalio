@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:lokalio/features/read_notice/domain/entities/notice_details.dart';
-import 'package:lokalio/features/read_notice/domain/repositories/read_notice_repository.dart';
-import 'package:lokalio/features/read_notice/domain/usecases/read_notice.dart';
+import 'package:lokalio/features/notice/domain/entities/notice_details.dart';
+import 'package:lokalio/features/notice/domain/repositories/notice_repository.dart';
+import 'package:lokalio/features/notice/domain/usecases/read_notice.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockReadNoticeRepository extends Mock implements ReadNoticeRepository {}

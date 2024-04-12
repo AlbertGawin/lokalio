@@ -10,7 +10,7 @@ import 'package:lokalio/features/create_notice/presentation/widgets/date_time_ra
 import 'package:lokalio/features/create_notice/presentation/widgets/location_input_widget.dart';
 import 'package:lokalio/features/create_notice/presentation/widgets/title_desc__input_widget.dart';
 import 'package:lokalio/features/create_notice/presentation/widgets/images_input_widget.dart';
-import 'package:lokalio/features/read_notice/domain/entities/notice_details.dart';
+import 'package:lokalio/features/notice/domain/entities/notice_details.dart';
 
 class CreateNoticeWidget extends StatelessWidget {
   const CreateNoticeWidget({super.key});
@@ -121,7 +121,7 @@ class CreateNoticeWidget extends StatelessWidget {
         description: data['description'],
         peopleAmount: data['peopleAmount'],
         imagesUrl: data['images'],
-        createdAt: Timestamp.now(),
+        createdAt: Timestamp.now().seconds.toString(),
       );
 
       context

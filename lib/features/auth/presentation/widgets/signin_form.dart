@@ -28,11 +28,6 @@ class SignInForm extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(
-                'assets/bloc_logo_small.png',
-                height: 120,
-              ),
-              const SizedBox(height: 16),
               _EmailInput(),
               const SizedBox(height: 8),
               _PasswordInput(),

@@ -4,12 +4,12 @@ sealed class NoticeListEvent {
   const NoticeListEvent();
 }
 
-class GetAllNoticesEvent extends NoticeListEvent {
-  const GetAllNoticesEvent();
+class ReadAllNoticesEvent extends NoticeListEvent {
+  const ReadAllNoticesEvent();
 }
 
-final class GetUserNoticesEvent extends NoticeListEvent {
+final class ReadUserNoticesEvent extends NoticeListEvent {
   final String userId;
 
-  const GetUserNoticesEvent({required this.userId});
+  const ReadUserNoticesEvent({required this.userId});
 }

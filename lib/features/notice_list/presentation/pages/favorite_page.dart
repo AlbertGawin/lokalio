@@ -14,7 +14,7 @@ class FavoritePage extends StatelessWidget {
         create: (_) {
           final bloc = sl<NoticeListBloc>();
 
-          bloc.add(const GetAllNoticesEvent());
+          bloc.add(const ReadAllNoticesEvent());
           return bloc;
         },
         child: const NoticeListWidget(),

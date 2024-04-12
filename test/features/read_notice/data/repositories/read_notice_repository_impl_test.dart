@@ -5,9 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
-import 'package:lokalio/features/read_notice/data/datasources/read_notice_remote_data_source.dart';
-import 'package:lokalio/features/read_notice/data/models/notice_details.dart';
-import 'package:lokalio/features/read_notice/data/repositories/read_notice_repository_impl.dart';
+import 'package:lokalio/features/notice/data/datasources/notice_remote_data_source.dart';
+import 'package:lokalio/features/notice/data/models/notice_details.dart';
+import 'package:lokalio/features/notice/data/repositories/notice_repository_impl.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../fixtures/fixture_reader.dart';

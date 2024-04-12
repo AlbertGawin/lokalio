@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lokalio/core/util/create_route.dart';
 import 'package:lokalio/features/notice_list/domain/entities/notice.dart';
-import 'package:lokalio/features/read_notice/presentation/pages/notice_page.dart';
+import 'package:lokalio/features/notice/presentation/pages/notice_page.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class NoticeItemWidget extends StatelessWidget {
@@ -14,9 +14,6 @@ class NoticeItemWidget extends StatelessWidget {
     return Stack(
       children: [
         Card(
-          clipBehavior: Clip.antiAlias,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          margin: EdgeInsets.zero,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -71,11 +68,12 @@ class NoticeItemWidget extends StatelessWidget {
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                splashColor: Colors.orange.withOpacity(0.2),
-                highlightColor: Colors.orange.withOpacity(0.2),
+                splashColor: Theme.of(context).primaryColor.withOpacity(0.2),
+                highlightColor: Theme.of(context).primaryColor.withOpacity(0.2),
                 onTap: () {
-                  Navigator.of(context)
-                      .push(createRoute(NoticePage(noticeId: notice.id)));
+                  Navigator.of(context).push(createRoute(
+                    NoticePage(noticeId: notice.id),
+                  ));
                 },
               ),
             ),

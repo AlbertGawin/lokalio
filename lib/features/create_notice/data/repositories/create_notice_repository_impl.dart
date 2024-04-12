@@ -4,8 +4,8 @@ import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
 import 'package:lokalio/features/create_notice/data/datasources/create_notice_remote_data_source.dart';
 import 'package:lokalio/features/create_notice/domain/repositories/create_notice_repository.dart';
-import 'package:lokalio/features/read_notice/data/models/notice_details.dart';
-import 'package:lokalio/features/read_notice/domain/entities/notice_details.dart';
+import 'package:lokalio/features/notice/data/models/notice_details.dart';
+import 'package:lokalio/features/notice/domain/entities/notice_details.dart';
 
 class CreateNoticeRepositoryImpl implements CreateNoticeRepository {
   final CreateNoticeRemoteDataSource remoteDataSource;
