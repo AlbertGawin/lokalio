@@ -13,11 +13,12 @@ class NoticeBloc extends Bloc<NoticeEvent, NoticeState> {
       : _repository = repository,
         super(const NoticeState.loading()) {
     on<NoticeEvent>((event, emit) async {
-      if (event is ReadNoticeDetailsEvent) {
-        await _repository
-            .readNotice(noticeId: event.noticeId)
-            .then((noticeDetails) {
-          emit(NoticeState.success(notice: noticeDetails));
+      if (event is GetNoticeDetailsEvent) {
+        await _repository.readNotice(noticeId: event.noticeId).then((chooser) {
+          chooser.fold(
+            (failure) => emit(const NoticeState.failure()),
+            (notice) => emit(NoticeState.success(notice: notice)),
+          );
         });
       }
     });

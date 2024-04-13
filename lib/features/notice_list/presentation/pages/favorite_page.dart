@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lokalio/features/notice_list/notice_list.dart';
+import 'package:lokalio/features/notice_list/presentation/bloc/notice_list_bloc.dart';
+import 'package:lokalio/features/notice_list/presentation/widgets/notice_list_widget.dart';
 import 'package:lokalio/injection_container.dart';
 
 class FavoritePage extends StatelessWidget {
@@ -14,7 +15,7 @@ class FavoritePage extends StatelessWidget {
         create: (_) {
           final bloc = sl<NoticeListBloc>();
 
-          bloc.add(const ReadAllNoticesEvent());
+          bloc.add(const GetAllNoticesEvent());
           return bloc;
         },
         child: const NoticeListWidget(),

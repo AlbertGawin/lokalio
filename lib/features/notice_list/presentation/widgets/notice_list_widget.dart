@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:lokalio/features/notice_list/notice_list.dart';
+import 'package:lokalio/features/notice_list/presentation/bloc/notice_list_bloc.dart';
+import 'package:lokalio/features/notice_list/presentation/widgets/notice_item_widget.dart';
 
 class NoticeListWidget extends StatelessWidget {
   const NoticeListWidget({super.key});

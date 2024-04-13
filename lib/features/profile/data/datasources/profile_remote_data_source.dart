@@ -1,23 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/features/profile/data/models/profile.dart';
 
 abstract class ProfileRemoteDataSource {
-  Future<ProfileModel> readProfile({required String userId});
+  Future<ProfileModel> getProfile({required String userId});
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   final FirebaseFirestore firebaseFirestore;
-  final FirebaseAuth firebaseAuth;
 
-  ProfileRemoteDataSourceImpl({
-    required this.firebaseFirestore,
-    required this.firebaseAuth,
-  });
+  const ProfileRemoteDataSourceImpl({required this.firebaseFirestore});
 
   @override
-  Future<ProfileModel> readProfile({required String userId}) async {
+  Future<ProfileModel> getProfile({required String userId}) async {
     final docRef = firebaseFirestore.collection('profile').doc(userId);
 
     return await docRef.get().then(
@@ -32,6 +27,8 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       onError: (e) {
         throw ServerException();
       },
-    );
+    ).onError((error, stackTrace) {
+      throw ServerException();
+    });
   }
 }

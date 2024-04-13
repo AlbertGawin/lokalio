@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lokalio/features/profile/presentation/pages/my_profile_page.dart';
 
 import 'core/pages/anonymous_page.dart';
 import 'core/util/create_route.dart';
 import 'features/create_notice/presentation/pages/create_notice_page.dart';
 import 'features/notice_list/presentation/pages/favorite_page.dart';
 import 'features/notice_list/presentation/pages/home_page.dart';
-import 'features/profile/presentation/pages/profile_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});

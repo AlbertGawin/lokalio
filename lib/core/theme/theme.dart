@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-const _primaryColor = Colors.pink;
+const _primaryColor = Colors.orange;
 
 final theme = ThemeData(
   textTheme: GoogleFonts.openSansTextTheme(),

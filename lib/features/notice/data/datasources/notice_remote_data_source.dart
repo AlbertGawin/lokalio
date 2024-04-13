@@ -3,7 +3,7 @@ import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/features/notice/data/models/notice_details.dart';
 
 abstract class NoticeRemoteDataSource {
-  Future<NoticeDetailsModel> readNotice({required String noticeId});
+  Future<NoticeDetailsModel> getNotice({required String noticeId});
 }
 
 class NoticeRemoteDataSourceImpl implements NoticeRemoteDataSource {
@@ -12,8 +12,9 @@ class NoticeRemoteDataSourceImpl implements NoticeRemoteDataSource {
   const NoticeRemoteDataSourceImpl({required this.firebaseFirestore});
 
   @override
-  Future<NoticeDetailsModel> readNotice({required String noticeId}) async {
+  Future<NoticeDetailsModel> getNotice({required String noticeId}) async {
     final docRef = firebaseFirestore.collection('noticeDetails').doc(noticeId);
+
     return await docRef.get().then(
       (DocumentSnapshot doc) {
         if (!doc.exists) {

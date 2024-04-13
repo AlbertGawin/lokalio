@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class Profile extends Equatable {
@@ -7,7 +6,7 @@ class Profile extends Equatable {
   final String email;
   final String phoneNumber;
   final String city;
-  final Timestamp createdAt;
+  final String createdAt;
   final String? imageUrl;
 
   const Profile({
@@ -19,6 +18,19 @@ class Profile extends Equatable {
     required this.createdAt,
     this.imageUrl,
   });
+
+  static const empty = Profile(
+    id: '',
+    username: '',
+    email: '',
+    phoneNumber: '',
+    city: '',
+    createdAt: '',
+  );
+
+  bool get isEmpty => this == Profile.empty;
+
+  bool get isNotEmpty => this != Profile.empty;
 
   @override
   List<Object?> get props => [

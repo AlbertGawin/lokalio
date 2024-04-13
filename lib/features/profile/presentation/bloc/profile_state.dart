@@ -1,30 +1,23 @@
 part of 'profile_bloc.dart';
 
-sealed class ProfileState extends Equatable {
-  const ProfileState();
+enum ProfileStatus { loading, success, failure }
 
-  @override
-  List<Object> get props => [];
-}
-
-final class ProfileInitial extends ProfileState {}
-
-final class Loading extends ProfileState {}
-
-final class Done extends ProfileState {
+final class ProfileState extends Equatable {
+  final ProfileStatus status;
   final Profile profile;
 
-  const Done({required this.profile});
+  const ProfileState._({
+    required this.status,
+    this.profile = Profile.empty,
+  });
+
+  const ProfileState.loading() : this._(status: ProfileStatus.loading);
+
+  const ProfileState.success({required Profile profile})
+      : this._(status: ProfileStatus.success, profile: profile);
+
+  const ProfileState.failure() : this._(status: ProfileStatus.failure);
 
   @override
-  List<Object> get props => [profile];
-}
-
-final class Error extends ProfileState {
-  final String message;
-
-  const Error({required this.message});
-
-  @override
-  List<Object> get props => [message];
+  List<Object> get props => [status, profile];
 }

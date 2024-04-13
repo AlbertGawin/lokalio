@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lokalio/features/profile/domain/entities/profile.dart';
 
 class ProfileModel extends Profile {
@@ -19,8 +18,7 @@ class ProfileModel extends Profile {
       email: json['email'] as String,
       phoneNumber: json['phoneNumber'] as String,
       city: json['city'] as String,
-      createdAt: Timestamp.fromMillisecondsSinceEpoch(
-          int.parse(json['createdAt']) * 1000),
+      createdAt: json['createdAt'],
       imageUrl: json['imageUrl'] as String?,
     );
   }
@@ -32,7 +30,7 @@ class ProfileModel extends Profile {
       'email': email,
       'phoneNumber': phoneNumber,
       'city': city,
-      'createdAt': createdAt.seconds.toString(),
+      'createdAt': createdAt,
       'imageUrl': imageUrl,
     };
   }

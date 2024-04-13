@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lokalio/core/util/create_route.dart';
 import 'package:lokalio/features/create_notice/create_notice.dart';
-import 'package:lokalio/features/notice_list/notice_list.dart';
+import 'package:lokalio/features/notice_list/domain/repositories/notice_list_repository.dart';
+import 'package:lokalio/features/notice_list/presentation/bloc/notice_list_bloc.dart';
+import 'package:lokalio/features/notice_list/presentation/widgets/notice_list_widget.dart';
 import 'package:lokalio/injection_container.dart';
 
 class HomePage extends StatelessWidget {
@@ -22,7 +24,7 @@ class HomePage extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (_) => NoticeListBloc(repository: sl<NoticeListRepository>())
-          ..add(const ReadAllNoticesEvent()),
+          ..add(const GetAllNoticesEvent()),
         child: const Padding(
           padding: EdgeInsets.all(16),
           child: NoticeListWidget(),

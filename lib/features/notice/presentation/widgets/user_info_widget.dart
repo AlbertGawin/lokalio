@@ -1,18 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lokalio/core/util/create_route.dart';
-import 'package:lokalio/features/auth/auth.dart';
-import 'package:lokalio/features/notice_list/presentation/pages/user_page.dart';
+import 'package:lokalio/features/notice_list/presentation/pages/profile_page.dart';
+import 'package:lokalio/features/profile/domain/entities/profile.dart';
 
-class UserInfoWidget extends StatelessWidget {
-  final User user;
+class ProfileInfoWidget extends StatelessWidget {
+  final Profile profile;
 
-  const UserInfoWidget({super.key, required this.user});
+  const ProfileInfoWidget({super.key, required this.profile});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(createRoute(UserPage(userId: user.id)));
+        Navigator.of(context).push(createRoute(ProfilePage(profile: profile)));
       },
       child: Card(
         child: Container(
@@ -22,11 +23,35 @@ class UserInfoWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Sprzedaje ${user.username}',
+                'Sprzedaje ${profile.username}',
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                 ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Na Lokalio od : ${Timestamp.fromMillisecondsSinceEpoch(int.parse(profile.createdAt) * 1000).toDate()}',
+                style: const TextStyle(fontSize: 12),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  const Icon(Icons.location_on_outlined),
+                  Text(profile.city),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Zobacz profil'.toUpperCase(),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

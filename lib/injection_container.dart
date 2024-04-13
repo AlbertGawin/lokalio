@@ -9,14 +9,20 @@ import 'package:lokalio/features/notice/data/datasources/notice_remote_data_sour
 import 'package:lokalio/features/notice/data/repositories/notice_repository_impl.dart';
 import 'package:lokalio/features/notice/domain/repositories/notice_repository.dart';
 import 'package:lokalio/features/notice/presentation/bloc/notice_bloc.dart';
+import 'package:lokalio/features/notice_list/data/datasources/notice_list_remote_data_source.dart';
+import 'package:lokalio/features/notice_list/data/repositories/notice_list_repository_impl.dart';
+import 'package:lokalio/features/notice_list/domain/repositories/notice_list_repository.dart';
+import 'package:lokalio/features/notice_list/presentation/bloc/notice_list_bloc.dart';
+import 'package:lokalio/features/profile/data/datasources/profile_remote_data_source.dart';
+import 'package:lokalio/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:lokalio/features/profile/domain/repositories/profile_repository.dart';
+import 'package:lokalio/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import 'core/network/network_info.dart';
 import 'features/auth/auth.dart';
 import 'features/create_notice/create_notice.dart';
-import 'features/notice_list/notice_list.dart';
-import 'features/profile/profile.dart';
 
 final sl = GetIt.instance;
 
@@ -68,18 +74,15 @@ void initCreateNotice() {
 
 void initProfile() {
   //Bloc
-  sl.registerFactory(() => ProfileBloc(readProfile: sl()));
-
-  // Use cases
-  sl.registerLazySingleton(() => ReadProfile(repository: sl()));
+  sl.registerFactory(() => ProfileBloc(repository: sl()));
 
   // Repository
   sl.registerLazySingleton<ProfileRepository>(
       () => ProfileRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()));
 
   // Data sources
-  sl.registerLazySingleton<ProfileRemoteDataSource>(() =>
-      ProfileRemoteDataSourceImpl(firebaseFirestore: sl(), firebaseAuth: sl()));
+  sl.registerLazySingleton<ProfileRemoteDataSource>(
+      () => ProfileRemoteDataSourceImpl(firebaseFirestore: sl()));
 }
 
 void initReadNotice() {
@@ -98,10 +101,6 @@ void initReadNotice() {
 void initNoticeList() {
   //Bloc
   sl.registerFactory(() => NoticeListBloc(repository: sl()));
-
-  // Use cases
-  sl.registerLazySingleton(() => GetAllNotices(noticeListRepository: sl()));
-  sl.registerLazySingleton(() => GetUserNotices(noticeListRepository: sl()));
 
   // Repository
   sl.registerLazySingleton<NoticeListRepository>(() =>

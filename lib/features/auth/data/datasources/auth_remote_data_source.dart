@@ -51,7 +51,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           email: user.email ?? '',
           phoneNumber: user.phoneNumber ?? '',
           city: '',
-          createdAt: Timestamp.now(),
+          createdAt: Timestamp.now().seconds.toString(),
           imageUrl: user.photoURL,
         );
 
