@@ -152,15 +152,15 @@ class _NoticeWidgetState extends State<NoticeWidget> {
         }
         return Positioned(
           top: 225,
-          right: 0,
+          right: 6,
           child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 shape: const CircleBorder(),
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(12),
               ),
-              child: const Icon(Icons.favorite_outline, size: 20)),
+              child: const Icon(Icons.favorite_outline, size: 24)),
         );
       },
     );

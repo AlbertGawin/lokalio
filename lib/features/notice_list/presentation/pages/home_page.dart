@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lokalio/core/util/create_route.dart';
-import 'package:lokalio/features/create_notice/create_notice.dart';
+import 'package:lokalio/features/create_notice/presentation/pages/create_notice_page.dart';
 import 'package:lokalio/features/notice_list/domain/repositories/notice_list_repository.dart';
 import 'package:lokalio/features/notice_list/presentation/bloc/notice_list_bloc.dart';
 import 'package:lokalio/features/notice_list/presentation/widgets/notice_list_widget.dart';

@@ -37,8 +37,11 @@ class ProfileInfoWidget extends StatelessWidget {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  const Icon(Icons.location_on_outlined),
-                  Text(profile.city),
+                  Icon(
+                    Icons.location_on_outlined,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  Text(profile.city, style: const TextStyle(fontSize: 14)),
                 ],
               ),
               const SizedBox(height: 8),
@@ -49,6 +52,7 @@ class ProfileInfoWidget extends StatelessWidget {
                     'Zobacz profil'.toUpperCase(),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],

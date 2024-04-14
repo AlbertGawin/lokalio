@@ -1,25 +1,30 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:lokalio/core/error/failures.dart';
-import 'package:lokalio/features/create_notice/domain/usecases/create_notice.dart';
+import 'package:formz/formz.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'package:lokalio/features/create_notice/domain/repositories/create_notice_repository.dart';
+import 'package:lokalio/features/create_notice/presentation/src/description.dart';
+import 'package:lokalio/features/create_notice/presentation/src/title.dart';
 import 'package:lokalio/features/notice/domain/entities/notice_details.dart';
 
 part 'create_notice_event.dart';
 part 'create_notice_state.dart';
 
 class CreateNoticeBloc extends Bloc<CreateNoticeEvent, CreateNoticeState> {
-  final CreateNotice createNotice;
+  final CreateNoticeRepository _repository;
 
-  CreateNoticeBloc({required this.createNotice})
-      : super(CreateNoticeInitial()) {
+  CreateNoticeBloc({required CreateNoticeRepository repository})
+      : _repository = repository,
+        super(const CreateNoticeState.initial()) {
     on<CreateNoticeEvent>((event, emit) async {
       if (event is CreateNoticeDetailsEvent) {
-        emit(Loading());
-        await createNotice(Params(noticeDetails: event.noticeDetails))
-            .then((isCreated) {
-          isCreated.fold(
-            (failure) => emit(Error(message: failureMessages[failure.type]!)),
-            (isCreated) => emit(Done()),
+        await _repository
+            .createNotice(noticeDetails: event.noticeDetails)
+            .then((chooser) {
+          chooser.fold(
+            (failure) => emit(const CreateNoticeState.failure()),
+            (_) => emit(const CreateNoticeState.success()),
           );
         });
       }

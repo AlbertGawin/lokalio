@@ -10,9 +10,9 @@ import 'package:lokalio/features/auth/src/password.dart';
 part 'sign_up_state.dart';
 
 class SignUpCubit extends Cubit<SignUpState> {
-  SignUpCubit(this._authenticationRepository) : super(const SignUpState());
+  final AuthRepository _repository;
 
-  final AuthRepository _authenticationRepository;
+  SignUpCubit(this._repository) : super(const SignUpState());
 
   void emailChanged(String value) {
     final email = Email.dirty(value);
@@ -68,7 +68,7 @@ class SignUpCubit extends Cubit<SignUpState> {
     if (!state.isValid) return;
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     try {
-      await _authenticationRepository.signUp(
+      await _repository.signUp(
         email: state.email.value,
         password: state.password.value,
       );

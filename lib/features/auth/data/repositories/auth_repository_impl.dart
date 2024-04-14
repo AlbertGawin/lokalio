@@ -4,7 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lokalio/core/cache/cache.dart';
-import 'package:lokalio/features/auth/auth.dart';
+import 'package:lokalio/features/auth/domain/entities/user.dart';
+import 'package:lokalio/features/auth/domain/repositories/auth_repository.dart';
 
 class SignUpWithEmailAndPasswordFailure implements Exception {
   const SignUpWithEmailAndPasswordFailure([

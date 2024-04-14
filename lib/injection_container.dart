@@ -5,6 +5,14 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lokalio/core/cache/cache.dart';
+import 'package:lokalio/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:lokalio/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:lokalio/features/auth/domain/repositories/auth_repository.dart';
+import 'package:lokalio/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:lokalio/features/create_notice/data/datasources/create_notice_remote_data_source.dart';
+import 'package:lokalio/features/create_notice/data/repositories/create_notice_repository_impl.dart';
+import 'package:lokalio/features/create_notice/domain/repositories/create_notice_repository.dart';
+import 'package:lokalio/features/create_notice/presentation/bloc/create_notice_bloc.dart';
 import 'package:lokalio/features/notice/data/datasources/notice_remote_data_source.dart';
 import 'package:lokalio/features/notice/data/repositories/notice_repository_impl.dart';
 import 'package:lokalio/features/notice/domain/repositories/notice_repository.dart';
@@ -21,8 +29,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import 'core/network/network_info.dart';
-import 'features/auth/auth.dart';
-import 'features/create_notice/create_notice.dart';
 
 final sl = GetIt.instance;
 
@@ -40,12 +46,6 @@ void initAuth() {
   //Bloc
   sl.registerFactory(() => AuthBloc(repository: sl()));
 
-  // Use cases
-  sl.registerLazySingleton(() => SignIn(authRepository: sl()));
-  sl.registerLazySingleton(() => SignInAnonymously(authRepository: sl()));
-  sl.registerLazySingleton(() => SignUp(authRepository: sl()));
-  sl.registerLazySingleton(() => SignOut(authRepository: sl()));
-
   // Repository
   sl.registerLazySingleton<AuthRepository>(() =>
       AuthRepositoryImpl(cache: sl(), firebaseAuth: sl(), googleSignIn: sl()));
@@ -57,10 +57,7 @@ void initAuth() {
 
 void initCreateNotice() {
   //Bloc
-  sl.registerFactory(() => CreateNoticeBloc(createNotice: sl()));
-
-  // Use cases
-  sl.registerLazySingleton(() => CreateNotice(repository: sl()));
+  sl.registerFactory(() => CreateNoticeBloc(repository: sl()));
 
   // Repository
   sl.registerLazySingleton<CreateNoticeRepository>(() =>

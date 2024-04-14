@@ -9,7 +9,6 @@ import 'package:lokalio/features/notice/domain/repositories/notice_repository.da
 
 class NoticeRepositoryImpl implements NoticeRepository {
   final NoticeRemoteDataSource remoteDataSource;
-
   final NetworkInfo networkInfo;
 
   const NoticeRepositoryImpl({

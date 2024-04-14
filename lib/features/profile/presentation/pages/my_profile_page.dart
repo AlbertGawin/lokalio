@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lokalio/features/auth/auth.dart';
+import 'package:lokalio/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lokalio/features/profile/domain/repositories/profile_repository.dart';
 import 'package:lokalio/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:lokalio/features/profile/presentation/widgets/my_profile_widget.dart';

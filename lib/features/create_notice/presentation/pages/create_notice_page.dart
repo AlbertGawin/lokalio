@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
+import 'package:lokalio/features/create_notice/domain/repositories/create_notice_repository.dart';
 import 'package:lokalio/features/create_notice/presentation/bloc/create_notice_bloc.dart';
+import 'package:lokalio/features/create_notice/presentation/cubit/create_notice_cubit.dart';
 import 'package:lokalio/features/create_notice/presentation/widgets/create_notice_widget.dart';
 import 'package:lokalio/injection_container.dart';
 
@@ -15,26 +18,26 @@ class CreateNoticePage extends StatelessWidget {
         appBar: AppBar(
           title: const Text("Dodaj ogłoszenie"),
         ),
-        body: _buildBody(context),
-      ),
-    );
-  }
-
-  BlocProvider<CreateNoticeBloc> _buildBody(BuildContext context) {
-    return BlocProvider(
-      create: (_) => sl<CreateNoticeBloc>(),
-      child: BlocBuilder<CreateNoticeBloc, CreateNoticeState>(
-        builder: (context, state) {
-          if (state is CreateNoticeInitial || state is Loading) {
-            return const CreateNoticeWidget();
-          } else if (state is Done) {
-            return const Center(child: Text('Done'));
-          } else if (state is Error) {
-            return Center(child: Text(state.message));
-          } else {
-            return const Center(child: Text('Something went wrong'));
-          }
-        },
+        body: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) =>
+                  CreateNoticeBloc(repository: sl<CreateNoticeRepository>()),
+            ),
+            BlocProvider(create: (context) => CreateNoticeCubit()),
+          ],
+          child: BlocBuilder<CreateNoticeBloc, CreateNoticeState>(
+            builder: (context, state) {
+              if (state.status.isInProgress) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return const CreateNoticeWidget();
+              }
+            },
+          ),
+        ),
       ),
     );
   }
