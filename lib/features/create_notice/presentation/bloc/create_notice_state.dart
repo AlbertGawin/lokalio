@@ -4,9 +4,9 @@ final class CreateNoticeState extends Equatable {
   final List<String> imageUrls;
   final Title title;
   final Description description;
-  final int category;
-  final int moneyAmount;
-  final int peopleAmount;
+  final Category category;
+  final MoneyAmount moneyAmount;
+  final PeopleAmount peopleAmount;
   final LatLng location;
   final FormzSubmissionStatus status;
   final bool isValid;
@@ -16,9 +16,9 @@ final class CreateNoticeState extends Equatable {
     this.imageUrls = const [],
     this.title = const Title.pure(),
     this.description = const Description.pure(),
-    this.category = -1,
-    this.moneyAmount = -1,
-    this.peopleAmount = 1,
+    this.category = const Category.pure(),
+    this.moneyAmount = const MoneyAmount.pure(),
+    this.peopleAmount = const PeopleAmount.pure(),
     this.location = const LatLng(0, 0),
     this.status = FormzSubmissionStatus.initial,
     this.isValid = false,
@@ -59,9 +59,9 @@ final class CreateNoticeState extends Equatable {
     List<String>? imageUrls,
     Title? title,
     Description? description,
-    int? category,
-    int? moneyAmount,
-    int? peopleAmount,
+    Category? category,
+    MoneyAmount? moneyAmount,
+    PeopleAmount? peopleAmount,
     LatLng? location,
     FormzSubmissionStatus? status,
     bool? isValid,

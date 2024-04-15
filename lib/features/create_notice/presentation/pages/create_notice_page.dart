@@ -17,6 +17,8 @@ class CreateNoticePage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Dodaj ogłoszenie"),
+          elevation: 1.0,
+          shadowColor: Colors.grey.shade100,
         ),
         body: MultiBlocProvider(
           providers: [

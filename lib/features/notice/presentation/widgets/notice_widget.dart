@@ -190,7 +190,7 @@ class _NoticeWidgetState extends State<NoticeWidget> {
             backgroundColor: color,
             foregroundColor: isWhite ? Colors.black : Colors.white,
             shadowColor: isWhite ? Colors.grey.shade100 : null,
-            elevation: isWhite ? 8.0 : 0.0,
+            elevation: isWhite ? 1.0 : 0.0,
             scrolledUnderElevation: isWhite ? 1.0 : 0.0,
           ),
         );
