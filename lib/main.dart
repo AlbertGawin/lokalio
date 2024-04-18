@@ -13,7 +13,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = const AppBlocObserver();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   final authenticationRepository = AuthRepositoryImpl();
   await authenticationRepository.user.first;

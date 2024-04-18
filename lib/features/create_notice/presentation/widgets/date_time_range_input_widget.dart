@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lokalio/features/create_notice/presentation/widgets/card_widget.dart';
 
 class DateTimeRangeInputWidget extends StatefulWidget {
   const DateTimeRangeInputWidget({super.key, required this.getDateTimeRange});
@@ -27,43 +26,42 @@ class _DateTimeRangeInputWidgetState extends State<DateTimeRangeInputWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return CardWidget(
-      title: 'Data*',
-      cornerWidget: InkWell(
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        onTap: () => _showDateRangePicker(),
-        child: Text(
-          'WYBIERZ ZAKRES',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.primary,
+    return InkWell(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      onTap: () => _showDateRangePicker(),
+      child: Column(
+        children: [
+          Text(
+            'WYBIERZ ZAKRES',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
-        ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: _buildDateField(
+                  controller: _startDateInput,
+                  labelText: 'Data początkowa',
+                  onTap: () => _updateDateRange(isStart: true),
+                ),
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: _buildDateField(
+                  controller: _endDateInput,
+                  labelText: 'Data końcowa',
+                  onTap: () => _updateDateRange(isStart: false),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
-      content: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: _buildDateField(
-                controller: _startDateInput,
-                labelText: 'Data początkowa',
-                onTap: () => _updateDateRange(isStart: true),
-              ),
-            ),
-            const SizedBox(width: 20),
-            Expanded(
-              child: _buildDateField(
-                controller: _endDateInput,
-                labelText: 'Data końcowa',
-                onTap: () => _updateDateRange(isStart: false),
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 

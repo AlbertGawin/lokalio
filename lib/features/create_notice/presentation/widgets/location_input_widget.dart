@@ -5,7 +5,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lokalio/core/util/api_keys.dart';
 import 'package:lokalio/core/util/create_route.dart';
 import 'package:lokalio/features/create_notice/presentation/pages/map_page.dart';
-import 'package:lokalio/features/create_notice/presentation/widgets/card_widget.dart';
 
 class LocationInputWidget extends StatefulWidget {
   const LocationInputWidget({
@@ -150,24 +149,19 @@ class _LocationInputWidgetState extends State<LocationInputWidget> {
       );
     }
 
-    return CardWidget(
-      title: 'Lokalizacja*',
-      content: [
-        InkWell(
-          onTap: _selectOnMap,
-          child: Container(
-            height: 68,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(4),
-              border: Border.all(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-            child: content,
+    return InkWell(
+      onTap: _selectOnMap,
+      child: Container(
+        height: 68,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
-      ],
+        child: content,
+      ),
     );
   }
 }

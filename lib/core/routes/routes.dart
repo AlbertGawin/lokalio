@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
+import 'package:lokalio/core/navbar/pages/main_page.dart';
 import 'package:lokalio/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:lokalio/features/auth/presentation/pages/signin_page.dart';
-import 'package:lokalio/features/notice_list/presentation/pages/home_page.dart';
 
 List<Page<dynamic>> onGenerateAppViewPages(
   AuthStatus state,
@@ -9,7 +9,7 @@ List<Page<dynamic>> onGenerateAppViewPages(
 ) {
   switch (state) {
     case AuthStatus.authenticated:
-      return [HomePage.page()];
+      return [MainPage.page()];
     case AuthStatus.unauthenticated:
       return [SignInPage.page()];
   }

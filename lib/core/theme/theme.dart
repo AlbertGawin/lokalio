@@ -5,9 +5,7 @@ const _primaryColor = Colors.orange;
 
 final theme = ThemeData(
   textTheme: GoogleFonts.openSansTextTheme(),
-  appBarTheme: const AppBarTheme(surfaceTintColor: Colors.white),
   cardTheme: CardTheme(
-    surfaceTintColor: Colors.white,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
     clipBehavior: Clip.antiAlias,
     margin: EdgeInsets.zero,
@@ -39,9 +37,7 @@ final theme = ThemeData(
   ),
   colorScheme: const ColorScheme.light(
     primary: _primaryColor,
-    secondary: Colors.white,
+    secondary: Colors.orangeAccent,
     background: Colors.white,
-  ).copyWith(
-    background: Color.lerp(_primaryColor, Colors.white, 0.9),
   ),
 );

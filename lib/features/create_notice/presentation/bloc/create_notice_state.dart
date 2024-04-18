@@ -1,7 +1,7 @@
 part of 'create_notice_bloc.dart';
 
 final class CreateNoticeState extends Equatable {
-  final List<String> imageUrls;
+  final Images images;
   final Title title;
   final Description description;
   final Category category;
@@ -13,7 +13,7 @@ final class CreateNoticeState extends Equatable {
   final String? errorMessage;
 
   const CreateNoticeState({
-    this.imageUrls = const [],
+    this.images = const Images.pure(),
     this.title = const Title.pure(),
     this.description = const Description.pure(),
     this.category = const Category.pure(),
@@ -43,7 +43,7 @@ final class CreateNoticeState extends Equatable {
 
   @override
   List<Object?> get props => [
-        imageUrls,
+        images,
         title,
         description,
         category,
@@ -56,7 +56,7 @@ final class CreateNoticeState extends Equatable {
       ];
 
   CreateNoticeState copyWith({
-    List<String>? imageUrls,
+    Images? images,
     Title? title,
     Description? description,
     Category? category,
@@ -68,7 +68,7 @@ final class CreateNoticeState extends Equatable {
     String? errorMessage,
   }) {
     return CreateNoticeState(
-      imageUrls: imageUrls ?? this.imageUrls,
+      images: images ?? this.images,
       title: title ?? this.title,
       description: description ?? this.description,
       category: category ?? this.category,

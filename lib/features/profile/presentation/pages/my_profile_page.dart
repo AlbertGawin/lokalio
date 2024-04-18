@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lokalio/features/auth/domain/repositories/auth_repository.dart';
+import 'package:lokalio/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:lokalio/features/profile/domain/repositories/profile_repository.dart';
 import 'package:lokalio/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:lokalio/features/profile/presentation/widgets/my_profile_widget.dart';
@@ -11,14 +11,13 @@ class MyProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userId = context.select((AuthBloc bloc) => bloc.state.user.id);
+
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(toolbarHeight: 0),
       body: BlocProvider(
-        create: (context) {
-          final userId = sl<AuthRepository>().currentUser.id;
-          return ProfileBloc(repository: sl<ProfileRepository>())
-            ..add(GetProfileEvent(userId: userId));
-        },
+        create: (context) => ProfileBloc(repository: sl<ProfileRepository>())
+          ..add(GetProfileEvent(userId: userId)),
         child: BlocBuilder<ProfileBloc, ProfileState>(
           builder: (context, state) {
             switch (state.status) {

@@ -15,8 +15,8 @@ class SignInPage extends StatelessWidget {
       appBar: AppBar(title: const Text('Login')),
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: BlocProvider(
-          create: (_) => SignInCubit(context.read<AuthRepository>()),
+        child: BlocProvider<SignInCubit>.value(
+          value: SignInCubit(context.read<AuthRepository>()),
           child: const SignInForm(),
         ),
       ),

@@ -10,7 +10,7 @@ class FavoritePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Ulubione')),
+      appBar: AppBar(title: const Text('Obserwowane')),
       body: BlocProvider(
         create: (_) {
           final bloc = sl<NoticeListBloc>();

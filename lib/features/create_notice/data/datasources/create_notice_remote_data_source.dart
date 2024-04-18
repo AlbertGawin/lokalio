@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:lokalio/core/error/exceptions.dart';
+import 'package:lokalio/core/util/compress_image.dart';
 import 'package:lokalio/features/notice/data/models/notice_details.dart';
 
 abstract class CreateNoticeRemoteDataSource {
@@ -23,9 +24,14 @@ class CreateNoticeRemoteDataSourceImpl implements CreateNoticeRemoteDataSource {
     final noticeRef = firebaseFirestore.collection('notice').doc();
     noticeDetails = noticeDetails.copyWith(id: noticeRef.id);
 
-    noticeDetails = await _uploadImages(
+    await _uploadThumbnail(
+      noticeId: noticeDetails.id,
+      thumbnailPath: noticeDetails.imagesUrl[0],
+    );
+
+    await _uploadImages(
+      noticeId: noticeDetails.id,
       images: noticeDetails.imagesUrl,
-      noticeDetails: noticeDetails,
     );
 
     await noticeRef.set(noticeDetails.toNoticeJson()).then(
@@ -37,25 +43,34 @@ class CreateNoticeRemoteDataSourceImpl implements CreateNoticeRemoteDataSource {
     ).onError((error, stackTrace) => throw ServerException());
   }
 
-  Future<NoticeDetailsModel> _uploadImages({
+  Future<void> _uploadImages({
+    required String noticeId,
     required List<String> images,
-    required NoticeDetailsModel noticeDetails,
   }) async {
-    final List<String> imagesUrl = [];
-    final storageRef = firebaseStorage.ref();
+    for (var i = 0; i < images.length; i++) {
+      final imageRef =
+          firebaseStorage.ref().child('noticeImages/$noticeId/$i.webp');
+      final compressedImage = await compressImage(path: images[i]);
 
-    int index = 0;
-    for (final image in images) {
-      final uploadTask = storageRef
-          .child('noticeImages/${noticeDetails.id}/$index.webp')
-          .putFile(File(image));
-      await uploadTask.whenComplete(() async {
-        final imageUrl = await uploadTask.snapshot.ref.getDownloadURL();
-        imagesUrl.add(imageUrl);
-        index++;
-      }).onError((error, stackTrace) => throw ServerException());
+      await imageRef
+          .putFile(File(compressedImage))
+          .onError((error, stackTrace) => throw ServerException());
     }
+  }
 
-    return noticeDetails.copyWith(imagesUrl: imagesUrl);
+  Future<void> _uploadThumbnail({
+    required String noticeId,
+    required String thumbnailPath,
+  }) async {
+    final thumbnailRef =
+        firebaseStorage.ref().child('noticeThumbnail/$noticeId.webp');
+    final compressedImage = await compressImage(
+      path: thumbnailPath,
+      isThumbnail: true,
+    );
+
+    await thumbnailRef
+        .putFile(File(compressedImage))
+        .onError((error, stackTrace) => throw ServerException());
   }
 }

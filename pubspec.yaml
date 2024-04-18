@@ -70,6 +70,7 @@ dependencies:
   flow_builder: ^0.1.0
   formz: ^0.7.0
   font_awesome_flutter: ^10.7.0
+  flutter_image_compress: ^2.2.0
 
 dev_dependencies:
   flutter_test:
