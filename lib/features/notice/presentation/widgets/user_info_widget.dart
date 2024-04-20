@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:lokalio/core/util/create_route.dart';
-import 'package:lokalio/features/notice_list/presentation/pages/profile_page.dart';
 import 'package:lokalio/features/profile/domain/entities/profile.dart';
+import 'package:lokalio/features/notice_list/presentation/pages/profile_page.dart';
 
 class ProfileInfoWidget extends StatelessWidget {
   final Profile profile;

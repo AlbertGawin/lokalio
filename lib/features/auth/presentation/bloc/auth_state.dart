@@ -3,23 +3,26 @@ part of 'auth_bloc.dart';
 enum AuthStatus {
   authenticated,
   unauthenticated,
+  missingData,
 }
 
 final class AuthState extends Equatable {
   final AuthStatus status;
-  final User user;
+  final Profile profile;
 
   const AuthState._({
     required this.status,
-    this.user = User.empty,
+    this.profile = Profile.empty,
   });
 
-  const AuthState.authenticated({required User user})
-      : this._(status: AuthStatus.authenticated, user: user);
+  const AuthState.authenticated({required Profile profile})
+      : this._(status: AuthStatus.authenticated, profile: profile);
 
   const AuthState.unauthenticated()
       : this._(status: AuthStatus.unauthenticated);
 
+  const AuthState.missingData() : this._(status: AuthStatus.missingData);
+
   @override
-  List<Object> get props => [status, user];
+  List<Object> get props => [status, profile];
 }

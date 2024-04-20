@@ -1,4 +1,4 @@
-import 'package:lokalio/features/profile/domain/entities/profile.dart';
+import '../../domain/entities/profile.dart';
 
 class ProfileModel extends Profile {
   const ProfileModel({
@@ -18,7 +18,7 @@ class ProfileModel extends Profile {
       email: json['email'] as String,
       phoneNumber: json['phoneNumber'] as String,
       city: json['city'] as String,
-      createdAt: json['createdAt'],
+      createdAt: json['createdAt'] as String,
       imageUrl: json['imageUrl'] as String?,
     );
   }

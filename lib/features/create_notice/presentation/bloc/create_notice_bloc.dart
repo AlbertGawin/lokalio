@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -23,6 +24,7 @@ class CreateNoticeBloc extends Bloc<CreateNoticeEvent, CreateNoticeState> {
         super(const CreateNoticeState.initial()) {
     on<CreateNoticeEvent>((event, emit) async {
       if (event is CreateNoticeDetailsEvent) {
+        emit(const CreateNoticeState.loading());
         await _repository
             .createNotice(noticeDetails: event.noticeDetails)
             .then((chooser) {

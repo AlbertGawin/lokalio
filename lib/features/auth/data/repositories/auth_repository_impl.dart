@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lokalio/core/cache/cache.dart';
-import 'package:lokalio/features/auth/domain/entities/user.dart';
+import 'package:lokalio/features/profile/domain/entities/profile.dart';
 import 'package:lokalio/features/auth/domain/repositories/auth_repository.dart';
 
 class SignUpWithEmailAndPasswordFailure implements Exception {
@@ -155,20 +155,21 @@ class AuthRepositoryImpl implements AuthRepository {
   final GoogleSignIn _googleSignIn;
 
   @visibleForTesting
-  static const userCacheKey = '__user_cache_key__';
+  static const profileCacheKey = '__profile_cache_key__';
 
   @override
-  Stream<User> get user {
+  Stream<Profile> get profile {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
-      final user = firebaseUser == null ? User.empty : firebaseUser.toUser;
-      _cache.write(key: userCacheKey, value: user);
-      return user;
+      final profile =
+          firebaseUser == null ? Profile.empty : firebaseUser.toProfile;
+      _cache.write(key: profileCacheKey, value: profile);
+      return profile;
     });
   }
 
   @override
-  User get currentUser {
-    return _cache.read<User>(key: userCacheKey) ?? User.empty;
+  Profile get currentProfile {
+    return _cache.read<Profile>(key: profileCacheKey) ?? Profile.empty;
   }
 
   @override
@@ -247,12 +248,15 @@ class AuthRepositoryImpl implements AuthRepository {
 }
 
 extension on firebase_auth.User {
-  User get toUser {
-    return User(
+  Profile get toProfile {
+    return Profile(
       id: uid,
-      email: email,
-      username: displayName,
-      photoUrl: photoURL,
+      username: displayName ?? '',
+      email: email ?? '',
+      phoneNumber: phoneNumber ?? '',
+      city: '',
+      createdAt: metadata.creationTime.toString(),
+      imageUrl: photoURL,
     );
   }
 }

@@ -9,7 +9,7 @@ class Images extends FormzInput<List<String>, ImagesValidationError> {
 
   @override
   ImagesValidationError? validator(List<String>? value) {
-    return value != null && value.length <= 4
+    return value != null && value.isNotEmpty && value.length <= 4
         ? null
         : ImagesValidationError.invalid;
   }

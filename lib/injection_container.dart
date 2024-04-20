@@ -66,7 +66,7 @@ void initCreateNotice() {
   // Data sources
   sl.registerLazySingleton<CreateNoticeRemoteDataSource>(() =>
       CreateNoticeRemoteDataSourceImpl(
-          firebaseFirestore: sl(), firebaseStorage: sl()));
+          firebaseFirestore: sl(), firebaseStorage: sl(), firebaseAuth: sl()));
 }
 
 void initProfile() {

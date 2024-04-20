@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lokalio/features/profile/domain/entities/profile.dart';
 import 'package:lokalio/features/notice/domain/entities/notice_details.dart';
 import 'package:lokalio/features/notice/domain/repositories/notice_repository.dart';
 import 'package:lokalio/features/notice/presentation/bloc/notice_bloc.dart';
@@ -8,7 +9,6 @@ import 'package:lokalio/features/notice/presentation/widgets/location_info_widge
 import 'package:lokalio/features/notice/presentation/widgets/notice_description_widget.dart';
 import 'package:lokalio/features/notice/presentation/widgets/notice_info_widget.dart';
 import 'package:lokalio/features/notice/presentation/widgets/user_info_widget.dart';
-import 'package:lokalio/features/profile/domain/entities/profile.dart';
 import 'package:lokalio/features/profile/domain/repositories/profile_repository.dart';
 import 'package:lokalio/features/profile/presentation/bloc/profile_bloc.dart';
 

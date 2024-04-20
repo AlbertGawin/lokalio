@@ -9,7 +9,7 @@ final class SignOutEvent extends AuthEvent {
 }
 
 final class _AuthUserChanged extends AuthEvent {
-  const _AuthUserChanged({required this.user});
+  const _AuthUserChanged({required this.profile});
 
-  final User user;
+  final Profile profile;
 }

@@ -8,6 +8,7 @@ import 'package:lokalio/features/create_notice/presentation/widgets/desc_input_w
 import 'package:lokalio/features/create_notice/presentation/widgets/images_input_widget.dart';
 import 'package:lokalio/features/create_notice/presentation/widgets/money_amount_input_widget.dart';
 import 'package:lokalio/features/create_notice/presentation/widgets/people_amount_input_widget.dart';
+import 'package:lokalio/features/create_notice/presentation/widgets/submit_button_widget.dart';
 import 'package:lokalio/features/create_notice/presentation/widgets/title_input_widget.dart';
 
 class CreateNoticeWidget extends StatelessWidget {
@@ -19,17 +20,9 @@ class CreateNoticeWidget extends StatelessWidget {
       listener: (context, state) {
         if (state.status.isSuccess) {
           Navigator.of(context).pop();
-        } else if (state.status.isFailure) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage ?? 'Create Notice Failure'),
-              ),
-            );
         }
       },
-      child: const Padding(
+      child: const SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -45,6 +38,8 @@ class CreateNoticeWidget extends StatelessWidget {
             MoneyAmountInput(),
             SizedBox(height: 8),
             PeopleAmountInput(),
+            SizedBox(height: 8),
+            SubmitButtonWidget(),
           ],
         ),
       ),

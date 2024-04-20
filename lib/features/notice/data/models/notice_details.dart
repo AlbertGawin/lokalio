@@ -61,7 +61,7 @@ class NoticeDetailsModel extends NoticeDetails {
     };
   }
 
-  Map<String, dynamic> toNoticeJson() {
+  Map<String, dynamic> toNoticeJson({required String thumbnailUrl}) {
     return {
       'id': id,
       'userId': userId,
@@ -69,7 +69,7 @@ class NoticeDetailsModel extends NoticeDetails {
       'category': category,
       'moneyAmount': moneyAmount,
       'location': location.toJson(),
-      'thumbnailUrl': imagesUrl.first,
+      'thumbnailUrl': thumbnailUrl,
     };
   }
 

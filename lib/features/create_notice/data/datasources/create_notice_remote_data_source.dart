@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/core/util/compress_image.dart';
@@ -13,28 +14,40 @@ abstract class CreateNoticeRemoteDataSource {
 class CreateNoticeRemoteDataSourceImpl implements CreateNoticeRemoteDataSource {
   final FirebaseFirestore firebaseFirestore;
   final FirebaseStorage firebaseStorage;
+  final FirebaseAuth firebaseAuth;
 
   const CreateNoticeRemoteDataSourceImpl({
     required this.firebaseFirestore,
     required this.firebaseStorage,
+    required this.firebaseAuth,
   });
 
   @override
   Future<void> createNotice({required NoticeDetailsModel noticeDetails}) async {
-    final noticeRef = firebaseFirestore.collection('notice').doc();
-    noticeDetails = noticeDetails.copyWith(id: noticeRef.id);
+    final user = firebaseAuth.currentUser;
 
-    await _uploadThumbnail(
+    if (user == null) {
+      throw FirebaseAuthException(message: 'User not found', code: '');
+    }
+
+    final noticeRef = firebaseFirestore.collection('notice').doc();
+    noticeDetails = noticeDetails.copyWith(id: noticeRef.id, userId: user.uid);
+
+    final String thumbnailUrl = await _uploadThumbnail(
       noticeId: noticeDetails.id,
       thumbnailPath: noticeDetails.imagesUrl[0],
     );
 
-    await _uploadImages(
+    final List<String> imagesUrl = await _uploadImages(
       noticeId: noticeDetails.id,
       images: noticeDetails.imagesUrl,
     );
 
-    await noticeRef.set(noticeDetails.toNoticeJson()).then(
+    noticeDetails = noticeDetails.copyWith(imagesUrl: imagesUrl);
+
+    await noticeRef
+        .set(noticeDetails.toNoticeJson(thumbnailUrl: thumbnailUrl))
+        .then(
       (_) async {
         final noticeDetailsRef =
             firebaseFirestore.collection('noticeDetails').doc(noticeRef.id);
@@ -43,22 +56,7 @@ class CreateNoticeRemoteDataSourceImpl implements CreateNoticeRemoteDataSource {
     ).onError((error, stackTrace) => throw ServerException());
   }
 
-  Future<void> _uploadImages({
-    required String noticeId,
-    required List<String> images,
-  }) async {
-    for (var i = 0; i < images.length; i++) {
-      final imageRef =
-          firebaseStorage.ref().child('noticeImages/$noticeId/$i.webp');
-      final compressedImage = await compressImage(path: images[i]);
-
-      await imageRef
-          .putFile(File(compressedImage))
-          .onError((error, stackTrace) => throw ServerException());
-    }
-  }
-
-  Future<void> _uploadThumbnail({
+  Future<String> _uploadThumbnail({
     required String noticeId,
     required String thumbnailPath,
   }) async {
@@ -69,8 +67,28 @@ class CreateNoticeRemoteDataSourceImpl implements CreateNoticeRemoteDataSource {
       isThumbnail: true,
     );
 
-    await thumbnailRef
+    return await thumbnailRef
         .putFile(File(compressedImage))
+        .then((_) => thumbnailRef.getDownloadURL())
         .onError((error, stackTrace) => throw ServerException());
+  }
+
+  Future<List<String>> _uploadImages({
+    required String noticeId,
+    required List<String> images,
+  }) async {
+    List<String> imagesUrl = [];
+
+    for (var i = 0; i < images.length; i++) {
+      final imageRef =
+          firebaseStorage.ref().child('noticeImages/$noticeId/$i.webp');
+      final compressedImage = await compressImage(path: images[i]);
+
+      await imageRef.putFile(File(compressedImage)).then((_) async {
+        imagesUrl.add(await imageRef.getDownloadURL());
+      }).onError((error, stackTrace) => throw ServerException());
+    }
+
+    return imagesUrl;
   }
 }

@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
       body: BlocProvider(
         create: (_) => NoticeListBloc(repository: sl<NoticeListRepository>())
           ..add(const GetAllNoticesEvent()),
-        child: const Padding(
+        child: const SingleChildScrollView(
           padding: EdgeInsets.all(16),
           child: NoticeListWidget(),
         ),

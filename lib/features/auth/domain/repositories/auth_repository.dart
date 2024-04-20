@@ -1,8 +1,8 @@
-import '../entities/user.dart';
+import '../../../profile/domain/entities/profile.dart';
 
 abstract class AuthRepository {
-  Stream<User> get user;
-  User get currentUser;
+  Stream<Profile> get profile;
+  Profile get currentProfile;
 
   Future<void> signUp({required String email, required String password});
   Future<void> signInWithGoogle();

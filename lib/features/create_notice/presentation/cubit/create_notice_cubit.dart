@@ -63,47 +63,123 @@ class CreateNoticeCubit extends Cubit<CreateNoticeState> {
     if (images.value.length > 4) {
       return;
     }
-    emit(state.copyWith(images: images, isValid: Formz.validate([images])));
+
+    emit(state.copyWith(
+        images: images,
+        isValid: Formz.validate([
+          images,
+          state.title,
+          state.description,
+          state.category,
+          state.moneyAmount,
+          state.peopleAmount
+        ])));
   }
 
   void _updateImage(int index, String value) {
     final images = Images.dirty(List<String>.from(state.images.value)
       ..replaceRange(index, index + 1, [value]));
-    emit(state.copyWith(images: images, isValid: Formz.validate([images])));
+
+    emit(state.copyWith(
+        images: images,
+        isValid: Formz.validate([
+          images,
+          state.title,
+          state.description,
+          state.category,
+          state.moneyAmount,
+          state.peopleAmount
+        ])));
   }
 
   void removeImage(int index) {
     final images =
         Images.dirty(List<String>.from(state.images.value)..removeAt(index));
-    emit(state.copyWith(images: images, isValid: Formz.validate([images])));
+
+    emit(state.copyWith(
+        images: images,
+        isValid: Formz.validate([
+          images,
+          state.title,
+          state.description,
+          state.category,
+          state.moneyAmount,
+          state.peopleAmount
+        ])));
   }
 
   void titleChanged(String value) {
     final title = Title.dirty(value);
-    emit(state.copyWith(title: title, isValid: Formz.validate([title])));
+
+    emit(state.copyWith(
+        title: title,
+        isValid: Formz.validate([
+          state.images,
+          title,
+          state.description,
+          state.category,
+          state.moneyAmount,
+          state.peopleAmount
+        ])));
   }
 
   void descriptionChanged(String value) {
     final description = Description.dirty(value);
+
     emit(state.copyWith(
-        description: description, isValid: Formz.validate([description])));
+        description: description,
+        isValid: Formz.validate([
+          state.images,
+          state.title,
+          description,
+          state.category,
+          state.moneyAmount,
+          state.peopleAmount
+        ])));
   }
 
   void categoryChanged(int value) {
     final category = Category.dirty(value);
+
     emit(state.copyWith(
-        category: category, isValid: Formz.validate([category])));
+        category: category,
+        isValid: Formz.validate([
+          state.images,
+          state.title,
+          state.description,
+          category,
+          state.moneyAmount,
+          state.peopleAmount
+        ])));
   }
 
   void moneyAmountChanged(String value) {
     final moneyAmount = MoneyAmount.dirty(value);
+
     emit(state.copyWith(
-        moneyAmount: moneyAmount, isValid: Formz.validate([moneyAmount])));
+        moneyAmount: moneyAmount,
+        isValid: Formz.validate([
+          state.images,
+          state.title,
+          state.description,
+          state.category,
+          moneyAmount,
+          state.peopleAmount
+        ])));
   }
 
   void peopleAmountChanged(String value) {
     final peopleAmount = PeopleAmount.dirty(value);
+
     emit(state.copyWith(
-        peopleAmount: peopleAmount, isValid: Formz.validate([peopleAmount])));
+        peopleAmount: peopleAmount,
+        isValid: Formz.validate([
+          state.images,
+          state.title,
+          state.description,
+          state.category,
+          state.moneyAmount,
+          peopleAmount
+        ])));
   }
 }

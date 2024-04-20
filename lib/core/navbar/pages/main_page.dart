@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lokalio/core/navbar/bloc/main_page_bloc.dart';
 import 'package:lokalio/features/notice_list/presentation/pages/home_page.dart';
+import 'package:lokalio/features/notice_list/presentation/pages/my_notices_page.dart';
 import 'package:lokalio/features/profile/presentation/pages/my_profile_page.dart';
 
 class MainPage extends StatelessWidget {
@@ -67,7 +68,7 @@ class MainPage extends StatelessWidget {
   static const List<Widget> bottomNavScreen = <Widget>[
     HomePage(),
     Text('Index 1: Category'),
-    Text('Index 2: Search'),
+    MyNoticesPage(),
     Text('Index 3: Favourite'),
     MyProfilePage(),
   ];

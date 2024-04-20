@@ -2,8 +2,8 @@ import 'package:fpdart/fpdart.dart';
 import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/core/error/failures.dart';
 import 'package:lokalio/core/network/network_info.dart';
-import 'package:lokalio/features/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:lokalio/features/profile/data/models/profile.dart';
+import 'package:lokalio/features/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:lokalio/features/profile/domain/repositories/profile_repository.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {

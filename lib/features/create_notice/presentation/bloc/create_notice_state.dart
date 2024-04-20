@@ -28,18 +28,26 @@ final class CreateNoticeState extends Equatable {
   const CreateNoticeState.initial() : this();
 
   const CreateNoticeState.loading()
-      : this(
-          status: FormzSubmissionStatus.inProgress,
-        );
+      : this(status: FormzSubmissionStatus.inProgress);
 
   const CreateNoticeState.success()
-      : this(
-          status: FormzSubmissionStatus.success,
-          isValid: true,
-        );
+      : this(status: FormzSubmissionStatus.success, isValid: true);
 
   const CreateNoticeState.failure({String? errorMessage})
       : this(errorMessage: errorMessage);
+
+  NoticeDetails get noticeDetails => NoticeDetails(
+        id: '',
+        userId: '',
+        title: title.value,
+        category: category.value,
+        moneyAmount: int.parse(moneyAmount.value),
+        location: location,
+        description: description.value,
+        peopleAmount: int.parse(peopleAmount.value),
+        imagesUrl: images.value,
+        createdAt: Timestamp.now().millisecondsSinceEpoch.toString(),
+      );
 
   @override
   List<Object?> get props => [
