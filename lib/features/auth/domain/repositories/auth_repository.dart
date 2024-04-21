@@ -1,4 +1,6 @@
-import '../../../profile/domain/entities/profile.dart';
+import 'dart:async';
+
+import 'package:lokalio/features/profile/domain/entities/profile.dart';
 
 abstract class AuthRepository {
   Stream<Profile> get profile;
@@ -10,4 +12,10 @@ abstract class AuthRepository {
       {required String email, required String password});
   Future<void> signInAnonymously();
   Future<void> signOut();
+
+  Future<void> addProfileData({
+    required String username,
+    required String phoneNumber,
+    required String city,
+  });
 }

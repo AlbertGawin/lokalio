@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
-import 'package:lokalio/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lokalio/features/auth/src/email.dart';
 import 'package:lokalio/features/auth/src/password.dart';

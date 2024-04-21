@@ -70,3 +70,7 @@ class EmailAlreadyInUseFailure extends Failure {
   const EmailAlreadyInUseFailure()
       : super(type: FailureType.emailAlreadyInUseFailure);
 }
+
+class AddProfileDataFailure extends Failure {
+  const AddProfileDataFailure() : super(type: FailureType.firebaseFailure);
+}

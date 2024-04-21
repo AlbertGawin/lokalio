@@ -6,12 +6,12 @@ import 'package:image_picker_android/image_picker_android.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 import 'package:lokalio/core/util/compress_image.dart';
 import 'package:lokalio/features/create_notice/presentation/bloc/create_notice_bloc.dart';
-import 'package:lokalio/features/create_notice/presentation/src/category.dart';
-import 'package:lokalio/features/create_notice/presentation/src/description.dart';
-import 'package:lokalio/features/create_notice/presentation/src/images.dart';
-import 'package:lokalio/features/create_notice/presentation/src/money_amount.dart';
-import 'package:lokalio/features/create_notice/presentation/src/people_amount.dart';
-import 'package:lokalio/features/create_notice/presentation/src/title.dart';
+import 'package:lokalio/features/create_notice/src/category.dart';
+import 'package:lokalio/features/create_notice/src/description.dart';
+import 'package:lokalio/features/create_notice/src/images.dart';
+import 'package:lokalio/features/create_notice/src/money_amount.dart';
+import 'package:lokalio/features/create_notice/src/people_amount.dart';
+import 'package:lokalio/features/create_notice/src/title.dart';
 
 class CreateNoticeCubit extends Cubit<CreateNoticeState> {
   CreateNoticeCubit() : super(const CreateNoticeState());

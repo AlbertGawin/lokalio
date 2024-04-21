@@ -30,7 +30,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
 
     if (event.profile.username.isEmpty ||
-        event.profile.email.isEmpty ||
         event.profile.phoneNumber.isEmpty ||
         event.profile.city.isEmpty) {
       emit(const AuthState.missingData());

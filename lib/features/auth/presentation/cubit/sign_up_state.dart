@@ -1,6 +1,13 @@
 part of 'sign_up_cubit.dart';
 
 final class SignUpState extends Equatable {
+  final Email email;
+  final Password password;
+  final ConfirmedPassword confirmedPassword;
+  final FormzSubmissionStatus status;
+  final bool isValid;
+  final String? errorMessage;
+
   const SignUpState({
     this.email = const Email.pure(),
     this.password = const Password.pure(),
@@ -9,13 +16,6 @@ final class SignUpState extends Equatable {
     this.isValid = false,
     this.errorMessage,
   });
-
-  final Email email;
-  final Password password;
-  final ConfirmedPassword confirmedPassword;
-  final FormzSubmissionStatus status;
-  final bool isValid;
-  final String? errorMessage;
 
   @override
   List<Object?> get props => [

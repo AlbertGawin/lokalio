@@ -1,26 +1,93 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:flutter/widgets.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:lokalio/core/cache/cache.dart';
 import 'package:lokalio/core/error/exceptions.dart';
 import 'package:lokalio/features/profile/data/models/profile.dart';
+import 'package:lokalio/features/profile/domain/entities/profile.dart';
 
 abstract class AuthRemoteDataSource {
-  Future<void> signIn({required AuthCredential credential});
+  Stream<Profile> get profile;
+
+  Future<void> signInWithEmailAndPassword(
+      {required String email, required String password});
+  Future<void> signInWithGoogle();
   Future<void> signInAnonymously();
   Future<void> signUp({required String email, required String password});
   Future<void> signOut();
+  Future<void> addProfileData({
+    required String username,
+    required String phoneNumber,
+    required String city,
+  });
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final FirebaseAuth firebaseAuth;
   final FirebaseFirestore firebaseFirestore;
+  final GoogleSignIn googleSignIn;
+  final CacheClient cache;
 
   const AuthRemoteDataSourceImpl({
     required this.firebaseAuth,
     required this.firebaseFirestore,
+    required this.googleSignIn,
+    required this.cache,
   });
 
+  @visibleForTesting
+  static const profileCacheKey = '__profile_cache_key__';
+
   @override
-  Future<void> signIn({required AuthCredential credential}) async {
+  Stream<Profile> get profile {
+    return firebaseAuth.userChanges().asyncMap((firebaseUser) async {
+      if (firebaseUser == null) {
+        return Profile.empty;
+      } else {
+        final doc = await firebaseFirestore
+            .collection('profile')
+            .doc(firebaseUser.uid)
+            .get();
+
+        if (doc.exists) {
+          final profile = ProfileModel.fromJson(json: doc.data()!);
+          cache.write<Profile>(key: profileCacheKey, value: profile);
+          return profile;
+        } else {
+          return Profile.empty;
+        }
+      }
+    });
+  }
+
+  @override
+  Future<void> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      throw FirebaseAuthException(message: e.message, code: e.code);
+    }
+  }
+
+  @override
+  Future<void> signInWithGoogle() async {
+    late final AuthCredential credential;
+
+    final googleUser = await googleSignIn.signIn();
+    final googleAuth = await googleUser!.authentication;
+    credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
     try {
       await firebaseAuth.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
@@ -45,15 +112,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       if (userCredential.user != null) {
         final user = userCredential.user!;
-        final profile = ProfileModel(
-          id: user.uid,
-          username: user.displayName ?? '',
-          email: user.email ?? '',
-          phoneNumber: user.phoneNumber ?? '',
-          city: '',
-          createdAt: Timestamp.now().seconds.toString(),
-          imageUrl: user.photoURL,
-        );
+        final profile = user.toProfile;
 
         final profileRef =
             firebaseFirestore.collection('profile').doc(profile.id);
@@ -62,8 +121,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           throw UnknownException();
         });
       }
-
-      throw UnknownException();
     } on FirebaseAuthException catch (e) {
       throw FirebaseAuthException(message: e.message, code: e.code);
     }
@@ -72,9 +129,57 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> signOut() async {
     try {
-      await firebaseAuth.signOut();
+      await Future.wait([
+        firebaseAuth.signOut(),
+        googleSignIn.signOut(),
+      ]);
     } on FirebaseAuthException catch (e) {
       throw FirebaseAuthException(message: e.message, code: e.code);
     }
+  }
+
+  @override
+  Future<void> addProfileData({
+    required String username,
+    required String phoneNumber,
+    required String city,
+  }) async {
+    try {
+      final user = firebaseAuth.currentUser;
+      if (user == null) {
+        throw FirebaseAuthException(
+          message: 'User not found',
+          code: 'user-not-found',
+        );
+      }
+
+      final profileRef = firebaseFirestore.collection('profile').doc(user.uid);
+
+      await firebaseAuth.currentUser!
+          .updateDisplayName(username)
+          .onError((error, stackTrace) => throw UnknownException());
+
+      await profileRef.update({
+        'username': username,
+        'phoneNumber': phoneNumber,
+        'city': city,
+      }).onError((error, stackTrace) => throw UnknownException());
+    } on FirebaseAuthException catch (e) {
+      throw FirebaseAuthException(message: e.message, code: e.code);
+    }
+  }
+}
+
+extension on firebase_auth.User {
+  ProfileModel get toProfile {
+    return ProfileModel(
+      id: uid,
+      username: displayName ?? '',
+      email: email ?? '',
+      phoneNumber: phoneNumber ?? '',
+      city: '',
+      createdAt: Timestamp.now().seconds.toString(),
+      imageUrl: photoURL,
+    );
   }
 }

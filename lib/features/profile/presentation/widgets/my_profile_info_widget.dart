@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lokalio/features/profile/domain/entities/profile.dart';
 
-class ProfileInfoWidget extends StatelessWidget {
+class MyProfileInfoWidget extends StatelessWidget {
   final Profile profile;
 
-  const ProfileInfoWidget({super.key, required this.profile});
+  const MyProfileInfoWidget({super.key, required this.profile});
 
   @override
   Widget build(BuildContext context) {

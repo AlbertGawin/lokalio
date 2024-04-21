@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lokalio/core/util/create_route.dart';
 import 'package:lokalio/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:lokalio/features/notice/presentation/widgets/user_info_widget.dart';
 import 'package:lokalio/features/profile/domain/repositories/profile_repository.dart';
 import 'package:lokalio/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:lokalio/features/profile/presentation/widgets/menu_item_widget.dart';
+import 'package:lokalio/features/profile/presentation/widgets/my_profile_info_widget.dart';
 import 'package:lokalio/features/profile/presentation/widgets/settings_widget.dart';
 import 'package:lokalio/features/profile/presentation/widgets/wallet_widget.dart';
 import 'package:lokalio/injection_container.dart';
@@ -29,7 +29,7 @@ class MyProfilePage extends StatelessWidget {
               child: Column(
                 children: [
                   if (state.status != ProfileStatus.failure)
-                    ProfileInfoWidget(profile: state.profile),
+                    MyProfileInfoWidget(profile: state.profile),
                   const SizedBox(height: 16),
                   MenuItemWidget(
                     onPressed: () {

@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lokalio/core/navbar/pages/main_page.dart';
 import 'package:lokalio/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:lokalio/features/auth/presentation/pages/signin_page.dart';
-import 'package:lokalio/features/auth/presentation/pages/update_profile_data_page.dart';
+import 'package:lokalio/features/auth/presentation/pages/profile_data_addition_page.dart';
 
 List<Page<dynamic>> onGenerateAppViewPages(
   AuthStatus state,
@@ -14,6 +14,6 @@ List<Page<dynamic>> onGenerateAppViewPages(
     case AuthStatus.unauthenticated:
       return [SignInPage.page()];
     case AuthStatus.missingData:
-      return [UpdateProfileDataPage.page()];
+      return [ProfileDataAdditionPage.page()];
   }
 }

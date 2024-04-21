@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lokalio/core/cache/cache.dart';
+import 'package:lokalio/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:lokalio/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:lokalio/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:lokalio/features/auth/domain/repositories/auth_repository.dart';
@@ -25,7 +26,6 @@ import 'package:lokalio/features/profile/data/datasources/profile_remote_data_so
 import 'package:lokalio/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:lokalio/features/profile/domain/repositories/profile_repository.dart';
 import 'package:lokalio/features/profile/presentation/bloc/profile_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import 'core/network/network_info.dart';
@@ -47,12 +47,18 @@ void initAuth() {
   sl.registerFactory(() => AuthBloc(repository: sl()));
 
   // Repository
-  sl.registerLazySingleton<AuthRepository>(() =>
-      AuthRepositoryImpl(cache: sl(), firebaseAuth: sl(), googleSignIn: sl()));
+  sl.registerLazySingleton<AuthRepository>(
+      () => AuthRepositoryImpl(remoteDataSource: sl(), localDataSource: sl()));
 
   // Data sources
-  sl.registerLazySingleton<AuthRemoteDataSource>(() =>
-      AuthRemoteDataSourceImpl(firebaseAuth: sl(), firebaseFirestore: sl()));
+  sl.registerLazySingleton<AuthRemoteDataSource>(() => AuthRemoteDataSourceImpl(
+        firebaseAuth: sl(),
+        firebaseFirestore: sl(),
+        googleSignIn: sl(),
+        cache: sl(),
+      ));
+  sl.registerLazySingleton<AuthLocalDataSource>(
+      () => AuthLocalDataSourceImpl(cache: sl()));
 }
 
 void initCreateNotice() {
@@ -115,7 +121,6 @@ void initCore() {
 }
 
 Future<void> initExternal() async {
-  final sharedPreferences = await SharedPreferences.getInstance();
   final firebaseFirestore = FirebaseFirestore.instance;
   final firebaseAuth = FirebaseAuth.instance;
   final firebaseStorage = FirebaseStorage.instance;
@@ -123,7 +128,6 @@ Future<void> initExternal() async {
   sl.registerLazySingleton(() => firebaseFirestore);
   sl.registerLazySingleton(() => firebaseAuth);
   sl.registerLazySingleton(() => firebaseStorage);
-  sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => http.Client());
   sl.registerLazySingleton(() => Connectivity());
   sl.registerLazySingleton(() => CacheClient());

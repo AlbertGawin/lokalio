@@ -8,7 +8,7 @@ import 'package:lokalio/features/notice/presentation/widgets/image_list_widget.d
 import 'package:lokalio/features/notice/presentation/widgets/location_info_widget.dart';
 import 'package:lokalio/features/notice/presentation/widgets/notice_description_widget.dart';
 import 'package:lokalio/features/notice/presentation/widgets/notice_info_widget.dart';
-import 'package:lokalio/features/notice/presentation/widgets/user_info_widget.dart';
+import 'package:lokalio/features/notice/presentation/widgets/profile_info_widget.dart';
 import 'package:lokalio/features/profile/domain/repositories/profile_repository.dart';
 import 'package:lokalio/features/profile/presentation/bloc/profile_bloc.dart';
 
